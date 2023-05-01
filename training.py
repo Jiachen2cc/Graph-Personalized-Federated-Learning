@@ -24,7 +24,7 @@ import math
 COUNT_LEN = 10
 RECORD_ROUND = [50,100,200]
 
-def interval_print(x,cur_round,interval,desc = None,out = False):
+def interval_print(x,cur_round,interval,desc = None,out = True):
 
     if not out:
         return
@@ -473,20 +473,23 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
 
     # compute the initial graph 
     init_A = None
+    nclient = len(clients)
 
     if args.initial_graph not in ['distance','uniform','similarity']:
         distributions = [client.structure_feature_analysis(args.initial_graph) for client in clients]
         init_A = structure_sim(distributions,args.graph_eps)
+    elif args.initial_graph == 'uniform':
+        init_A = torch.ones(nclient,nclient)/nclient
+
 
     #init_A = 
     #interval update
     last_client_W = None
-    nclient = len(clients)
     A,average_A = None,torch.zeros(nclient,nclient)
     feature_dim = clients[0].data[0].x.shape[1] if args.setting == 'single' else args.hidden
     graph_batch = struc_graphs(20,30,feature_dim,0.1,seed = 0)
     #graph_model = GCN_DAE(2,40,128,40,0.5,0,args.gen_mode,64,32,2).to(args.device)
-    sharing_start = 10
+    sharing_start = 20
 
     for cround in range(1, COMMUNICATION_ROUNDS + 1):
 
@@ -514,8 +517,6 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
         if (graph_dWs is not None) and cround > sharing_start:
             if args.initial_graph == 'distance':
                 init_A = dist_simi_metrix(graph_dWs,args.graph_eps)
-            elif args.initial_graph == 'uniform':
-                init_A = torch.ones(nclient,nclient)/nclient
 
             # graph build
             #compress_param = (para2metrix(graph_dWs,args.compress_mode,args.compress_dim)).to(args.device)
@@ -530,8 +531,8 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
                 choices = {'param':param_sim,'embed':embed_sim}
                 init_A = choices[args.para_choice]
             # choose whether to use graph truncate
-            #init_A = normalize(graph_truncate(init_A.cpu(),math.ceil((init_A.shape[1]+1)/2)),'sym').to(args.device)
-            init_A = normalize(init_A,'sym').to(args.device)
+            init_A = normalize(graph_truncate(init_A.cpu(),math.ceil((init_A.shape[1]+1)/2)),'sym').to(args.device)
+            #init_A = normalize(init_A,'sym').to(args.device)
 
             #compress_param = (para2metrix(graph_dWs,args.compress_mode,args.compress_dim)).to(args.device)
             #interval_print(cos_sim(compress_param),cround,20,'compressed client model similarity')
@@ -544,6 +545,8 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
                 _,A,graph_model = generate_adj(choices[args.para_choice],init_A,args,None)
             elif args.para_choice == 'ans':
                 A = cluster_uniform_graph(nclient,args.num_splits)
+            elif args.para_choice == 'self':
+                A = torch.eye(nclient)  
 
             
             #A = 0.95 * A.to(args.device) + 0.05 * init_A
@@ -559,12 +562,16 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
         #print(A)
         # 2 update the local models
         if cround > sharing_start:
-            [client.reset() for client in clients]
+            for client in clients:
+                client.reset()
+            #[client.reset() for client in clients]
             server.graph_update(clients,agg_dWs,A.to('cpu'),args)
         #q = server.inter_graph_update(clients,q,A,5)
 
         # evaluate the performance
-        [client.evaluate() for client in clients]
+        for client in clients:
+            client.evaluate()
+        #[client.evaluate() for client in clients]
     
     allAccs = analyze_train(clients)
 

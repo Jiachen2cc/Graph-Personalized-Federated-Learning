@@ -226,7 +226,7 @@ def prepareData_oneDS(num_client, args, seed=None):
     if args.num_splits > 1:
         graphs_chunks_idx = subchunk_split(graphs,graphs_chunks_idx,args.num_splits)
         num_client *= args.num_splits
-
+    
     splitedData = {}
     num_node_features = graphs[0].num_node_features
     '''
@@ -241,6 +241,7 @@ def prepareData_oneDS(num_client, args, seed=None):
         ds = f'{idx}-{data}-{status}'
         #print(len(chunks_idx))
         chunks = [graphs[idx] for idx in chunks_idx]
+        show_label_distribution(chunks)
         #print(idx,len(chunks))
         
         if args.feature_pertur:

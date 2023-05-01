@@ -155,22 +155,22 @@ class GCN_DAE(torch.nn.Module):
 
     def forward(self,features,x,A,normal = True):
 
-        A_ = self.graph_gen(features, A)
+        A = no_negtive(self.graph_gen(features, A))
 
         if normal:
-            A_ = no_negtive(A_)
+            A_ = torch.nn.ReLU()(A)
             #A_ = symmetrize(A_)
             A_ = normalize(A_,'sym')
 
         #A = F.dropout(A_,self.adj_dropout,training = self.training)
         for conv in self.layers[:-1]:
-            x = conv(x,A)
+            x = conv(x,A_)
             x = self.act(x)
             x = F.dropout(x, self.dropout, training = self.training)
         
-        x = self.layers[-1](x, A)
+        x = self.layers[-1](x, A_)
 
-        return x,A_
+        return x,A
 
         
 # fixed 2 layers
