@@ -12,6 +12,21 @@ from graph_utils import normalize,matri2dict,state_dict2metrix
 from analyze_client import gradient_ana
 import os
 
+def adj_entloss(adj):
+
+    adj_ent = - adj*torch.log(adj) - (1-adj)*torch.log(1-adj)
+    loss = torch.mean(adj_ent)
+    return loss
+
+def size_loss(adj,mask_act = 'relu'):
+
+    if mask_act == 'sigmoid':
+        adj = torch.sigmoid(adj)
+    elif mask_act == 'relu':
+        adj = torch.nn.ReLU()(adj)
+    size_loss = torch.sum(adj)
+    return adj
+
 
 def calc_sim(matrix):
     norm_matrix = matrix / torch.norm(matrix,dim = 1, p =2)[:,None]
@@ -102,13 +117,14 @@ def generate_adj(param_metrix,pre_A,args,model = None):
         optimizer.zero_grad()
         
         loss1, adj = get_loss_masked_features(Net,param_metrix,pre_A,mask,args)
-        loss2 = F.mse_loss(pre_A,adj,reduction='mean')
+        loss2 = F.mse_loss(pre_A,adj,reduction='mean') 
+        loss3 = adj_entloss(adj)
         
         #print('gc_epoch:{}'.format(e))
         #print('adj during training:',adj.view(10,10))
         # loss = loss1 + loss2
         #loss = loss2 
-        loss = loss2
+        loss = loss2 + loss3
         loss.backward()
         '''
         if e >= 0:
@@ -123,8 +139,10 @@ def generate_adj(param_metrix,pre_A,args,model = None):
     # get final adj(without noise)
     Net.eval()
     #exit(0)
+    # generate normalized predicted client graph
     with torch.no_grad():
         resf,adj = Net(param_metrix,param_metrix,pre_A)
+        adj = normalize(adj,'sym')
         
     return resf,adj.detach().to('cpu'),Net
 
