@@ -9,35 +9,6 @@ from graph_utils import symmetrize,no_negtive,normalize
 from layers import GCNConv_dense,GraphAttentionLayer
 from graph_contructor import MLP, FullParam, MLP_Diag
 
-class GAE_encoder(torch.nn.Module):
-    def __init__(self, input_dim , hidden_dim = 32 , latent_dim = 16, dropout = 0.5, act = F.relu):
-        super().__init__()
-        self.inc = input_dim
-        self.hidden = hidden_dim
-        self.latent = latent_dim
-        self.dropout = dropout
-        self.act = act
-
-        self.conv1 = GCNConv(
-            in_channels = self.inc,
-            out_channels = self.hidden
-        )
-        
-        self.conv2 = GCNConv(
-            in_channels = self.hidden,
-            out_channels = self.latent
-        )
-
-    def forward(self, x, edge_index, edge_attr):
-        #x = F.dropout(x,self.dropout,self.training)
-        x = self.conv1(x, edge_index, edge_attr)
-        x = self.act(x)
-
-        x = F.dropout(x,self.dropout,self.training)
-        x = self.conv2(x, edge_index, edge_attr)
-        #x = self.act(x)
-        
-        return x
 
 class GAE_dense(torch.nn.Module):
     def __init__(self, input_dim, hidden_dim, latent_dim = 16, dropout = 0.5, layers = 2, act = F.relu):
@@ -53,56 +24,26 @@ class GAE_dense(torch.nn.Module):
         self.act = act
         self.dropout = dropout
     
-    def forward(self, x, A, normal = True):
+    def forward(self, x, A, normal = True,sigmoid = True):
 
         if normal:
             A = normalize(A,'sym',False)
         
-        for conv in self.layers[:-1]:
-            x = conv(x, A)
-            x = self.act(x)
-            x = F.dropout(x,p=self.dropout, training = self.training)
+        for i,conv in enumerate(self.layers):
+            x = conv(x,A)
+            if i < len(self.layers) - 1:
+                x = F.relu(x)
+                x = F.dropout(x,p = self.dropout)
         
-        #print('edge features')
-        #print(x)
-        x = self.layers[-1](x, A)
-        x = F.normalize(x,p = 2,dim = 1)
+        #x = F.normalize(x,p = 2,dim = 1)
         adj = torch.matmul(x,x.T)
+        return torch.sigmoid(adj) if sigmoid else torch.relu(1 - torch.relu(1-adj))
         #print('learned graph before process')
         #print(adj)
         
-        return adj
+        #return adj
 
 
-# 2-layer GCN for self-supervision
-# it has to corporate with the weighted edges
-class GCN(torch.nn.Module):
-
-    def __init__(self,input_dim,hidden_dim,output_dim,layers = 2,dropout = 0.5,act = F.relu):
-        super().__init__()
-        
-        self.layers = torch.nn.ModuleList()
-        self.layers.append(GCNConv_dense(input_dim,hidden_dim))
-        for _ in range(layers - 2):
-            self.layers.append(GCNConv_dense(hidden_dim,hidden_dim))
-        self.layers.append(GCNConv_dense(hidden_dim,output_dim))
-        self.dropout = dropout
-        self.act = act
-
-
-    def forward(self, x, A, normal = True):
-        
-        if normal:
-            A = normalize(A, 'sym')
-
-        for conv in self.layers[:-1]:
-            x = conv(x,A)
-            x = self.act(x)
-            x = F.dropout(x, self.dropout, training = self.training)
-
-        x = self.layers[-1](x, A)
-
-        return x
 
 # 看上去可采用的策略：利用mse_loss对GAE进行初始化(x)
 # GAE通常会把dropout设成0  这里暂且设为）0.5
@@ -153,14 +94,15 @@ class GCN_DAE(torch.nn.Module):
             loss.backward()
             optimizer.step() 
 
-    def forward(self,features,x,A,normal = True):
-
-        A = no_negtive(self.graph_gen(features, A))
+    def forward(self,features,x,A,normal = True,sigmoid = True):
+        
+        #A = A - A*torch.eye(A.shape[0]).to(A.device)
+        A = self.graph_gen(features, A, sigmoid = sigmoid)
+        #print(A)
 
         if normal:
-            A_ = torch.nn.ReLU()(A)
             #A_ = symmetrize(A_)
-            A_ = normalize(A_,'sym')
+            A_ = normalize(A,'sym')
 
         #A = F.dropout(A_,self.adj_dropout,training = self.training)
         for conv in self.layers[:-1]:
@@ -188,18 +130,24 @@ class GAE_AT_dense(torch.nn.Module):
         self.out_att = GraphAttentionLayer(nheads*hidden_dim,latent_dim,dropout,alpha,concat = False)
         self.dropout = dropout
 
-    def forward(self,x,A,normal = True):
+    def forward(self,x,A,normal = True,sigmoid = True):
 
         if normal:
             A = normalize(A,'sym',False)
-        
-        x = F.dropout(x, self.dropout, training=self.training)
-        x = torch.concat([att(x,A) for att in self.attentions], dim = 1)
-        x = F.dropout(x, self.dropout, training=self.training)
-        x = F.elu(self.out_att(x,A))
+            # set self-loop to 0
 
-        x = F.normalize(x,p = 2, dim = 1)
-        adj = torch.matmul(x,x.T)
+        
+        #x = F.dropout(x, self.dropout, training=self.training)
+        x = torch.concat([att(x,A) for att in self.attentions], dim = 1)
+        x = F.elu(self.out_att(x,A))
+        x = F.dropout(x, self.dropout, training=self.training)
+
+        #x = F.normalize(x,p = 2, dim = 1)
+        # just the same as the traditional GAE
+        #adj = torch.sigmoid(torch.matmul(x,x.T))
+        adj = torch.sigmoid(torch.matmul(x,x.T))
+        #x = F.normalize(x,p=2,dim = 1)
+        #adj = torch.matmul(x,x.T)
 
         return adj
 

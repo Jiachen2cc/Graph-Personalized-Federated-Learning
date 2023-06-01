@@ -71,7 +71,20 @@ class serverGIN(torch.nn.Module):
         x = F.log_softmax(x,dim = 1)
 
         return x
-            
+
+class GINextractor(torch.nn.Module):
+
+    def __init__(self,nfeat,nhid):
+        super().__init__()
+        self.pre = torch.nn.Sequential(torch.nn.Linear(nfeat,nhid))
+
+    def forward(self,data):
+        x = data.x
+        x = self.pre(x)
+        res = data.clone()
+        res.__setitem__('x',x)
+        return res
+        
 class GINclassifier(torch.nn.Module):
 
     def __init__(self,nhid,nclass):

@@ -181,9 +181,14 @@ class Client_GC():
 
 
     def local_train_prox(self, local_epoch, mu):
+        copy(target=self.W_old, source=self.W, keys=self.gconvNames)
+
         """ For FedProx """
         train_stats = train_gc_prox(self.model, self.dataLoader, self.optimizer, local_epoch, self.args.device,
                                self.gconvNames, self.W, mu, self.W_old)
+        self.train_stats = self.dict_extend(self.train_stats, train_stats)
+        
+        subtract_(target=self.dW, minuend=self.W, subtrahend=self.W_old)
 
         self.train_stats = train_stats
         self.weightsNorm = torch.norm(flatten(self.W)).item()

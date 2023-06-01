@@ -166,7 +166,7 @@ parser.add_argument('--epsilon2', help='the threshold epsilon2 for GCFL',
                         type=float, default=0.1)
 
 # SFL parameters
-parser.add_argument('--gen_mode', type = str, default = 'GAEAT',
+parser.add_argument('--gen_mode', type = str, default = 'GAE',
                     help = 'the type of graph generator')
 parser.add_argument('--glr', type = float, default = 0.001,
                     help = 'the learning rate of graph generator')
@@ -177,7 +177,7 @@ parser.add_argument('--compress_mode', type = str, default = 'shape',
                     help = 'the parameter compression model',
                     choices = ['continous','discrete','shape'])
 parser.add_argument('--compress_dim', type = int, default = 1000)
-parser.add_argument('--gc_epoch', type = int, default = 20,
+parser.add_argument('--gc_epoch', type = int, default = 200,
                     help = 'the epoch for training ')
 parser.add_argument('--layers', type = int, default = 1)
 parser.add_argument('--serveralpha', type = float, default = 1,
@@ -233,14 +233,16 @@ parser.add_argument('--target_dataset', type = str, default = 'IMDB-BINARY')
 # choose federated parameters
 parser.add_argument('--Federated_mode', type = str, default ='SFL',
                         choices = ['Selftraining','FedAvg','FedProx','SFL','biSFL','toSFL','GCFL'])
-parser.add_argument('--initial_graph', type = str, default = 'hop2_disb',
-                        choices = ['degree_disb','triangle_disb','distance','hop2_disb','uniform','similarity'])
+parser.add_argument('--initial_graph', type = str, default = 'sim',
+                        choices = ['degree_disb','triangle_disb','distance','hop2_disb','uniform','sim'])
 parser.add_argument('--graph_eps', type = float, default = 0.3,
                         help = 'the eps term for initial client graph normalization')
 parser.add_argument('--para_choice', type = str, default = 'embed',
                         choices = ['param','embed','ans'])
 parser.add_argument('--input_choice', type = str, default = 'diff',
                         choices = ['whole','gradient','seq','diff'])
+parser.add_argument('--diff_rate',type = float, default = 0.95,
+                    help = 'the remove rate of mean value')
 parser.add_argument('--timelen', type = int, default = 20)
 parser.add_argument('--num_splits', type = int, default = 1)
 
@@ -253,6 +255,18 @@ parser.add_argument('--norm_way', type = str, default = 'F_norm',
                         choices = ['F_norm','minmax_norm',''])
 parser.add_argument('--global_model', type = int, default = 0,
                     help = 'we do not need a global model in cross-dataset setting')
+parser.add_argument('--sround', type = int, default = 0,
+                    help = 'the start round of normal sharing')
+parser.add_argument('--pshare', type = str, default = 'uniform',
+                    choices = ['null','uniform','init'],help = 'the sharing method before normal sharing start')
+
+# the mu coefficient for fedprox
+parser.add_argument('--mu',type = float, default = 0.01,
+                    help = 'the mu coefficient for fedprox')
+parser.add_argument('--sigmoid',type = int, default = 1,
+                    help = 'the activation function for generated graph')
+parser.add_argument('--discrete',type = int, default = 0,
+                    help = 'whether to train a discrete or continual client graph')
 
 try:
     args = parser.parse_args()

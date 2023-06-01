@@ -12,14 +12,20 @@ from graph_utils import normalize
 from analyze_dataset import structure_sim
 
 class Server():
-    def __init__(self, model, classifiers, device):
+    def __init__(self, model, classifiers, extractors, device):
         self.model = model.to(device)
-        self.classifiers = [classifier.to(device) for classifier in classifiers]
+
+        self.classifiers = [c.to(device) for c in classifiers]
+        self.extractors = [e.to(device) for e in extractors]
+
         self.W = {key: value for key, value in self.model.named_parameters()}
+        
+        self.ex_Ws = [{key: value for key, value in ex.named_parameters()}
+            for ex in self.extractors]
 
         self.clf_Ws= [{key: value for key, value in clf.named_parameters()}
-            for clf in self.classifiers
-        ]
+            for clf in self.classifiers]
+
         self.model_cache = []
     
     # random select clients
@@ -132,7 +138,33 @@ class Server():
         res_matrix = torch.cat(res_embed,dim = 0)
 
         return res_matrix
+    
+    def multi_embedding(self,clients,graph_batch,mode = 'sum'):
+        res_embed = []
 
+        for ex,exW,client,cbatch in zip(self.extractors,self.ex_Ws,clients,graph_batch):
+
+            # load client model & extractor
+            for k in self.W.keys():
+                self.W[k].data = copy.deepcopy(client.W[k])
+            for k in exW.keys():
+                exW[k].data = copy.deepcopy(client.W[k])
+            self.model.eval()
+            ex.eval()
+            embed = self.model(ex(cbatch)).detach()
+            if mode == 'sum':
+                embed = torch.flatten(embed).unsqueeze(0)
+            elif mode == 'mean':
+                embed = torch.mean(embed,dim = 0).unsqueeze(0)
+            #embed = torch.mean(embed,dim = 0)
+            res_embed.append(embed)
+
+        res_matrix = torch.cat(res_embed,dim = 0)
+        
+        return res_matrix
+    
+
+            
 
     def graph_build(self, client_dWs, A, args, norm = True):
 

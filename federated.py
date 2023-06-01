@@ -12,20 +12,25 @@ from graph_utils import normalize,matri2dict,state_dict2metrix
 from analyze_client import gradient_ana
 import os
 
-def adj_entloss(adj):
+def adj_entloss(adj,eps = 1e-6):
 
-    adj_ent = - adj*torch.log(adj) - (1-adj)*torch.log(1-adj)
+    adj_ent = - adj*torch.log(adj+eps) - (1-adj)*torch.log(1-adj+eps)
     loss = torch.mean(adj_ent)
     return loss
 
-def size_loss(adj,mask_act = 'relu'):
+def adj_reluloss(adj,eps = 1e-6):
 
-    if mask_act == 'sigmoid':
-        adj = torch.sigmoid(adj)
-    elif mask_act == 'relu':
-        adj = torch.nn.ReLU()(adj)
-    size_loss = torch.sum(adj)
-    return adj
+    adj_relu = adj*(1-adj)
+    loss = torch.mean(adj_relu)
+    return loss
+
+def size_loss(adj,acted = 'relu',eps = 1e-6):
+
+    if acted == 'sigmoid':
+        loss = torch.mean(-torch.log(1+eps-adj))
+    elif acted == 'relu':
+        loss = torch.mean(adj) 
+    return loss
 
 
 def calc_sim(matrix):
@@ -98,11 +103,19 @@ def gae_adj(param_metrix,pre_A,args):
 
     pass
 
+def preprocess_input(features,ini_graph):
+
+    features = F.normalize(features,dim = 1)
+    return features,ini_graph
+
 def generate_adj(param_metrix,pre_A,args,model = None):
     '''
     Net = SLAPS(param_metrix.shape[1],32,16,0,F.relu,
     param_metrix.shape[1],64,0.5,F.relu,len(param_metrix)).to(args.device)
     '''
+    # preprocess the input parameters
+    #param_metrix,pre_A = preprocess_input(param_metrix,pre_A)
+
     Net = GCN_DAE(2,param_metrix.shape[1],128,param_metrix.shape[1],0.5,0,args.gen_mode,64,32,2).to(args.device)
     if model is not None:
         Net = model
@@ -118,14 +131,14 @@ def generate_adj(param_metrix,pre_A,args,model = None):
         
         loss1, adj = get_loss_masked_features(Net,param_metrix,pre_A,mask,args)
         loss2 = F.mse_loss(pre_A,adj,reduction='mean') 
-        loss3 = adj_entloss(adj)
-        
-        #print('gc_epoch:{}'.format(e))
-        #print('adj during training:',adj.view(10,10))
-        # loss = loss1 + loss2
-        #loss = loss2 
-        loss = loss2 + loss3
+        #loss2 = F.binary_cross_entropy(adj.view(-1),pre_A.view(-1))
+        if args.sigmoid:
+            loss = adj_entloss(adj) + 0.5*size_loss(adj,'sigmoid')
+        else:
+            loss = adj_reluloss(adj) + 0.5*size_loss(adj)
         loss.backward()
+        #print(adj)
+        #print(loss)
         '''
         if e >= 0:
             print('loss_used:{:.4f}'.format(loss))
@@ -142,8 +155,14 @@ def generate_adj(param_metrix,pre_A,args,model = None):
     # generate normalized predicted client graph
     with torch.no_grad():
         resf,adj = Net(param_metrix,param_metrix,pre_A)
+        if args.discrete and args.sigmoid:
+            adj = (adj >= 0.5).float().to(adj.device)
+        #print('the output client graph(before normalization)')
+        #print(adj)
         adj = normalize(adj,'sym')
-        
+    #print(pre_A)  
+    #print(adj)
+    #exit(0)
     return resf,adj.detach().to('cpu'),Net
 
 def bi_graph_dic(models_state,pre_A,args):
@@ -183,7 +202,7 @@ def get_loss_masked_features(model,features,pre_A,mask,args):
     else:
         noise = torch.normal(0.0, 1.0, size=features.shape).to(args.device)
         masked_features = features + (noise * mask)
-        logits, Adj = model(features, masked_features,pre_A)
+        logits, Adj = model(features, masked_features,pre_A,sigmoid = args.sigmoid)
         indices = mask > 0
 
         loss = F.mse_loss(logits[indices],features[indices],reduction = 'mean')

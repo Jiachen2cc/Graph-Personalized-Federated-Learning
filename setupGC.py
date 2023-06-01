@@ -7,7 +7,7 @@ import torch
 from torch_geometric.datasets import TUDataset
 from torch_geometric.loader import DataLoader
 
-from models import GIN, serverGIN,GraphCNN,serverGraphCNN,GINclassifier,classiGIN,featureGIN
+from models import GIN, serverGIN,GraphCNN,serverGraphCNN,GINclassifier,classiGIN,featureGIN,GINextractor
 from server import Server
 from client import Client_GC
 from utils import get_stats, split_data, get_numGraphLabels,convert_to_nodeDegreeFeatures
@@ -241,7 +241,7 @@ def prepareData_oneDS(num_client, args, seed=None):
         ds = f'{idx}-{data}-{status}'
         #print(len(chunks_idx))
         chunks = [graphs[idx] for idx in chunks_idx]
-        show_label_distribution(chunks)
+        #show_label_distribution(chunks)
         #print(idx,len(chunks))
         
         if args.feature_pertur:
@@ -345,7 +345,7 @@ def prepareData_fakeDS(args,seed = None):
 def setup_devices(splitedData, args):
     idx_clients = {}
     clients = []
-    sclassifiers = []
+    sclassifiers,sextracts = [],[]
     for idx, ds in enumerate(splitedData.keys()):
         idx_clients[idx] = ds
         data, split_idx, num_node_features, num_graph_labels, dataset_name = splitedData[ds]
@@ -359,7 +359,11 @@ def setup_devices(splitedData, args):
         clients.append(Client_GC(cmodel_gc, idx, ds, dataset_name,
                        data, split_idx, optimizer, args))
         sclassifier = GINclassifier(nhid = args.hidden,nclass=num_graph_labels)
+        sextract = GINextractor(nfeat = num_node_features, nhid = args.hidden)
+
         sclassifiers.append(sclassifier)
+        sextracts.append(sextract)
+
     if args.server_sharing == 'center':
         smodel = serverGIN(nlayer=args.nlayer, nhid=args.hidden)
     elif args.server_sharing == 'full':
@@ -373,7 +377,7 @@ def setup_devices(splitedData, args):
                     num_graph_labels, args.nlayer, args.dropout)
 
     #smodel = serverGraphCNN(args.num_layers,args.num_mlp_layers,args.hidden_dim,args.learn_eps,args.device)
-    server = Server(smodel, sclassifiers ,args.device)
+    server = Server(smodel, sclassifiers, sextracts, args.device)
     return clients, server, idx_clients
 
 def property_counts(args,seed = None):

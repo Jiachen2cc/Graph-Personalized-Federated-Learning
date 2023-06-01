@@ -117,7 +117,7 @@ def symmetrize(adj):  # only for non-sparse
 def no_negtive(adj):
 
     mask = (adj >= 0).float().cuda()
-    p_adj = adj*mask
+    p_adj = adj*mask#/torch.max(adj)  
 
     return p_adj
 

@@ -148,6 +148,7 @@ def graph_truncate(graph,link_num):
         mask[i,idx[i]] = 1
 
     return graph*mask
+    #return mask
 
 
 def mean_diff(vmatrix,diff_rate):

@@ -7,49 +7,35 @@ import random
 
 
 
-def random_graphbatch(graph_num,graph_size,feature_dim,threshold = 0.3,seed = 0):
-    
+def random_graphbatch(graph_num,min_size,max_size,feature_dim,method = 'structure',seed = 0):
 
-    graph_list = []
-    
-    for _ in range(graph_num):
-
-        # random feature generating
-        feature = torch.normal(0,1,size = (graph_size,feature_dim))
-        normf = torch.norm(feature,dim = 1,keepdim = True)
-        feature /= normf
-        
-        # generate edge based on node feature similarity
-        edge_index = [[],[]]
-        simif = torch.matmul(feature,feature.T)
-
-        for i in range(graph_size):
-            for j in range(graph_size):
-                if simif[i,j] >= threshold:
-                    edge_index[0].append(i)
-                    edge_index[1].append(j)
-        
-        edge_index = torch.LongTensor(edge_index)
-        
-        graph = Data(x = feature,edge_index = edge_index)
-
-        graph_list.append(graph)
-    
-    graph_batch = Batch.from_data_list(graph_list)
-
-    return graph_batch
-
-def struc_graphs(graph_num,graph_size,feature_dim,p,seed = 0):
-    # assert graphs_size < feature_dim
     graphs = []
+    random.seed(seed)
+    if method == 'structure':
 
-    for _ in range(graph_num):
+        # random sample graph_size k and edge rate p
+        for _ in range(graph_num):
+            mychoice = [(30,0.2),(20,0.2),(40,0.1)]
+            k,p = random.choice(mychoice)
+            #k = random.choice(range(min_size,max_size))
+            k = 30
+            #p = random.choice([0.1*k for k in range(1,10)])
+            p = 0.1
+            
+            graph = struc_graph(k,feature_dim,p,seed)
+            graphs.append(graph)
 
-        sample = erdos_renyi_graph(graph_size,p,seed,False)
-        data = onehotdegree_data(sample,torch.tensor(0),feature_dim)
-        graphs.append(data)
     graphs = Batch.from_data_list(graphs)
+    #exit(0)
+    
     return graphs
+   
+
+def struc_graph(graph_size,feature_dim,p,seed = 0):
+    # assert graphs_size < feature_dim
+    sample = erdos_renyi_graph(graph_size,p,seed,False)
+    data = onehotdegree_data(sample,torch.tensor(0),feature_dim)
+    return data
         
         
 
@@ -105,7 +91,14 @@ def feature_padding(graphs,max_dim = None):
     
     return datasets
 
-
+def feature_enlarge(batch,dim):
+    feat = batch.x
+    if dim > feat.shape[1]:
+        sup = torch.zeros(feat.shape[0], dim - feat.shape[1])
+        feat = torch.concat([feat,sup],dim = 1)
+    newbatch = batch.clone()
+    newbatch.__setitem__('x',feat)
+    return newbatch
 
     
 
@@ -125,7 +118,7 @@ def arti_datasets(cd_list, gsize = 30, p_rates = [0.2,0.8], seed = 0):
 
         for cidx in range(len(p_rates)):
 
-            res = struc_graphs(cd_list[cli][cidx],gsize,None,p_rates[cidx],seed)
+            res = struc_graph(cd_list[cli][cidx],gsize,None,p_rates[cidx],seed)
             datas.extend(res)
         
         datasets[cli] = feature_padding(datas)

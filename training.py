@@ -11,7 +11,7 @@ from analyze_graphs import fake_graph
 from server import group_sub
 from init_client_graph import dist_simi_metrix
 from graph_utils import para2metrix,normalize
-from functest import random_graphbatch,struc_graphs
+from functest import random_graphbatch,feature_enlarge
 from federated import generate_adj
 from torch.utils.tensorboard import SummaryWriter
 from analyze_client import graph_diff
@@ -24,7 +24,7 @@ import math
 COUNT_LEN = 10
 RECORD_ROUND = [50,100,200]
 
-def interval_print(x,cur_round,interval,desc = None,out = True):
+def interval_print(x,cur_round,interval,desc = None,out = False):
 
     if not out:
         return
@@ -106,7 +106,7 @@ def run_selftrain_GC(clients, server, args):
     
     #writer = SummaryWriter('run/exp1')
     feature_dim = clients[0].data[0].x.shape[1] if args.setting == 'single' else args.hidden
-    graph_batch = struc_graphs(20,30,feature_dim,0.1,seed = 0)
+    graph_batch = random_graphbatch(20,20,40,feature_dim,seed = 0)
     
     client_similarity = torch.zeros((len(clients),len(clients)))
     embed_similarity = torch.zeros((len(clients),len(clients)))
@@ -460,6 +460,94 @@ def run_tosfl(clients,server,COMMUNICATION_ROUNDS, local_epoch, args):
     '''
     return allAccs
 
+def pre_finigraph(tag,clients,eps):
+    # prepare all the initial client graph except for 
+    # distance & similarity(these two needed to be computed in each round)
+
+    if tag in ['degree_disb','triangle_disb','hop2_disb']:
+        distributions = [client.structure_feature_analysis(tag) for client in clients]
+        init_A = structure_sim(distributions,eps)
+    elif tag == 'uniform':
+        num = len(clients)
+        init_A = torch.ones(num,num)/num
+    else:
+        init_A = None
+    
+    return init_A
+
+def pre_vinigraph(init_A,tag,param,sim,eps,cround,args):
+    
+    if init_A is not None:
+        A = init_A
+    elif tag == 'distance':
+        A = dist_simi_metrix(param,eps)
+    elif tag == 'sim':
+        A = sim
+    elif tag == 'ans':
+        A = cluster_uniform_graph(args.num_clients*args.num_splits,args.num_splits)
+
+    #A = normalize(graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2)),'sym')
+    #A = graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2))
+    if args.discrete:
+        A = (A >= 0).float().to(A.device)
+    else:
+        mask = (A >= 0).float().to(A.device)
+        A = mask*A
+
+    interval_print(A,cround,40,'initial client graph')
+
+    return A
+
+def get_finalgraph(args,feature,init_A,cround):
+    nclient = init_A.shape[0]
+    if args.para_choice not in ['ans','self','avg']:
+        _,A,_ = generate_adj(feature,init_A,args,None)
+    elif args.para_choice == 'ans':
+        A = cluster_uniform_graph(nclient,args.num_splits)
+    elif args.para_choice == 'self':
+        A = torch.eye(nclient)
+    elif args.para_choice == 'avg':
+        A = torch.ones((nclient,nclient))/nclient
+    interval_print(A,cround,40,'result client graph')
+    return A
+
+def prepare_features(embed,param,cround,args):
+    # param to metrix
+    cparam = (para2metrix(param,None,args.compress_dim)).to(args.device)
+    ofeature = {'embed':embed,'param':cparam}
+    choices = {'embed':embed,'param':cparam}
+
+    # apply transforms to parameters
+    if args.input_choice == 'diff':
+        choices = {k: mean_diff(f,args.diff_rate) for k,f in choices.items()}
+
+    # compute similarity
+    sims = {k:cos_sim(f) for k,f in choices.items()}
+    for k,s in sims.items():
+        interval_print(s,cround,40,'the similarity of '+ k)
+    
+    k = args.para_choice if args.para_choice in choices.keys() else 'embed'
+    return ofeature[k],choices[k],sims[k]
+
+# try different sharing ways before paramter converge to stable value
+def pre_sharing(server,clients,agg_dWs,method,init_A,args):
+
+    if method == 'null':
+        return
+    [client.reset() for client in clients]
+    nc = init_A.shape[0]
+    choices = {'uniform':torch.ones(nc,nc)/nc,'init':init_A.cpu()}
+    server.graph_update(clients,agg_dWs,choices[method],args)
+
+def collect_info(info,ofeature,feature,initA,resA):
+    
+    info['ofeature'].append(ofeature)
+    info['feature'].append(feature)
+    info['initA'].append(initA)
+    info['resA'].append(resA)
+
+    return info
+
 def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
 
     assert isinstance(server,Server)
@@ -472,111 +560,58 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
     #q = Queue(maxsize = 5)
 
     # compute the initial graph 
-    init_A = None
+    init_A = pre_finigraph(args.initial_graph,clients,args.graph_eps)
     nclient = len(clients)
 
-    if args.initial_graph not in ['distance','uniform','similarity']:
-        distributions = [client.structure_feature_analysis(args.initial_graph) for client in clients]
-        init_A = structure_sim(distributions,args.graph_eps)
-    elif args.initial_graph == 'uniform':
-        init_A = torch.ones(nclient,nclient)/nclient
-
-
-    #init_A = 
     #interval update
     last_client_W = None
     A,average_A = None,torch.zeros(nclient,nclient)
-    feature_dim = clients[0].data[0].x.shape[1] if args.setting == 'single' else args.hidden
-    graph_batch = struc_graphs(20,30,feature_dim,0.1,seed = 0)
-    #graph_model = GCN_DAE(2,40,128,40,0.5,0,args.gen_mode,64,32,2).to(args.device)
-    sharing_start = 20
+    graph_batch = random_graphbatch(20,20,30,min(c.data[0].x.shape[1] for c in clients),'structure',seed = 0)
 
+    sharing_start = 0
+    if args.setting == 'multi':
+        graph_batch = [feature_enlarge(graph_batch,c.data[0].x.shape[1]) for c in clients]
+    infos = {'ofeature':[],'feature':[],'initA':[],'resA':[]}
     for cround in range(1, COMMUNICATION_ROUNDS + 1):
-
-        init_embed = server.graph_modelembedding(clients,graph_batch.to(args.device),'sum')
 
         for client in clients:
             client.compute_weight_update(local_epoch)
             seq_grads[client.id].append({k:client.dW[k] for k in client.gconvNames})
-
-        embed = server.graph_modelembedding(clients,graph_batch.to(args.device),'sum')
-        # calculate the embed difference
-        if args.input_choice == 'gradient':
-            embed = embed - init_embed
-        embed_sim = cos_sim(embed)
-        interval_print(embed_sim,cround,40,'embed similarity')
-
-        agg_dWs,graph_dWs,last_client_W = get_interval_dW(seq_grads,clients,last_client_W,server.W.keys(),cround,args)
         
-        # 1 build client graph
-        interval_print(simi_ana(clients,None,server.W.keys()),cround,40,'client similarity')
+        if args.setting == 'single':
+            embed = server.graph_modelembedding(clients,graph_batch.to(args.device),'sum')
+        else:
+            embed = server.multi_embedding(clients,[cbatch.to(args.device) for cbatch in graph_batch],'sum')
+        agg_dWs,graph_dWs,last_client_W = get_interval_dW(seq_grads,clients,last_client_W,server.W.keys(),cround,args)
 
-        #print('embed similarity')
-        #print(cos_sim(embed))
 
-        if (graph_dWs is not None) and cround > sharing_start:
-            if args.initial_graph == 'distance':
-                init_A = dist_simi_metrix(graph_dWs,args.graph_eps)
-
-            # graph build
-            #compress_param = (para2metrix(graph_dWs,args.compress_mode,args.compress_dim)).to(args.device)
-            compress_param = (para2metrix(graph_dWs,None,args.compress_dim)).to(args.device)
-            if args.input_choice == 'diff':
-                compress_param = mean_diff(compress_param,args.diff_rate)
-                embed = mean_diff(embed,args.diff_rate)
-            param_sim = cos_sim(compress_param)
-            interval_print(param_sim,cround,40,'client model similarity')
-
-            if args.initial_graph == 'similarity':
-                choices = {'param':param_sim,'embed':embed_sim}
-                init_A = choices[args.para_choice]
-            # choose whether to use graph truncate
-            init_A = normalize(graph_truncate(init_A.cpu(),math.ceil((init_A.shape[1]+1)/2)),'sym').to(args.device)
-            #init_A = normalize(init_A,'sym').to(args.device)
-
-            #compress_param = (para2metrix(graph_dWs,args.compress_mode,args.compress_dim)).to(args.device)
-            #interval_print(cos_sim(compress_param),cround,20,'compressed client model similarity')
-            #init_A = (normalize(cos_sim(embed),'sym').to(args.device)+normalize(cos_sim(compress_param),'sym').to(args.device))/2
-            interval_print(init_A,cround,40,'initial client graph')
-
-            #_,A = generate_adj(compress_param,init_A,args)
-            choices = {'param':compress_param,'embed':embed}
-            if args.para_choice in choices.keys():
-                _,A,graph_model = generate_adj(choices[args.para_choice],init_A,args,None)
-            elif args.para_choice == 'ans':
-                A = cluster_uniform_graph(nclient,args.num_splits)
-            elif args.para_choice == 'self':
-                A = torch.eye(nclient)  
-
-            
-            #A = 0.95 * A.to(args.device) + 0.05 * init_A
-            #A = torch.tensor([[0.5,0.5],[0.5,0.5]]).to(args.device)
-            interval_print(A,cround,40,'result client graph')
+        if (graph_dWs is not None) and cround > args.sround:
+            # prepare input_features
+            ofeature,feature,sim = prepare_features(embed,graph_dWs,cround,args)
+            init_A = pre_vinigraph(init_A, args.initial_graph,graph_dWs,sim,args.graph_eps,cround,args).to(args.device)
+            A = get_finalgraph(args,feature,init_A,cround)
             average_A += A.cpu()
-
+            
+            collect_info(infos,ofeature.cpu().numpy(),feature.cpu().numpy(),init_A.cpu().numpy(),A.cpu().numpy())
             # update initial A per rounds
             #init_A = (1 - args.serverbeta) * init_A + args.serverbeta * A.to(args.device)
 
-        # try fixed graphs 
-        #A = init_A
-        #print(A)
         # 2 update the local models
-        if cround > sharing_start:
-            for client in clients:
-                client.reset()
-            #[client.reset() for client in clients]
+        if cround > args.sround:
+            [client.reset() for client in clients]
             server.graph_update(clients,agg_dWs,A.to('cpu'),args)
+        else:
+            pre_sharing(server,clients,agg_dWs,args.pshare,init_A,args)
         #q = server.inter_graph_update(clients,q,A,5)
 
         # evaluate the performance
-        for client in clients:
-            client.evaluate()
-        #[client.evaluate() for client in clients]
+        [client.evaluate() for client in clients]
     
     allAccs = analyze_train(clients)
 
     average_A /= COMMUNICATION_ROUNDS - sharing_start
-
+    # save info
+    np.save('ee/info_record/info.npy',infos)
     #print('average sharing client graph')
     #print(average_A)
     return allAccs,average_A
