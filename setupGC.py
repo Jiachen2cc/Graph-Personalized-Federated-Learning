@@ -98,7 +98,7 @@ def label_skew(graphs, num_client, seed, alpha=4):
 
     # step 5: report the split result
     for idcs in client_idx:
-        print(len(idcs))
+        #print(len(idcs))
         each_num = []
         for i in range(num_classes):
             sum = 0
@@ -108,7 +108,7 @@ def label_skew(graphs, num_client, seed, alpha=4):
             each_num.append(sum)
         print(each_num)
 
-    return graph_chunks
+    return client_idx
 
 
 def label_skew_balance(graphs, num_client, seed, alpha=4):
@@ -121,16 +121,17 @@ def label_skew_balance(graphs, num_client, seed, alpha=4):
 
     class_priors = np.random.dirichlet(
         alpha=[alpha] * num_classes, size=num_client)
-    eps = 0.01
-    class_priors[class_priors < eps] = eps
+    
     for i, frac in enumerate(class_priors):
-        class_priors[i] /= np.sum(frac)
 
         # print(class_priors)
         prior_cusum = np.cumsum(class_priors, axis=1)
         idx_list = [np.where(labels == i)[0] for i in range(num_classes)]
-        class_amount = [len(idx_list[i]) for i in range(num_classes)]
 
+        # compute the size of each class
+        class_amount = [len(idx_list[i]) for i in range(num_classes)]
+        
+        # compute the size of each local dataset
         client_sample_nums = np.array(cal_num(len(labels), num_client))
         # print(client_sample_nums)
 
@@ -157,12 +158,11 @@ def label_skew_balance(graphs, num_client, seed, alpha=4):
         for i in range(num_client):
             graph_chunks.append([graphs[idx] for idx in client_indices[i]])
         for client_idx in client_indices:
-            label_res = [0, 0]
+            label_res = np.zeros(np.max(labels)+1).astype(int)
             for idx in client_idx:
                 label_res[int(labels[idx])] += 1
             print(label_res)
-
-        return graph_chunks
+        return [client_indices[i] for i in range(num_client)]
 
 
 def select_pertur(graphs,num_client,seed):
@@ -213,6 +213,8 @@ def prepareData_oneDS(num_client, args, seed=None):
     data = args.data_group
     tudataset = data_process(args.datapath, data, args.convert_x)
     graphs = [x for x in tudataset]
+    #show_label_distribution(graphs)
+    #exit(0)
     #print(graphs[0].x.shape)
     #print("  **", data, len(graphs))
 
@@ -221,11 +223,22 @@ def prepareData_oneDS(num_client, args, seed=None):
     #graphs_chunks = label_skew_balance(graphs, num_client, seed,args.label_skew)
 
     # only split two clients
-    graphs_chunks_idx = toy_split(graphs,rate = args.toy_rate)
+    if args.split_way == 'toy':
+        graphs_chunks_idx = toy_split(graphs,rate = args.toy_rate)
 
-    if args.num_splits > 1:
-        graphs_chunks_idx = subchunk_split(graphs,graphs_chunks_idx,args.num_splits)
+        if args.num_splits > 1:
+            graphs_chunks_idx = subchunk_split(graphs,graphs_chunks_idx,args.num_splits if num_client > 1 else args.num_splits//2)
+            num_client *= args.num_splits
+            args.num_clients *= args.num_splits
+
+    elif args.split_way == 'label_skew':
         num_client *= args.num_splits
+        graphs_chunks_idx = label_skew(graphs,num_client,seed,args.skew_rate)
+        #exit(0)
+    
+    elif args.split_way == 'blabel_skew':
+        num_client *= args.num_splits
+        graphs_chunks_idx = label_skew_balance(graphs,num_client,seed,args.skew_rate)
     
     splitedData = {}
     num_node_features = graphs[0].num_node_features
@@ -241,7 +254,7 @@ def prepareData_oneDS(num_client, args, seed=None):
         ds = f'{idx}-{data}-{status}'
         #print(len(chunks_idx))
         chunks = [graphs[idx] for idx in chunks_idx]
-        #show_label_distribution(chunks)
+        show_label_distribution(chunks)
         #print(idx,len(chunks))
         
         if args.feature_pertur:

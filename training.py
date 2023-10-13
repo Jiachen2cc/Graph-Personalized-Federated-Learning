@@ -6,7 +6,7 @@ import torch
 from queue import Queue
 import copy
 from analyze_client import simi_ana,clf_ana,cos_sim
-from analyze_dataset import structure_sim
+from analyze_dataset import structure_sim,pg_analysis,label_dis,get_meanfeature
 from analyze_graphs import fake_graph
 from server import group_sub
 from init_client_graph import dist_simi_metrix
@@ -17,8 +17,13 @@ from torch.utils.tensorboard import SummaryWriter
 from analyze_client import graph_diff
 from recover_model import GCN_DAE
 from client import Client_GC
-from utils import graph_truncate,mean_diff,cluster_uniform_graph
+from utils import graph_truncate,mean_diff,cluster_uniform_graph,random_con_graph
 import math
+from graph_utils import normalize
+import torch.nn.functional as F
+from tqdm import tqdm
+from utils import rule_selector
+
 
 # the length for considering the best accuracy among the last serveral rounds
 COUNT_LEN = 10
@@ -80,19 +85,23 @@ def best_final_acc(client_final_accs,length):
 
 def analyze_train(clients):
 
-    allAccs,final_accs = {},{}
+    allAccs,final_accs,final_rocs = {},{},{}
     for client in clients:
         # initialize
         allAccs[client.name] = {}
         stats = np.array(client.eval_stats['testAccs'])
+        #rstats = np.array(client.eval_stats['testRocs'])
         allAccs[client.name]['best_test_acc'] = np.max(stats)
         allAccs[client.name]['final_test_acc'] = stats[-1]
         final_accs[client.name] = stats[-(COUNT_LEN+1):-1]
+        #final_rocs[client.name] = rstats[-(COUNT_LEN+1):-1]
 
     best_final = best_final_acc(final_accs,COUNT_LEN)
+    #best_final_roc = best_final_acc(final_rocs,COUNT_LEN)
 
     for k in best_final.keys():
         allAccs[k]['final_best_test_acc'] = best_final[k]
+        #allAccs[k]['final_best_test_roc'] = best_final_roc[k]
 
     return allAccs
     
@@ -111,6 +120,9 @@ def run_selftrain_GC(clients, server, args):
     client_similarity = torch.zeros((len(clients),len(clients)))
     embed_similarity = torch.zeros((len(clients),len(clients)))
 
+    oparamsim = torch.zeros((args.num_clients,args.num_clients))
+    paramsim = torch.zeros((args.num_clients,args.num_clients))
+    
     for cround in range(1,args.num_rounds + 1):
         # training
         for client in clients:
@@ -119,6 +131,12 @@ def run_selftrain_GC(clients, server, args):
 
         #analyze the similarity 
         embed = server.graph_modelembedding(clients,graph_batch.to(args.device))
+        params = [{k:copy.deepcopy(client.W[k]) for k in server.W.keys()} for client in clients]
+        ofeature,feature,sim = prepare_features(embed,params,cround,args)
+
+        oparamsim += cos_sim(ofeature.detach().cpu())
+        paramsim += cos_sim(feature.detach().cpu())
+        print(torch.sum(oparamsim-paramsim))
         #print('the similarity of the model parameters')
         client_simi = simi_ana(clients,None,server.W.keys())
         #print('the similarity of the inference result')
@@ -128,18 +146,15 @@ def run_selftrain_GC(clients, server, args):
         embed_similarity += embed_simi.cpu()
 
 
-        if (cround+1)%10 == 0:
-            mean_loss,mean_acc = mean_performance(clients)
-            #print('average accuracy:{:.4f}, average loss:{:.4f}'.format(mean_acc, mean_loss))
         if args.data_group == 'clf_test':
             print('the similarity of the classifiers')
             clf_ana(clients,server)
     
     #print('average similarity')
-    print('average client similarity')
-    print(client_similarity/args.num_rounds)
-    print('average embedding similarity')
-    print(embed_similarity/args.num_rounds)
+    #print('average client similarity')
+    #print(client_similarity/args.num_rounds)
+    #print('average embedding similarity')
+    #print(embed_similarity/args.num_rounds)
     allAccs = analyze_train(clients)
     '''
     clients[0].download_from_server(clients[1])
@@ -150,6 +165,13 @@ def run_selftrain_GC(clients, server, args):
     #if args.global_model:
         #monitor_performance(writer,clients[-1])
     #monitor_performance(writer,clients)
+
+    oparamsim /= args.num_rounds
+    paramsim /= args.num_rounds
+    print(oparamsim-paramsim)
+
+    np.save('client_feature/vanilla_param.npy',oparamsim.numpy())
+    np.save('client_feature/differential_param.pt',paramsim.numpy())
 
     return allAccs
 
@@ -163,9 +185,6 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
         frac = 1.0
     
     for c_round in range(1, COMMUNICATION_ROUNDS + 1):
-        if (c_round) % 50 == 0:
-            pass
-            #print(f"  > round {c_round}")
         
         '''
         if c_round == 1:
@@ -220,6 +239,36 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
     #monitor_performance(writer,allloss,allacc)
     return allAccs
 
+def run_scaffold(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, args, samp = None, frac=1.0):
+
+    for client in clients:
+        client.download_from_server(server)
+
+    if samp is None:
+        sampling_fn = server.randomSample_clients
+        frac = 1.0
+    
+    for c_round in range(1, COMMUNICARION_ROUNDS + 1):
+        
+        for _ in range(local_epoch):
+            for client in clients:
+                client.local_train(1)
+                for k in server.W.keys():
+                    client.W[k].data = client.W[k].data - args.lr*(server.control[k].data - client.control[k].data)
+                client.evaluate()
+                
+        #update the client model with control parameters
+        server.scaffold_update(clients,local_epoch,args)
+    
+    allAccs = analyze_train(clients)
+
+    return allAccs
+
+
+
+
+
+
 
 def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, mu, samp=None, frac=1.0):
     for client in clients:
@@ -231,21 +280,15 @@ def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, mu, samp=Non
     if samp == 'random':
         sampling_fn = server.randomSample_clients
 
-    allAccs,final_accs = {},{}
     #initialize
-    for client in clients:
-        allAccs[client.name] = {'best_test_acc':[],'final_test_acc':None}
-        final_accs[client.name] = []
-
     for c_round in range(1, COMMUNICATION_ROUNDS + 1):
-        if (c_round) % 50 == 0:
-            print(f"  > round {c_round}")
-
+        #if (c_round) % 50 == 0:
+        #    print(f"  > round {c_round}")
+        
         if c_round == 1:
             selected_clients = clients
         else:
             selected_clients = sampling_fn(clients, frac)
-
         for client in selected_clients:
             client.local_train_prox(local_epoch, mu)
 
@@ -257,16 +300,9 @@ def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, mu, samp=Non
             client.cache_weights()
 
         for client in clients:
-            loss, acc = client.evaluate()
-            allAccs[client.name]['best_test_acc'].append(acc)
-            allAccs[client.name]['final_test_acc'] = acc
-            if COMMUNICATION_ROUNDS - c_round <= COUNT_LEN - 1:
-                final_accs[client.name].append(acc)
+            client.evaluate()
 
-    best_final = best_final_acc(final_accs,COUNT_LEN)
-    for key in allAccs.keys():
-        allAccs[key]['best_test_acc'] = np.max(np.array(allAccs[key]['best_test_acc']))
-        allAccs[key]['final_best_test_acc'] = best_final[key]
+    allAccs = analyze_train(clients)
     
     return allAccs
 
@@ -460,7 +496,7 @@ def run_tosfl(clients,server,COMMUNICATION_ROUNDS, local_epoch, args):
     '''
     return allAccs
 
-def pre_finigraph(tag,clients,eps):
+def pre_finigraph(tag,clients,eps,args):
     # prepare all the initial client graph except for 
     # distance & similarity(these two needed to be computed in each round)
 
@@ -470,22 +506,40 @@ def pre_finigraph(tag,clients,eps):
     elif tag == 'uniform':
         num = len(clients)
         init_A = torch.ones(num,num)/num
+    elif tag == 'property':
+        init_A = pg_analysis(clients)
+        #pass
+    elif tag == 'ans':
+        init_A = cluster_uniform_graph(args.num_clients*args.num_splits,args.num_splits)
+    elif tag == 'randomc':
+        init_A = random_con_graph(args.num_clients*args.num_splits)
     else:
         init_A = None
     
     return init_A
 
-def pre_vinigraph(init_A,tag,param,sim,eps,cround,args):
+def pre_vinigraph(init_A,tag,param,sim,eps,cround,lastA,args):
     
-    if init_A is not None:
-        A = init_A
+    flex = ['distance']
+    # filter last graph to avoid introducing wrong information
+    
+    if init_A is not None and tag not in flex:
+        # adjust the graph update rate according to the current round
+        #gr = args.graph_rate*(1-cround/args.num_rounds)
+        if 'u' in args.ablation:
+            gr = args.graph_rate
+            #A = init_A*(1 - args.graph_rate) + lastA.to(init_A.device)*args.graph_rate if lastA is not None else init_A
+            A = init_A.to(init_A.device)*(1 - gr) + sim.to(init_A.device)*gr if lastA is not None else init_A
+        else:
+            A = init_A
+        #print(cround)
+        #print(torch.sum((A-init_A)**2))
+        #A = init_A
     elif tag == 'distance':
         A = dist_simi_metrix(param,eps)
     elif tag == 'sim':
+        #print('correct logic!')
         A = sim
-    elif tag == 'ans':
-        A = cluster_uniform_graph(args.num_clients*args.num_splits,args.num_splits)
-
     #A = normalize(graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2)),'sym')
     #A = graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2))
     if args.discrete:
@@ -498,16 +552,21 @@ def pre_vinigraph(init_A,tag,param,sim,eps,cround,args):
 
     return A
 
-def get_finalgraph(args,feature,init_A,cround):
+def get_finalgraph(args,feature,init_A,cround,clients):
     nclient = init_A.shape[0]
     if args.para_choice not in ['ans','self','avg']:
-        _,A,_ = generate_adj(feature,init_A,args,None)
+        if 'l' in args.ablation:
+            _,A,_ = generate_adj(clients,feature,init_A,args,None)
+        else:
+            A = init_A
     elif args.para_choice == 'ans':
         A = cluster_uniform_graph(nclient,args.num_splits)
     elif args.para_choice == 'self':
         A = torch.eye(nclient)
     elif args.para_choice == 'avg':
         A = torch.ones((nclient,nclient))/nclient
+    elif args.para_choice == 'label':
+        A = label_dis(clients,args.graph_eps)
     interval_print(A,cround,40,'result client graph')
     return A
 
@@ -519,15 +578,14 @@ def prepare_features(embed,param,cround,args):
 
     # apply transforms to parameters
     if args.input_choice == 'diff':
-        choices = {k: mean_diff(f,args.diff_rate) for k,f in choices.items()}
-
+        choices = {k: F.normalize(mean_diff(f,args.diff_rate),p=2,dim=1) for k,f in choices.items()}
+    
     # compute similarity
     sims = {k:cos_sim(f) for k,f in choices.items()}
     for k,s in sims.items():
-        interval_print(s,cround,40,'the similarity of '+ k)
-    
+        interval_print(s,cround,1,'the similarity of '+ k)
     k = args.para_choice if args.para_choice in choices.keys() else 'embed'
-    return ofeature[k],choices[k],sims[k]
+    return ofeature[k],choices[k],sims[args.graph_choice]
 
 # try different sharing ways before paramter converge to stable value
 def pre_sharing(server,clients,agg_dWs,method,init_A,args):
@@ -552,7 +610,7 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
 
     assert isinstance(server,Server)
     
-    seq_grads = {c.id:[] for c in clients}
+    #seq_grads = {c.id:[] for c in clients}
     [client.download_from_server(server) for client in clients]
     
     # generate the input feature based on the gradients sequence
@@ -560,36 +618,59 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
     #q = Queue(maxsize = 5)
 
     # compute the initial graph 
-    init_A = pre_finigraph(args.initial_graph,clients,args.graph_eps)
+    init_A = pre_finigraph(args.initial_graph,clients,args.graph_eps,args)
+    property_feature = get_meanfeature(clients)
     nclient = len(clients)
 
     #interval update
     last_client_W = None
-    A,average_A = None,torch.zeros(nclient,nclient)
+    A,average_A,lastA = None,torch.zeros(nclient,nclient),None
     graph_batch = random_graphbatch(20,20,30,min(c.data[0].x.shape[1] for c in clients),'structure',seed = 0)
 
     sharing_start = 0
     if args.setting == 'multi':
         graph_batch = [feature_enlarge(graph_batch,c.data[0].x.shape[1]) for c in clients]
     infos = {'ofeature':[],'feature':[],'initA':[],'resA':[]}
-    for cround in range(1, COMMUNICATION_ROUNDS + 1):
 
-        for client in clients:
+    # record the performance gain of each client after knowledge sharing
+    #performance_gain = torch.zeros(len(clients))
+    for cround in range(1, COMMUNICATION_ROUNDS + 1):
+        
+        average = 0
+        for i,client in enumerate(clients):
             client.compute_weight_update(local_epoch)
-            seq_grads[client.id].append({k:client.dW[k] for k in client.gconvNames})
+            #_,acc,_ = client.evaluate(record = False)
+            #average += acc    
+            #performance_gain[i] = acc
+            #seq_grads[client.id].append({k:client.dW[k] for k in client.gconvNames})
+        #print('accuracy after local training before knowledge sharing {:.4f}'.format(average/len(clients)))
         
         if args.setting == 'single':
             embed = server.graph_modelembedding(clients,graph_batch.to(args.device),'sum')
         else:
             embed = server.multi_embedding(clients,[cbatch.to(args.device) for cbatch in graph_batch],'sum')
-        agg_dWs,graph_dWs,last_client_W = get_interval_dW(seq_grads,clients,last_client_W,server.W.keys(),cround,args)
-
+        agg_dWs,graph_dWs = get_interval_dW(clients,last_client_W,server.W.keys())
 
         if (graph_dWs is not None) and cround > args.sround:
             # prepare input_features
             ofeature,feature,sim = prepare_features(embed,graph_dWs,cround,args)
-            init_A = pre_vinigraph(init_A, args.initial_graph,graph_dWs,sim,args.graph_eps,cround,args).to(args.device)
-            A = get_finalgraph(args,feature,init_A,cround)
+            # select property features
+            if args.initial_graph == 'property' and cround == 1:
+                #print(property_feature.shape)
+                init_A = rule_selector(property_feature,sim.detach().cpu())
+            init_A = pre_vinigraph(init_A, args.initial_graph,graph_dWs,sim,args.graph_eps,cround,A,args).to(args.device)
+            init_A = normalize(init_A,'sym')
+            
+            A = get_finalgraph(args,feature,init_A,cround,clients)
+            
+            
+            #print('out')
+            #print(A)
+            
+            num = torch.tensor([client.train_size]).to(A.device)
+            A = normalize(A*num[None,:],'row')
+
+            lastA = A
             average_A += A.cpu()
             
             collect_info(infos,ofeature.cpu().numpy(),feature.cpu().numpy(),init_A.cpu().numpy(),A.cpu().numpy())
@@ -597,15 +678,23 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
             #init_A = (1 - args.serverbeta) * init_A + args.serverbeta * A.to(args.device)
 
         # 2 update the local models
-        if cround > args.sround:
+        if cround >= args.sround:
             [client.reset() for client in clients]
-            server.graph_update(clients,agg_dWs,A.to('cpu'),args)
+            server.graph_update(clients,agg_dWs,A,args)
         else:
             pre_sharing(server,clients,agg_dWs,args.pshare,init_A,args)
         #q = server.inter_graph_update(clients,q,A,5)
 
         # evaluate the performance
         [client.evaluate() for client in clients]
+        '''
+        average = 0
+        for i,client in enumerate(clients):
+            _,acc,_ = client.evaluate()
+            performance_gain[i] -= acc
+            average += acc
+        '''
+        #print('accuracy after knowledge sharing {:.4f}'.format(average/len(clients)))
     
     allAccs = analyze_train(clients)
 
@@ -796,36 +885,18 @@ def run_gcflplus_dWs(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, 
 
     return allAccs
 
-def get_interval_dW(seq_grad,clients,last_client_W,server_key,cround,args):
+def get_interval_dW(clients,last_client_W,server_key):
 
     agg_dWs = [
             {k:copy.deepcopy(client.dW[k]) for k in server_key}
             for client in clients
     ]
-    if args.input_choice == 'gradient':
-        graph_dWs = [
-            {k:copy.deepcopy(client.dW[k]) for k in server_key}
-            for client in clients
-        ]
-    elif args.input_choice == 'seq':
-        if len(seq_grad[clients[0].id]) < args.timelen:
-            graph_dWs = [
+    graph_dWs = [
             {k:copy.deepcopy(client.W[k]) for k in server_key}
             for client in clients
-            ]
-        else:
-            graph_dWs = [
-                time_mean(seq_grad[client.id][-args.timelen:])
-                for client in clients
-            ]
-    else:
-        graph_dWs = [
-            {k:copy.deepcopy(client.W[k]) for k in server_key}
-            for client in clients
-        ]
+    ]
             
-    last_client_W = None
-    return agg_dWs,graph_dWs,last_client_W
+    return agg_dWs,graph_dWs
     # update every round
     if interval == 1 or ((last_client_W is None) and cround == 1):
         graph_dWs = [

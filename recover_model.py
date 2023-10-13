@@ -103,15 +103,15 @@ class GCN_DAE(torch.nn.Module):
         if normal:
             #A_ = symmetrize(A_)
             A_ = normalize(A,'sym')
-
         #A = F.dropout(A_,self.adj_dropout,training = self.training)
+        '''
         for conv in self.layers[:-1]:
             x = conv(x,A_)
             x = self.act(x)
             x = F.dropout(x, self.dropout, training = self.training)
-        
         x = self.layers[-1](x, A_)
-
+        '''
+        
         return x,A
 
         

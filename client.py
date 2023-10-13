@@ -7,6 +7,8 @@ import numpy as np
 import random
 from data_utils import easy_datasets,label_balanced_downsample
 from perturbations import node_feature_perturbation,structure_perturbation
+from utils import get_roc_auc
+import torch.nn.functional as F
 
 class Client_GC():
     def __init__(self, model, client_id, client_name, dataset_name, data, split_idx, optimizer, args):
@@ -29,6 +31,10 @@ class Client_GC():
         self.W = {key: value for key, value in self.model.named_parameters()}
         self.dW = {key: torch.zeros_like(value) for key, value in self.model.named_parameters()}
         self.W_old = {key: value.data.clone() for key, value in self.model.named_parameters()}
+        self.control = {key: torch.zeros_like(value) for key, value in self.model.named_parameters()}
+        self.dcontrol = {key: torch.zeros_like(value) for key, value in self.model.named_parameters()}
+        self.weights = {k:torch.ones_like(self.W[k]).to(args.device) for k in self.W.keys()}
+        self.wm = 1
 
         self.gconvNames = None
 
@@ -42,6 +48,7 @@ class Client_GC():
         self.eval_stats = {
             'testLosses': [],
             'testAccs': [],
+            'testRocs':[],
         }
 
         self.weightsNorm = 0.
@@ -69,6 +76,19 @@ class Client_GC():
 
         self.train_data = cp.deepcopy(train)
         self.test_data = cp.deepcopy(test)
+    
+    # sample a uniform subdataset from the original dataset
+    def sample_uniform(self):
+        # classify the train dataset according to the label 
+        labels = np.array([g.y.item() for g in self.train_data])
+        label_num = np.max(labels)+1
+        subgraph = [np.where(labels == i)[0] for i in range(label_num)]
+        sample_size = min([len(sub) for sub in subgraph])
+        
+        #sample_idx = np.concatenate([np.random.choice(sub,sample_size) if len(sub) < sample_size else np.random.choice(sub,sample_size,replace = False) for sub in subgraph])
+        sample_idx = np.concatenate([np.random.choice(sub,sample_size) for sub in subgraph])
+        return [self.train_data[idx] for idx in sample_idx]
+        
 
 
     def split_traintest(self,fold_idx,Batchsize,args):
@@ -94,6 +114,12 @@ class Client_GC():
         self.test_data = cp.deepcopy(test)
 
         #return struc_f
+    
+    def get_labeldis(self):
+
+        labels = np.array([g.y.item() for g in self.train_data])
+        ldis = [np.sum(labels == i) for i in range(1,int(np.max(labels)+1))]
+        return ldis
 
     def dict_extend(self,x,y):
         
@@ -143,6 +169,7 @@ class Client_GC():
 
         grads_conv = {key: self.W[key].grad for key in self.gconvNames}
         self.convGradsNorm = torch.norm(flatten(grads_conv)).item()
+    
 
 
     def compute_weight_update(self, local_epoch):
@@ -170,13 +197,120 @@ class Client_GC():
         grads_conv = {key: self.W[key].grad for key in self.gconvNames}
         self.convGradsNorm = torch.norm(flatten(grads_conv)).item()
 
-    def evaluate(self):
+    def evaluate(self,record = True):
 
-        valloss,valacc = eval_gc(self.model, self.dataLoader['test'], self.args.device)
-        self.eval_stats['testLosses'].append(valloss)
-        self.eval_stats['testAccs'].append(valacc)
+        valloss,valacc,roc_auc_score = eval_gc(self.model, self.dataLoader['test'], self.args.device)
+        
+        if record:
+            self.eval_stats['testLosses'].append(valloss)
+            self.eval_stats['testAccs'].append(valacc)
+            self.eval_stats['testRocs'].append(roc_auc_score)
 
-        return valloss,valacc
+        return valloss,valacc,roc_auc_score
+    
+    def load_param_matrix(self,param):
+
+        # reshape parameter tensor back to model parameters
+        pointer = 0
+        for k in self.W.keys():
+            kshape = self.W[k].data.shape
+            num_p = 1
+            for n in kshape:
+                num_p *= n
+            self.W[k].data = param[pointer:pointer+num_p].view(kshape)
+            pointer += num_p
+        
+        
+
+    def ALA_aggregate(self,server_dW,args):
+        
+        # create temp model
+        model_t = cp.deepcopy(self.model)
+        param_t = {k:v for k,v in model_t.named_parameters()}
+
+        # compute loss
+        optimizer = torch.optim.SGD(model_t.parameters(),0)
+
+        # load the aggregated gradient in server
+        serverd = cp.deepcopy(self.dW)
+        pointer = 0
+        loss = 0
+        #loss = F.mse_loss(param,torch.zeros(param.shape).to(param.device))
+        for k in serverd.keys():
+            kshape = serverd[k].data.shape
+            num_p = 1
+            for n in kshape:
+                num_p *= n
+            serverd[k].data = server_dW[pointer:pointer + num_p].view(kshape)
+            pointer += num_p 
+        
+        locald = cp.deepcopy(self.dW)
+        localp = cp.deepcopy(self.W_old)
+        
+        # weight initialization & param initialization
+        #weights = {k:torch.ones_like(localp[k]).to(args.device) for k in localp.keys()}
+        for k in serverd.keys():
+            param_t[k].data = localp[k] + locald[k] + (serverd[k] - locald[k]) * self.weights[k]
+
+        # initialize the parameters 
+        # initialize 
+        # sample ratio% of training data and compute loss
+        #sample_idx = label_balanced_downsample(np.array([g.y.item() for g in self.train_data]),args.ala_ratio,args.seed)
+        #sample = [self.train_data[idx] for idx in sample_idx]
+        sample_loader = DataLoader(self.train_data,args.batch_size,True)
+        
+        # perform training 
+        losses = []
+        cnt = 0
+        model_t.train()
+
+        for i in range(args.ala_round):
+
+            loss = 0
+
+            for _, batch in enumerate(self.dataLoader['train']):
+                optimizer.zero_grad()
+                batch.to(args.device)
+                pred = model_t(batch)
+                tloss = model_t.loss(pred,batch.y)
+                tloss.backward()
+                loss += tloss*batch.num_graphs
+                optimizer.step()
+                
+                '''
+                print('accept loss {:.4f}'.format(tloss))
+                for k in serverd.keys():
+                    print('gradient norm')
+                    print(torch.norm(param_t[k].grad))
+                    print('difference norm')
+                    print(torch.norm((serverd[k] - locald[k])*param_t[k].grad))
+                '''
+                # update weight 
+                
+                for k in serverd.keys():
+                    self.weights[k].data = torch.clamp(
+                        self.weights[k].data + (args.ala_lr/args.lr) * param_t[k].grad * (serverd[k] - locald[k]), 0, 1)
+                    #print('weigth diff {:.4f}'.format(torch.norm(args.ala_lr * param_t[k].grad * (serverd[k] - locald[k]))))
+                #self.wm = sum([torch.sum(weights[k]) for k in serverd.keys()])/(pointer+1)
+                # update param
+                for k in serverd.keys():
+                    param_t[k].data = localp[k] + locald[k] + (serverd[k] - locald[k]) * self.weights[k]
+                
+            loss /= len(self.train_data)
+            #print('current loss {:.4f}'.format(loss))
+            weight_mean = sum([torch.sum(self.weights[k]) for k in serverd.keys()])/(pointer+1)
+            #print('mean accept weight {:.4f}'.format(weight_mean))
+            losses.append(loss)
+            cnt += 1
+        
+        self.download_weight({k: param_t[k] for k in serverd.keys()})
+        # compute the average accept rate
+        weight_mean = sum([torch.sum(self.weights[k]) for k in serverd.keys()])/(pointer+1)
+        #print(weight_mean)
+        #exit(0)
+        return weight_mean
+
+
 
 
 
@@ -248,7 +382,7 @@ def train_gc(model, dataloaders, optimizer, local_epoch, device, train_data):
         acc = acc_sum / ngraphs
 
         #loss_v, acc_v = eval_gc(model, val_loader, device)
-        loss_tt, acc_tt = eval_gc(model, test_loader, device)
+        loss_tt, acc_tt,_ = eval_gc(model, test_loader, device)
 
         losses_train.append(total_loss)
         accs_train.append(acc)
@@ -282,6 +416,7 @@ def train_gc(model, dataloaders, optimizer, local_epoch, device, train_data):
         losses_test.append(loss_tt)
         accs_test.append(acc_tt)
     '''
+    #print('train loss',losses_train)
     return {'trainingLosses': losses_train, 'trainingAccs': accs_train, #'valLosses': losses_val, 'valAccs': accs_val,
             'testLosses': losses_test, 'testAccs': accs_test}
 
@@ -291,17 +426,28 @@ def eval_gc(model, test_loader, device):
     total_loss = 0.
     acc_sum = 0.
     ngraphs = 0
+    preds,labels = [],[]
     for batch in test_loader:
         batch.to(device)
         with torch.no_grad():
             pred = model(batch)
             label = batch.y
             loss = model.loss(pred, label)
+        preds.append(pred)
+        labels.append(F.one_hot(label,pred.shape[1]))
         total_loss += loss.item() * batch.num_graphs
         acc_sum += pred.max(dim=1)[1].eq(label).sum().item()
         ngraphs += batch.num_graphs
 
-    return total_loss/ngraphs, acc_sum/ngraphs
+    preds = torch.concat(preds,dim = 0)
+    labels = torch.concat(labels,dim = 0)
+    #print(preds.shape)
+    #print(labels.shape)
+
+    roc_auc_score = get_roc_auc(labels,preds)
+    #roc_auc_score = 0
+
+    return total_loss/ngraphs, acc_sum/ngraphs, roc_auc_score
 
 
 def _prox_term(model, gconvNames, Wt):
@@ -338,7 +484,7 @@ def train_gc_prox(model, dataloaders, optimizer, local_epoch, device, gconvNames
         acc = acc_sum / ngraphs
 
         #loss_v, acc_v = eval_gc(model, val_loader, device)
-        loss_tt, acc_tt = eval_gc(model, test_loader, device)
+        loss_tt, acc_tt,_ = eval_gc(model, test_loader, device)
 
         losses_train.append(total_loss)
         accs_train.append(acc)

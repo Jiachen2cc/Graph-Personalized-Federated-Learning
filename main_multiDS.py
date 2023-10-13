@@ -117,7 +117,7 @@ parser.add_argument('--device', type=str, default='cpu',
 # parameter for local model training
 parser.add_argument('--num_repeat', type=int, default= 5,
                         help='number of repeating rounds to simulate;')
-parser.add_argument('--num_rounds', type=int, default= 200,
+parser.add_argument('--num_rounds', type=int, default= 100,
                         help='number of rounds to simulate;')
 parser.add_argument('--local_epoch', type=int, default=1,
                         help='number of local epochs;')
@@ -172,12 +172,13 @@ parser.add_argument('--glr', type = float, default = 0.001,
                     help = 'the learning rate of graph generator')
 parser.add_argument('--gweight_decay', type = float, default = 5e-4,
                     help = 'the weight decay of graph generator')
-parser.add_argument('--mask_ratio', type = float, default = 0.1)
+parser.add_argument('--mask_ratio', type = float, default = 0.)
+parser.add_argument('--loss_gama', type = float, default = 0.25)
 parser.add_argument('--compress_mode', type = str, default = 'shape',
                     help = 'the parameter compression model',
                     choices = ['continous','discrete','shape'])
 parser.add_argument('--compress_dim', type = int, default = 1000)
-parser.add_argument('--gc_epoch', type = int, default = 200,
+parser.add_argument('--gc_epoch', type = int, default = 100,
                     help = 'the epoch for training ')
 parser.add_argument('--layers', type = int, default = 1)
 parser.add_argument('--serveralpha', type = float, default = 1,
@@ -232,19 +233,22 @@ parser.add_argument('--target_dataset', type = str, default = 'IMDB-BINARY')
 
 # choose federated parameters
 parser.add_argument('--Federated_mode', type = str, default ='SFL',
-                        choices = ['Selftraining','FedAvg','FedProx','SFL','biSFL','toSFL','GCFL'])
+                        choices = ['Selftraining','FedAvg','FedProx','SFL','biSFL','toSFL','GCFL','Scaffold'])
 parser.add_argument('--initial_graph', type = str, default = 'sim',
-                        choices = ['degree_disb','triangle_disb','distance','hop2_disb','uniform','sim'])
+                        choices = ['degree_disb','triangle_disb','distance','hop2_disb','uniform','sim','ans','property'])
 parser.add_argument('--graph_eps', type = float, default = 0.3,
                         help = 'the eps term for initial client graph normalization')
-parser.add_argument('--para_choice', type = str, default = 'embed',
-                        choices = ['param','embed','ans'])
+parser.add_argument('--graph_rate', type = float, default = 0.05,
+                    help = 'the update rate of the initial graph')
+parser.add_argument('--para_choice', type = str, default = 'param',
+                        choices = ['param','embed','ans','self','avg'])
+parser.add_argument('--graph_choice', type = str,default = 'embed',
+                    help = 'the choice for parameterize the initial graph')
 parser.add_argument('--input_choice', type = str, default = 'diff',
-                        choices = ['whole','gradient','seq','diff'])
+                        choices = ['whole','gradient','seq','diff','ans'])
 parser.add_argument('--diff_rate',type = float, default = 0.95,
                     help = 'the remove rate of mean value')
 parser.add_argument('--timelen', type = int, default = 20)
-parser.add_argument('--num_splits', type = int, default = 1)
 
 # update model sharing mechanism
 parser.add_argument('--sharing_mode', type = str, default = 'gradient',

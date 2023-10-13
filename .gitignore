@@ -1,3 +1,13 @@
 data/
 ee/
 __pycache__/
+analysis/
+.vscode/
+NCI1_experiment/
+plotresult/
+run/
+runs/
+yeast_experiment/
+protein_experiment/
+motivation/
+client_feature/

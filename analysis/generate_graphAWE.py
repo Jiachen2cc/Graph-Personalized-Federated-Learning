@@ -107,7 +107,7 @@ def runner2(graphs):
 
 
 if __name__ == "__main__":
-    # datasets = [#"MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "NCI1",  # small molecules
+    # datasets = [#"MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "COLLAB",  # small molecules
     #             # "ENZYMES",
     #             # "DD", "PROTEINS",  # bioinformatics
     #             "COLLAB", "IMDB-BINARY", "IMDB-MULTI", "REDDIT-BINARY"]  # social networks

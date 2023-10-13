@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
+from sklearn.metrics import roc_auc_score
 
 
 def convert_to_nodeDegreeFeatures(graphs):
@@ -151,9 +152,19 @@ def graph_truncate(graph,link_num):
     #return mask
 
 
-def mean_diff(vmatrix,diff_rate):
+def mean_diff(vmatrix,diff_rate,threshold = 0.1):
     
     vmean = torch.mean(vmatrix,dim = 0)
+
+    # compute resd
+    resd = vmatrix - vmean
+    mean_res = torch.mean(resd**2,dim = 0)
+    # compute vmean
+    measure = (torch.mean(vmatrix**2,dim = 0)+vmean**2)/2
+    #difp = torch.mean(mean_res/torch.mean(vmatrix**2,dim = 0))
+    difp = torch.mean(mean_res/measure)
+    diff_rate = 1 #if difp >= threshold else 1
+    #print(difp)
     return vmatrix-diff_rate*vmean
 
 
@@ -167,4 +178,67 @@ def cluster_uniform_graph(num,csize):
         A[i*csize:(i+1)*csize,:][:,i*csize:(i+1)*csize] = 1/csize
     
     return A
-            
+
+def get_roc_auc(label,score):
+
+    Fscore = F.softmax(score,dim = 1).cpu()
+    label = label.cpu()
+    #print(Fscore.shape)
+    #print(label.shape)
+    #label = F.one_hot(label,Fscore.shape[1]).cpu()
+    return 0
+
+    #return roc_auc_score(label,Fscore,average = 'macro')
+
+#   randomly generate weighted graph
+def random_con_graph(num):
+    return torch.tensor(np.random.random((num,num))).float()
+
+
+#   compute similarity based on given features
+def f2sim(features):
+    features = F.normalize(mean_diff(features,1,0),p = 2,dim = 1)
+    sim = torch.matmul(features,features.T)
+    sim *= (sim >= 0).float().to(sim.device)
+    return sim
+
+#   gradualy remove features
+def feature_removal(features,sim):
+
+    if(features.shape[1] == 2):
+        return None
+    
+    odiff = torch.sum((f2sim(features)-sim)**2)
+    ndiffs = torch.zeros(features.shape[1])
+
+    for i in range(features.shape[1]):
+        subfeature = features[:,torch.arange(features.shape[1]) != i]
+        ndiffs[i] = torch.sum((f2sim(subfeature) - sim)**2)
+
+    # remove unhelpful features
+    resdiff = ndiffs - odiff
+    bestidx = torch.argmin(resdiff)
+    if(resdiff[bestidx] >= 0):
+        return None
+    
+    return features[:,torch.arange(features.shape[1]) != bestidx]
+
+def rule_selector(features,sim):
+    #preprocess the similarity matrix
+    sim *= (sim >= 0).float().to(sim.device)
+
+    while(1):
+
+        removal = feature_removal(features,sim)
+        if removal is None:
+            break
+        features = removal
+    #print(features.shape)
+    # construct client graph based on selected features
+    return f2sim(features)
+
+    
+        
+
+    
+

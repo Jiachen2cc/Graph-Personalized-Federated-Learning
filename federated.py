@@ -108,7 +108,7 @@ def preprocess_input(features,ini_graph):
     features = F.normalize(features,dim = 1)
     return features,ini_graph
 
-def generate_adj(param_metrix,pre_A,args,model = None):
+def generate_adj(clients,param_metrix,pre_A,args,model = None):
     '''
     Net = SLAPS(param_metrix.shape[1],32,16,0,F.relu,
     param_metrix.shape[1],64,0.5,F.relu,len(param_metrix)).to(args.device)
@@ -116,10 +116,9 @@ def generate_adj(param_metrix,pre_A,args,model = None):
     # preprocess the input parameters
     #param_metrix,pre_A = preprocess_input(param_metrix,pre_A)
 
-    Net = GCN_DAE(2,param_metrix.shape[1],128,param_metrix.shape[1],0.5,0,args.gen_mode,64,32,2).to(args.device)
+    Net = GCN_DAE(1,param_metrix.shape[1],128,param_metrix.shape[1],0.5,0,args.gen_mode,64,32,1).to(args.device)
     if model is not None:
         Net = model
-    #print(pre_A)
     Net.train()
     #Net.init_graph_gen(param_metrix,pre_A)
     #print(Net.parameters())
@@ -130,23 +129,30 @@ def generate_adj(param_metrix,pre_A,args,model = None):
         optimizer.zero_grad()
         
         loss1, adj = get_loss_masked_features(Net,param_metrix,pre_A,mask,args)
-        loss2 = F.mse_loss(pre_A,adj,reduction='mean') 
+        #loss2 = F.binary_cross_entropy(adj, (pre_A >= 1/pre_A.shape[0]).float()) 
+        #ploss = gain_loss(adj,gain)
+        #aloss = ALA_loss(adj,clients,args)
+        #print(aloss)
+        #print(ploss)
         #loss2 = F.binary_cross_entropy(adj.view(-1),pre_A.view(-1))
         if args.sigmoid:
-            loss = adj_entloss(adj) + 0.5*size_loss(adj,'sigmoid')
+            loss = adj_entloss(adj) + args.loss_gama*size_loss(adj,'sigmoid')
         else:
-            loss = adj_reluloss(adj) + 0.5*size_loss(adj)
+            loss = adj_reluloss(adj) + args.loss_gama*size_loss(adj)
+        #loss += 0.1*aloss
         loss.backward()
         #print(adj)
+        #print(adj)
         #print(loss)
-        '''
+        
         if e >= 0:
-            print('loss_used:{:.4f}'.format(loss))
-            print('loss1:{:.4f}, loss2:{:.4f}'.format(loss1,loss2))
-            print('learned client graph')
-            print(adj)
-            gradient_ana(Net)
-        '''
+            pass
+            #print('loss_used:{:.4f}'.format(loss))
+            #print('loss1:{:.4f}, loss2:{:.4f}'.format(loss1,loss2))
+            #print('learned client graph')
+            #print(adj)
+            #gradient_ana(Net)
+        
         optimizer.step()
         #print('edge_loss:{:.4f}'.format(loss))
     # get final adj(without noise)
@@ -157,9 +163,18 @@ def generate_adj(param_metrix,pre_A,args,model = None):
         resf,adj = Net(param_metrix,param_metrix,pre_A)
         if args.discrete and args.sigmoid:
             adj = (adj >= 0.5).float().to(adj.device)
+        else:
+            '''
+            mask = (adj >= 0.5).float().to(adj.device)
+            adj = adj*mask
+            '''
+            pass
+        if args.sharing_mode == 'ALA':
+            pass
+            #adj.fill_diagonal_(0)
         #print('the output client graph(before normalization)')
         #print(adj)
-        adj = normalize(adj,'sym')
+        #adj = normalize(adj,'sym')
     #print(pre_A)  
     #print(adj)
     #exit(0)
@@ -208,3 +223,38 @@ def get_loss_masked_features(model,features,pre_A,mask,args):
         loss = F.mse_loss(logits[indices],features[indices],reduction = 'mean')
     
     return loss, Adj
+
+
+def gain_loss(graph,gain):
+
+    # negative gain causes negative weight 
+    # positive gain causes positive weight
+
+    tgain = (gain > 0)[:,None].to(graph.device)
+    tgraph = (graph > 1/graph.shape[0])
+    target_graph = (tgain & tgraph).float()
+    loss = F.binary_cross_entropy(graph,target_graph)
+
+    return loss
+
+def flattenw(w):
+    #return torch.cat([v.flatten() for v in w.data()])
+    return torch.cat([v.flatten() for v in w.values()])
+
+def ALA_loss(adj,clients,args):
+    # construct features
+    if args.sharing_mode == 'gradient':
+        features = torch.stack([flattenw(c.dW).detach() for c in clients])
+        features = torch.matmul(adj,features)
+        features += torch.stack([flattenw(c.W_old).detach() for c in clients])
+
+
+    # perform parameter aggregation based on predicted client graph
+    loss = 0
+    #loss += F.mse_loss(features,torch.zeros(features.shape).to(adj.device))
+
+    for i,c in enumerate(clients):
+        cfeature = features[i,:]
+        loss += c.ALA_train(cfeature,args)
+    
+    return loss

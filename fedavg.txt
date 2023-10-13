@@ -1,0 +1,5020 @@
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/COLLAB/eps_0.01_0.1
+Preparing data (original features) ...
+[190, 16]
+[152, 54]
+[100, 106]
+[54, 152]
+[110, 96]
+[165, 41]
+[193, 13]
+[111, 95]
+[28, 178]
+[49, 157]
+[87, 118]
+[6, 199]
+[113, 92]
+[150, 55]
+[52, 153]
+[200, 5]
+[4, 201]
+[23, 182]
+[75, 130]
+[191, 14]
+Done
+
+Done setting up devices.
+[190, 16]
+[152, 54]
+[100, 106]
+[54, 152]
+[110, 96]
+[165, 41]
+[193, 13]
+[111, 95]
+[28, 178]
+[49, 157]
+[87, 118]
+[6, 199]
+[113, 92]
+[150, 55]
+[52, 153]
+[200, 5]
+[4, 201]
+[23, 182]
+[75, 130]
+[191, 14]
+Done
+
+Done setting up devices.
+[190, 16]
+[152, 54]
+[100, 106]
+[54, 152]
+[110, 96]
+[165, 41]
+[193, 13]
+[111, 95]
+[28, 178]
+[49, 157]
+[87, 118]
+[6, 199]
+[113, 92]
+[150, 55]
+[52, 153]
+[200, 5]
+[4, 201]
+[23, 182]
+[75, 130]
+[191, 14]
+Done
+
+Done setting up devices.
+[190, 16]
+[152, 54]
+[100, 106]
+[54, 152]
+[110, 96]
+[165, 41]
+[193, 13]
+[111, 95]
+[28, 178]
+[49, 157]
+[87, 118]
+[6, 199]
+[113, 92]
+[150, 55]
+[52, 153]
+[200, 5]
+[4, 201]
+[23, 182]
+[75, 130]
+[191, 14]
+Done
+
+Done setting up devices.
+[190, 16]
+[152, 54]
+[100, 106]
+[54, 152]
+[110, 96]
+[165, 41]
+[193, 13]
+[111, 95]
+[28, 178]
+[49, 157]
+[87, 118]
+[6, 199]
+[113, 92]
+[150, 55]
+[52, 153]
+[200, 5]
+[4, 201]
+[23, 182]
+[75, 130]
+[191, 14]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.642509        0.572404             0.594750
+1-COLLAB-normal        0.694774        0.636516             0.653008
+2-COLLAB-normal        0.692102        0.656098             0.662973
+3-COLLAB-normal        0.780395        0.682067             0.683066
+4-COLLAB-normal        0.690662        0.655656             0.667294
+5-COLLAB-normal        0.683949        0.619768             0.625645
+6-COLLAB-normal        0.610546        0.557143             0.570708
+7-COLLAB-normal        0.705645        0.670616             0.671661
+8-COLLAB-normal        0.872892        0.683810             0.686713
+9-COLLAB-normal        0.800557        0.739210             0.726690
+10-COLLAB-normal       0.654634        0.616585             0.619512
+11-COLLAB-normal       0.970732        0.728780             0.725854
+12-COLLAB-normal       0.707317        0.659512             0.663415
+13-COLLAB-normal       0.702439        0.647805             0.669268
+14-COLLAB-normal       0.789268        0.722927             0.722927
+15-COLLAB-normal       0.594146        0.530732             0.556098
+16-COLLAB-normal       0.978537        0.666341             0.652683
+17-COLLAB-normal       0.891707        0.704390             0.694634
+18-COLLAB-normal       0.760000        0.727805             0.722927
+19-COLLAB-normal       0.622439        0.562927             0.587317
+mean                 0.742262        0.652055             0.657857
+std                  0.024377        0.024675             0.022795
+[128, 9]
+[100, 37]
+[59, 78]
+[54, 83]
+[60, 77]
+[113, 24]
+[127, 10]
+[87, 50]
+[28, 109]
+[31, 106]
+[67, 70]
+[13, 124]
+[73, 64]
+[111, 26]
+[45, 92]
+[134, 3]
+[1, 136]
+[8, 129]
+[52, 85]
+[131, 6]
+[113, 24]
+[135, 2]
+[38, 99]
+[22, 115]
+[80, 57]
+[115, 22]
+[47, 90]
+[13, 124]
+[35, 102]
+[33, 104]
+Done
+
+Done setting up devices.
+[128, 9]
+[100, 37]
+[59, 78]
+[54, 83]
+[60, 77]
+[113, 24]
+[127, 10]
+[87, 50]
+[28, 109]
+[31, 106]
+[67, 70]
+[13, 124]
+[73, 64]
+[111, 26]
+[45, 92]
+[134, 3]
+[1, 136]
+[8, 129]
+[52, 85]
+[131, 6]
+[113, 24]
+[135, 2]
+[38, 99]
+[22, 115]
+[80, 57]
+[115, 22]
+[47, 90]
+[13, 124]
+[35, 102]
+[33, 104]
+Done
+
+Done setting up devices.
+[128, 9]
+[100, 37]
+[59, 78]
+[54, 83]
+[60, 77]
+[113, 24]
+[127, 10]
+[87, 50]
+[28, 109]
+[31, 106]
+[67, 70]
+[13, 124]
+[73, 64]
+[111, 26]
+[45, 92]
+[134, 3]
+[1, 136]
+[8, 129]
+[52, 85]
+[131, 6]
+[113, 24]
+[135, 2]
+[38, 99]
+[22, 115]
+[80, 57]
+[115, 22]
+[47, 90]
+[13, 124]
+[35, 102]
+[33, 104]
+Done
+
+Done setting up devices.
+[128, 9]
+[100, 37]
+[59, 78]
+[54, 83]
+[60, 77]
+[113, 24]
+[127, 10]
+[87, 50]
+[28, 109]
+[31, 106]
+[67, 70]
+[13, 124]
+[73, 64]
+[111, 26]
+[45, 92]
+[134, 3]
+[1, 136]
+[8, 129]
+[52, 85]
+[131, 6]
+[113, 24]
+[135, 2]
+[38, 99]
+[22, 115]
+[80, 57]
+[115, 22]
+[47, 90]
+[13, 124]
+[35, 102]
+[33, 104]
+Done
+
+Done setting up devices.
+[128, 9]
+[100, 37]
+[59, 78]
+[54, 83]
+[60, 77]
+[113, 24]
+[127, 10]
+[87, 50]
+[28, 109]
+[31, 106]
+[67, 70]
+[13, 124]
+[73, 64]
+[111, 26]
+[45, 92]
+[134, 3]
+[1, 136]
+[8, 129]
+[52, 85]
+[131, 6]
+[113, 24]
+[135, 2]
+[38, 99]
+[22, 115]
+[80, 57]
+[115, 22]
+[47, 90]
+[13, 124]
+[35, 102]
+[33, 104]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.694656        0.530899             0.539735
+1-COLLAB-normal        0.645556        0.543228             0.553439
+2-COLLAB-normal        0.642275        0.578307             0.572487
+3-COLLAB-normal        0.729683        0.629894             0.634180
+4-COLLAB-normal        0.660106        0.627989             0.628095
+5-COLLAB-normal        0.674339        0.566349             0.567937
+6-COLLAB-normal        0.633545        0.478942             0.479048
+7-COLLAB-normal        0.618730        0.551481             0.558783
+8-COLLAB-normal        0.804656        0.666190             0.673280
+9-COLLAB-normal        0.808783        0.694074             0.704497
+10-COLLAB-normal       0.585450        0.551852             0.551852
+11-COLLAB-normal       0.909683        0.706296             0.718042
+12-COLLAB-normal       0.644444        0.596349             0.605185
+13-COLLAB-normal       0.650265        0.530212             0.537513
+14-COLLAB-normal       0.729947        0.643651             0.658571
+15-COLLAB-normal       0.662169        0.492751             0.508571
+16-COLLAB-normal       0.992857        0.749206             0.747989
+17-COLLAB-normal       0.951958        0.741587             0.757672
+18-COLLAB-normal       0.723810        0.675661             0.674233
+19-COLLAB-normal       0.655079        0.473810             0.478201
+20-COLLAB-normal       0.601905        0.488042             0.489577
+21-COLLAB-normal       0.595820        0.392646             0.407407
+22-COLLAB-normal       0.783915        0.685873             0.704974
+23-COLLAB-normal       0.874603        0.758466             0.767143
+24-COLLAB-normal       0.601111        0.523280             0.529048
+25-COLLAB-normal       0.656032        0.531587             0.537460
+26-COLLAB-normal       0.736296        0.631376             0.634392
+27-COLLAB-normal       0.908148        0.689101             0.699259
+28-COLLAB-normal       0.779153        0.647725             0.652222
+29-COLLAB-normal       0.790106        0.643757             0.652540
+mean                 0.724836        0.600686             0.607444
+std                  0.063538        0.042127             0.042180
+[97, 6]
+[73, 30]
+[53, 50]
+[37, 66]
+[51, 52]
+[88, 15]
+[94, 9]
+[59, 44]
+[36, 67]
+[21, 82]
+[52, 51]
+[9, 94]
+[61, 42]
+[86, 17]
+[43, 60]
+[100, 3]
+[7, 96]
+[18, 85]
+[42, 61]
+[99, 4]
+[90, 13]
+[99, 4]
+[24, 79]
+[20, 83]
+[50, 53]
+[79, 24]
+[43, 60]
+[5, 98]
+[27, 76]
+[17, 86]
+[68, 34]
+[61, 41]
+[15, 87]
+[29, 73]
+[98, 4]
+[31, 71]
+[51, 51]
+[57, 45]
+[26, 76]
+[37, 65]
+Done
+
+Done setting up devices.
+[97, 6]
+[73, 30]
+[53, 50]
+[37, 66]
+[51, 52]
+[88, 15]
+[94, 9]
+[59, 44]
+[36, 67]
+[21, 82]
+[52, 51]
+[9, 94]
+[61, 42]
+[86, 17]
+[43, 60]
+[100, 3]
+[7, 96]
+[18, 85]
+[42, 61]
+[99, 4]
+[90, 13]
+[99, 4]
+[24, 79]
+[20, 83]
+[50, 53]
+[79, 24]
+[43, 60]
+[5, 98]
+[27, 76]
+[17, 86]
+[68, 34]
+[61, 41]
+[15, 87]
+[29, 73]
+[98, 4]
+[31, 71]
+[51, 51]
+[57, 45]
+[26, 76]
+[37, 65]
+Done
+
+Done setting up devices.
+[97, 6]
+[73, 30]
+[53, 50]
+[37, 66]
+[51, 52]
+[88, 15]
+[94, 9]
+[59, 44]
+[36, 67]
+[21, 82]
+[52, 51]
+[9, 94]
+[61, 42]
+[86, 17]
+[43, 60]
+[100, 3]
+[7, 96]
+[18, 85]
+[42, 61]
+[99, 4]
+[90, 13]
+[99, 4]
+[24, 79]
+[20, 83]
+[50, 53]
+[79, 24]
+[43, 60]
+[5, 98]
+[27, 76]
+[17, 86]
+[68, 34]
+[61, 41]
+[15, 87]
+[29, 73]
+[98, 4]
+[31, 71]
+[51, 51]
+[57, 45]
+[26, 76]
+[37, 65]
+Done
+
+Done setting up devices.
+[97, 6]
+[73, 30]
+[53, 50]
+[37, 66]
+[51, 52]
+[88, 15]
+[94, 9]
+[59, 44]
+[36, 67]
+[21, 82]
+[52, 51]
+[9, 94]
+[61, 42]
+[86, 17]
+[43, 60]
+[100, 3]
+[7, 96]
+[18, 85]
+[42, 61]
+[99, 4]
+[90, 13]
+[99, 4]
+[24, 79]
+[20, 83]
+[50, 53]
+[79, 24]
+[43, 60]
+[5, 98]
+[27, 76]
+[17, 86]
+[68, 34]
+[61, 41]
+[15, 87]
+[29, 73]
+[98, 4]
+[31, 71]
+[51, 51]
+[57, 45]
+[26, 76]
+[37, 65]
+Done
+
+Done setting up devices.
+[97, 6]
+[73, 30]
+[53, 50]
+[37, 66]
+[51, 52]
+[88, 15]
+[94, 9]
+[59, 44]
+[36, 67]
+[21, 82]
+[52, 51]
+[9, 94]
+[61, 42]
+[86, 17]
+[43, 60]
+[100, 3]
+[7, 96]
+[18, 85]
+[42, 61]
+[99, 4]
+[90, 13]
+[99, 4]
+[24, 79]
+[20, 83]
+[50, 53]
+[79, 24]
+[43, 60]
+[5, 98]
+[27, 76]
+[17, 86]
+[68, 34]
+[61, 41]
+[15, 87]
+[29, 73]
+[98, 4]
+[31, 71]
+[51, 51]
+[57, 45]
+[26, 76]
+[37, 65]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.540952        0.511810             0.523333
+1-COLLAB-normal        0.599143        0.577810             0.577810
+2-COLLAB-normal        0.585048        0.520952             0.509143
+3-COLLAB-normal        0.766476        0.708571             0.712381
+4-COLLAB-normal        0.654952        0.601048             0.604952
+5-COLLAB-normal        0.518381        0.485429             0.495238
+6-COLLAB-normal        0.531143        0.496381             0.503810
+7-COLLAB-normal        0.552762        0.515810             0.521714
+8-COLLAB-normal        0.803714        0.721905             0.731810
+9-COLLAB-normal        0.852571        0.732476             0.740095
+10-COLLAB-normal       0.628095        0.575333             0.579333
+11-COLLAB-normal       0.922381        0.701143             0.693619
+12-COLLAB-normal       0.615524        0.559238             0.559524
+13-COLLAB-normal       0.506286        0.477143             0.492571
+14-COLLAB-normal       0.701810        0.649238             0.641619
+15-COLLAB-normal       0.489048        0.463714             0.461619
+16-COLLAB-normal       0.940190        0.749714             0.755714
+17-COLLAB-normal       0.854476        0.784667             0.788762
+18-COLLAB-normal       0.735905        0.673143             0.688667
+19-COLLAB-normal       0.517143        0.495905             0.495619
+20-COLLAB-normal       0.529333        0.497905             0.499905
+21-COLLAB-normal       0.502762        0.475905             0.473238
+22-COLLAB-normal       0.811714        0.732095             0.730000
+23-COLLAB-normal       0.846857        0.748190             0.750476
+24-COLLAB-normal       0.629048        0.574952             0.586571
+25-COLLAB-normal       0.607905        0.584571             0.578762
+26-COLLAB-normal       0.656952        0.543524             0.553333
+27-COLLAB-normal       0.951429        0.780190             0.780190
+28-COLLAB-normal       0.801524        0.682762             0.690762
+29-COLLAB-normal       0.873619        0.732190             0.748095
+30-COLLAB-normal       0.548000        0.512571             0.510667
+31-COLLAB-normal       0.593810        0.562571             0.564381
+32-COLLAB-normal       0.864476        0.697429             0.695714
+33-COLLAB-normal       0.771333        0.625619             0.621714
+34-COLLAB-normal       0.536857        0.511524             0.527143
+35-COLLAB-normal       0.784381        0.701429             0.699333
+36-COLLAB-normal       0.660095        0.624476             0.614762
+37-COLLAB-normal       0.736667        0.707333             0.715143
+38-COLLAB-normal       0.821810        0.733810             0.731905
+39-COLLAB-normal       0.713524        0.640000             0.640000
+mean                 0.688952        0.616762             0.619736
+std                  0.041298        0.025748             0.024454
+[157, 49]
+[51, 155]
+[131, 75]
+[137, 69]
+[125, 81]
+[47, 159]
+[191, 15]
+[64, 142]
+[102, 104]
+[101, 105]
+[65, 140]
+[123, 82]
+[159, 46]
+[120, 85]
+[51, 154]
+[34, 171]
+[84, 121]
+[121, 84]
+[38, 167]
+[152, 53]
+Done
+
+Done setting up devices.
+[157, 49]
+[51, 155]
+[131, 75]
+[137, 69]
+[125, 81]
+[47, 159]
+[191, 15]
+[64, 142]
+[102, 104]
+[101, 105]
+[65, 140]
+[123, 82]
+[159, 46]
+[120, 85]
+[51, 154]
+[34, 171]
+[84, 121]
+[121, 84]
+[38, 167]
+[152, 53]
+Done
+
+Done setting up devices.
+[157, 49]
+[51, 155]
+[131, 75]
+[137, 69]
+[125, 81]
+[47, 159]
+[191, 15]
+[64, 142]
+[102, 104]
+[101, 105]
+[65, 140]
+[123, 82]
+[159, 46]
+[120, 85]
+[51, 154]
+[34, 171]
+[84, 121]
+[121, 84]
+[38, 167]
+[152, 53]
+Done
+
+Done setting up devices.
+[157, 49]
+[51, 155]
+[131, 75]
+[137, 69]
+[125, 81]
+[47, 159]
+[191, 15]
+[64, 142]
+[102, 104]
+[101, 105]
+[65, 140]
+[123, 82]
+[159, 46]
+[120, 85]
+[51, 154]
+[34, 171]
+[84, 121]
+[121, 84]
+[38, 167]
+[152, 53]
+Done
+
+Done setting up devices.
+[157, 49]
+[51, 155]
+[131, 75]
+[137, 69]
+[125, 81]
+[47, 159]
+[191, 15]
+[64, 142]
+[102, 104]
+[101, 105]
+[65, 140]
+[123, 82]
+[159, 46]
+[120, 85]
+[51, 154]
+[34, 171]
+[84, 121]
+[121, 84]
+[38, 167]
+[152, 53]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.671684        0.557770             0.601649
+1-COLLAB-normal        0.806945        0.732125             0.734007
+2-COLLAB-normal        0.694077        0.659094             0.669779
+3-COLLAB-normal        0.652079        0.601533             0.603415
+4-COLLAB-normal        0.690267        0.642532             0.658235
+5-COLLAB-normal        0.788339        0.690035             0.680325
+6-COLLAB-normal        0.701463        0.581603             0.619675
+7-COLLAB-normal        0.756469        0.647991             0.635285
+8-COLLAB-normal        0.674541        0.618281             0.628990
+9-COLLAB-normal        0.611847        0.545970             0.559605
+10-COLLAB-normal       0.755122        0.698537             0.697561
+11-COLLAB-normal       0.640976        0.585366             0.600000
+12-COLLAB-normal       0.669268        0.604878             0.619512
+13-COLLAB-normal       0.694634        0.629268             0.638049
+14-COLLAB-normal       0.768780        0.674146             0.669268
+15-COLLAB-normal       0.862439        0.775610             0.760000
+16-COLLAB-normal       0.719024        0.676098             0.676098
+17-COLLAB-normal       0.690732        0.649756             0.651707
+18-COLLAB-normal       0.835122        0.714146             0.698537
+19-COLLAB-normal       0.655610        0.582439             0.603902
+mean                 0.716971        0.643359             0.650280
+std                  0.028162        0.021792             0.021091
+[112, 25]
+[33, 104]
+[89, 48]
+[89, 48]
+[82, 55]
+[38, 99]
+[116, 21]
+[41, 96]
+[54, 83]
+[58, 79]
+[43, 94]
+[78, 59]
+[101, 36]
+[91, 46]
+[42, 95]
+[15, 122]
+[56, 81]
+[88, 49]
+[37, 100]
+[106, 31]
+[123, 14]
+[50, 87]
+[118, 19]
+[18, 119]
+[57, 80]
+[15, 122]
+[70, 67]
+[83, 54]
+[47, 90]
+[103, 34]
+Done
+
+Done setting up devices.
+[112, 25]
+[33, 104]
+[89, 48]
+[89, 48]
+[82, 55]
+[38, 99]
+[116, 21]
+[41, 96]
+[54, 83]
+[58, 79]
+[43, 94]
+[78, 59]
+[101, 36]
+[91, 46]
+[42, 95]
+[15, 122]
+[56, 81]
+[88, 49]
+[37, 100]
+[106, 31]
+[123, 14]
+[50, 87]
+[118, 19]
+[18, 119]
+[57, 80]
+[15, 122]
+[70, 67]
+[83, 54]
+[47, 90]
+[103, 34]
+Done
+
+Done setting up devices.
+[112, 25]
+[33, 104]
+[89, 48]
+[89, 48]
+[82, 55]
+[38, 99]
+[116, 21]
+[41, 96]
+[54, 83]
+[58, 79]
+[43, 94]
+[78, 59]
+[101, 36]
+[91, 46]
+[42, 95]
+[15, 122]
+[56, 81]
+[88, 49]
+[37, 100]
+[106, 31]
+[123, 14]
+[50, 87]
+[118, 19]
+[18, 119]
+[57, 80]
+[15, 122]
+[70, 67]
+[83, 54]
+[47, 90]
+[103, 34]
+Done
+
+Done setting up devices.
+[112, 25]
+[33, 104]
+[89, 48]
+[89, 48]
+[82, 55]
+[38, 99]
+[116, 21]
+[41, 96]
+[54, 83]
+[58, 79]
+[43, 94]
+[78, 59]
+[101, 36]
+[91, 46]
+[42, 95]
+[15, 122]
+[56, 81]
+[88, 49]
+[37, 100]
+[106, 31]
+[123, 14]
+[50, 87]
+[118, 19]
+[18, 119]
+[57, 80]
+[15, 122]
+[70, 67]
+[83, 54]
+[47, 90]
+[103, 34]
+Done
+
+Done setting up devices.
+[112, 25]
+[33, 104]
+[89, 48]
+[89, 48]
+[82, 55]
+[38, 99]
+[116, 21]
+[41, 96]
+[54, 83]
+[58, 79]
+[43, 94]
+[78, 59]
+[101, 36]
+[91, 46]
+[42, 95]
+[15, 122]
+[56, 81]
+[88, 49]
+[37, 100]
+[106, 31]
+[123, 14]
+[50, 87]
+[118, 19]
+[18, 119]
+[57, 80]
+[15, 122]
+[70, 67]
+[83, 54]
+[47, 90]
+[103, 34]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.549630        0.421005             0.432593
+1-COLLAB-normal        0.772434        0.680317             0.678730
+2-COLLAB-normal        0.545979        0.484815             0.489206
+3-COLLAB-normal        0.567672        0.501852             0.509259
+4-COLLAB-normal        0.559577        0.505873             0.510265
+5-COLLAB-normal        0.803810        0.746720             0.746720
+6-COLLAB-normal        0.555344        0.429735             0.441481
+7-COLLAB-normal        0.742328        0.637937             0.639365
+8-COLLAB-normal        0.658730        0.584074             0.588466
+9-COLLAB-normal        0.684497        0.619735             0.621270
+10-COLLAB-normal       0.777619        0.726455             0.729259
+11-COLLAB-normal       0.567460        0.535132             0.543862
+12-COLLAB-normal       0.527513        0.414021             0.416878
+13-COLLAB-normal       0.532804        0.452434             0.455291
+14-COLLAB-normal       0.761958        0.678148             0.686720
+15-COLLAB-normal       0.899259        0.778995             0.774444
+16-COLLAB-normal       0.668836        0.639524             0.639630
+17-COLLAB-normal       0.601958        0.544709             0.551958
+18-COLLAB-normal       0.756138        0.658624             0.660000
+19-COLLAB-normal       0.597407        0.501164             0.508519
+20-COLLAB-normal       0.537354        0.372487             0.381111
+21-COLLAB-normal       0.722328        0.672857             0.678571
+22-COLLAB-normal       0.557143        0.405079             0.427037
+23-COLLAB-normal       0.883492        0.761270             0.765661
+24-COLLAB-normal       0.677831        0.648254             0.652751
+25-COLLAB-normal       0.909577        0.819048             0.816138
+26-COLLAB-normal       0.644815        0.588942             0.596243
+27-COLLAB-normal       0.582275        0.517989             0.513545
+28-COLLAB-normal       0.725926        0.633915             0.638148
+29-COLLAB-normal       0.560265        0.490106             0.494497
+mean                 0.664399        0.581707             0.586254
+std                  0.054371        0.028928             0.029603
+[80, 23]
+[23, 80]
+[70, 33]
+[80, 23]
+[59, 44]
+[24, 79]
+[90, 13]
+[34, 69]
+[50, 53]
+[51, 52]
+[33, 70]
+[54, 49]
+[83, 20]
+[65, 38]
+[33, 70]
+[17, 86]
+[44, 59]
+[63, 40]
+[23, 80]
+[80, 23]
+[94, 9]
+[48, 55]
+[91, 12]
+[12, 91]
+[41, 62]
+[8, 95]
+[52, 51]
+[58, 45]
+[29, 74]
+[80, 23]
+[57, 45]
+[55, 47]
+[97, 5]
+[87, 15]
+[25, 77]
+[4, 98]
+[45, 57]
+[13, 89]
+[86, 16]
+[15, 87]
+Done
+
+Done setting up devices.
+[80, 23]
+[23, 80]
+[70, 33]
+[80, 23]
+[59, 44]
+[24, 79]
+[90, 13]
+[34, 69]
+[50, 53]
+[51, 52]
+[33, 70]
+[54, 49]
+[83, 20]
+[65, 38]
+[33, 70]
+[17, 86]
+[44, 59]
+[63, 40]
+[23, 80]
+[80, 23]
+[94, 9]
+[48, 55]
+[91, 12]
+[12, 91]
+[41, 62]
+[8, 95]
+[52, 51]
+[58, 45]
+[29, 74]
+[80, 23]
+[57, 45]
+[55, 47]
+[97, 5]
+[87, 15]
+[25, 77]
+[4, 98]
+[45, 57]
+[13, 89]
+[86, 16]
+[15, 87]
+Done
+
+Done setting up devices.
+[80, 23]
+[23, 80]
+[70, 33]
+[80, 23]
+[59, 44]
+[24, 79]
+[90, 13]
+[34, 69]
+[50, 53]
+[51, 52]
+[33, 70]
+[54, 49]
+[83, 20]
+[65, 38]
+[33, 70]
+[17, 86]
+[44, 59]
+[63, 40]
+[23, 80]
+[80, 23]
+[94, 9]
+[48, 55]
+[91, 12]
+[12, 91]
+[41, 62]
+[8, 95]
+[52, 51]
+[58, 45]
+[29, 74]
+[80, 23]
+[57, 45]
+[55, 47]
+[97, 5]
+[87, 15]
+[25, 77]
+[4, 98]
+[45, 57]
+[13, 89]
+[86, 16]
+[15, 87]
+Done
+
+Done setting up devices.
+[80, 23]
+[23, 80]
+[70, 33]
+[80, 23]
+[59, 44]
+[24, 79]
+[90, 13]
+[34, 69]
+[50, 53]
+[51, 52]
+[33, 70]
+[54, 49]
+[83, 20]
+[65, 38]
+[33, 70]
+[17, 86]
+[44, 59]
+[63, 40]
+[23, 80]
+[80, 23]
+[94, 9]
+[48, 55]
+[91, 12]
+[12, 91]
+[41, 62]
+[8, 95]
+[52, 51]
+[58, 45]
+[29, 74]
+[80, 23]
+[57, 45]
+[55, 47]
+[97, 5]
+[87, 15]
+[25, 77]
+[4, 98]
+[45, 57]
+[13, 89]
+[86, 16]
+[15, 87]
+Done
+
+Done setting up devices.
+[80, 23]
+[23, 80]
+[70, 33]
+[80, 23]
+[59, 44]
+[24, 79]
+[90, 13]
+[34, 69]
+[50, 53]
+[51, 52]
+[33, 70]
+[54, 49]
+[83, 20]
+[65, 38]
+[33, 70]
+[17, 86]
+[44, 59]
+[63, 40]
+[23, 80]
+[80, 23]
+[94, 9]
+[48, 55]
+[91, 12]
+[12, 91]
+[41, 62]
+[8, 95]
+[52, 51]
+[58, 45]
+[29, 74]
+[80, 23]
+[57, 45]
+[55, 47]
+[97, 5]
+[87, 15]
+[25, 77]
+[4, 98]
+[45, 57]
+[13, 89]
+[86, 16]
+[15, 87]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.754095        0.689524             0.713048
+1-COLLAB-normal        0.804286        0.572857             0.576762
+2-COLLAB-normal        0.668952        0.616000             0.616190
+3-COLLAB-normal        0.674000        0.601048             0.626095
+4-COLLAB-normal        0.730857        0.669048             0.672952
+5-COLLAB-normal        0.803333        0.580667             0.582571
+6-COLLAB-normal        0.704286        0.657619             0.665333
+7-COLLAB-normal        0.769333        0.635810             0.624190
+8-COLLAB-normal        0.772667        0.716286             0.731714
+9-COLLAB-normal        0.711810        0.661619             0.665524
+10-COLLAB-normal       0.728857        0.567810             0.563810
+11-COLLAB-normal       0.733905        0.683714             0.686000
+12-COLLAB-normal       0.707905        0.670857             0.670857
+13-COLLAB-normal       0.702857        0.635143             0.662381
+14-COLLAB-normal       0.814571        0.683810             0.680000
+15-COLLAB-normal       0.879429        0.601143             0.597429
+16-COLLAB-normal       0.743524        0.648571             0.648476
+17-COLLAB-normal       0.693048        0.629238             0.646857
+18-COLLAB-normal       0.806476        0.510762             0.508762
+19-COLLAB-normal       0.673619        0.612952             0.630571
+20-COLLAB-normal       0.783714        0.737143             0.750762
+21-COLLAB-normal       0.793810        0.688381             0.703905
+22-COLLAB-normal       0.765429        0.726286             0.740000
+23-COLLAB-normal       0.901048        0.638286             0.640286
+24-COLLAB-normal       0.695714        0.586857             0.610286
+25-COLLAB-normal       0.936476        0.599048             0.599238
+26-COLLAB-normal       0.682190        0.590667             0.602095
+27-COLLAB-normal       0.656190        0.609714             0.625238
+28-COLLAB-normal       0.792571        0.616000             0.623714
+29-COLLAB-normal       0.702476        0.663619             0.677429
+30-COLLAB-normal       0.706286        0.649524             0.655333
+31-COLLAB-normal       0.705333        0.624190             0.633905
+32-COLLAB-normal       0.711333        0.646190             0.671524
+33-COLLAB-normal       0.701238        0.644667             0.646667
+34-COLLAB-normal       0.794000        0.557905             0.560190
+35-COLLAB-normal       0.960952        0.559143             0.570762
+36-COLLAB-normal       0.770857        0.697143             0.704857
+37-COLLAB-normal       0.904190        0.569810             0.583429
+38-COLLAB-normal       0.771238        0.733524             0.735524
+39-COLLAB-normal       0.886286        0.630857             0.646476
+mean                 0.762479        0.635336             0.643779
+std                  0.039240        0.031692             0.028089
+[42, 164]
+[46, 160]
+[31, 175]
+[89, 117]
+[121, 85]
+[125, 81]
+[40, 166]
+[180, 26]
+[204, 2]
+[153, 53]
+[50, 155]
+[71, 134]
+[169, 36]
+[73, 132]
+[182, 23]
+[84, 121]
+[43, 162]
+[128, 77]
+[56, 149]
+[166, 39]
+Done
+
+Done setting up devices.
+[42, 164]
+[46, 160]
+[31, 175]
+[89, 117]
+[121, 85]
+[125, 81]
+[40, 166]
+[180, 26]
+[204, 2]
+[153, 53]
+[50, 155]
+[71, 134]
+[169, 36]
+[73, 132]
+[182, 23]
+[84, 121]
+[43, 162]
+[128, 77]
+[56, 149]
+[166, 39]
+Done
+
+Done setting up devices.
+[42, 164]
+[46, 160]
+[31, 175]
+[89, 117]
+[121, 85]
+[125, 81]
+[40, 166]
+[180, 26]
+[204, 2]
+[153, 53]
+[50, 155]
+[71, 134]
+[169, 36]
+[73, 132]
+[182, 23]
+[84, 121]
+[43, 162]
+[128, 77]
+[56, 149]
+[166, 39]
+Done
+
+Done setting up devices.
+[42, 164]
+[46, 160]
+[31, 175]
+[89, 117]
+[121, 85]
+[125, 81]
+[40, 166]
+[180, 26]
+[204, 2]
+[153, 53]
+[50, 155]
+[71, 134]
+[169, 36]
+[73, 132]
+[182, 23]
+[84, 121]
+[43, 162]
+[128, 77]
+[56, 149]
+[166, 39]
+Done
+
+Done setting up devices.
+[42, 164]
+[46, 160]
+[31, 175]
+[89, 117]
+[121, 85]
+[125, 81]
+[40, 166]
+[180, 26]
+[204, 2]
+[153, 53]
+[50, 155]
+[71, 134]
+[169, 36]
+[73, 132]
+[182, 23]
+[84, 121]
+[43, 162]
+[128, 77]
+[56, 149]
+[166, 39]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.811684        0.745668             0.738792
+1-COLLAB-normal        0.802021        0.759233             0.757236
+2-COLLAB-normal        0.871916        0.825226             0.810616
+3-COLLAB-normal        0.698211        0.664344             0.674030
+4-COLLAB-normal        0.572985        0.489477             0.503159
+5-COLLAB-normal        0.590128        0.515145             0.528850
+6-COLLAB-normal        0.822230        0.740534             0.724158
+7-COLLAB-normal        0.622230        0.305900             0.340813
+8-COLLAB-normal        0.640813        0.244855             0.286574
+9-COLLAB-normal        0.603763        0.426806             0.447178
+10-COLLAB-normal       0.795122        0.748293             0.737561
+11-COLLAB-normal       0.705366        0.669268             0.669268
+12-COLLAB-normal       0.638049        0.368780             0.409756
+13-COLLAB-normal       0.694634        0.656585             0.657561
+14-COLLAB-normal       0.663415        0.355122             0.387317
+15-COLLAB-normal       0.676098        0.618537             0.616585
+16-COLLAB-normal       0.822439        0.796098             0.785366
+17-COLLAB-normal       0.600976        0.508293             0.540488
+18-COLLAB-normal       0.781463        0.745366             0.726829
+19-COLLAB-normal       0.628293        0.370732             0.400976
+mean                 0.702092        0.577713             0.587156
+std                  0.058185        0.027397             0.026294
+[21, 116]
+[21, 116]
+[11, 126]
+[53, 84]
+[71, 66]
+[76, 61]
+[27, 110]
+[116, 21]
+[126, 11]
+[83, 54]
+[33, 104]
+[44, 93]
+[98, 39]
+[52, 85]
+[118, 19]
+[46, 91]
+[29, 108]
+[87, 50]
+[37, 100]
+[114, 23]
+[59, 78]
+[98, 39]
+[89, 48]
+[111, 26]
+[119, 18]
+[40, 97]
+[79, 58]
+[91, 46]
+[61, 76]
+[43, 94]
+Done
+
+Done setting up devices.
+[21, 116]
+[21, 116]
+[11, 126]
+[53, 84]
+[71, 66]
+[76, 61]
+[27, 110]
+[116, 21]
+[126, 11]
+[83, 54]
+[33, 104]
+[44, 93]
+[98, 39]
+[52, 85]
+[118, 19]
+[46, 91]
+[29, 108]
+[87, 50]
+[37, 100]
+[114, 23]
+[59, 78]
+[98, 39]
+[89, 48]
+[111, 26]
+[119, 18]
+[40, 97]
+[79, 58]
+[91, 46]
+[61, 76]
+[43, 94]
+Done
+
+Done setting up devices.
+[21, 116]
+[21, 116]
+[11, 126]
+[53, 84]
+[71, 66]
+[76, 61]
+[27, 110]
+[116, 21]
+[126, 11]
+[83, 54]
+[33, 104]
+[44, 93]
+[98, 39]
+[52, 85]
+[118, 19]
+[46, 91]
+[29, 108]
+[87, 50]
+[37, 100]
+[114, 23]
+[59, 78]
+[98, 39]
+[89, 48]
+[111, 26]
+[119, 18]
+[40, 97]
+[79, 58]
+[91, 46]
+[61, 76]
+[43, 94]
+Done
+
+Done setting up devices.
+[21, 116]
+[21, 116]
+[11, 126]
+[53, 84]
+[71, 66]
+[76, 61]
+[27, 110]
+[116, 21]
+[126, 11]
+[83, 54]
+[33, 104]
+[44, 93]
+[98, 39]
+[52, 85]
+[118, 19]
+[46, 91]
+[29, 108]
+[87, 50]
+[37, 100]
+[114, 23]
+[59, 78]
+[98, 39]
+[89, 48]
+[111, 26]
+[119, 18]
+[40, 97]
+[79, 58]
+[91, 46]
+[61, 76]
+[43, 94]
+Done
+
+Done setting up devices.
+[21, 116]
+[21, 116]
+[11, 126]
+[53, 84]
+[71, 66]
+[76, 61]
+[27, 110]
+[116, 21]
+[126, 11]
+[83, 54]
+[33, 104]
+[44, 93]
+[98, 39]
+[52, 85]
+[118, 19]
+[46, 91]
+[29, 108]
+[87, 50]
+[37, 100]
+[114, 23]
+[59, 78]
+[98, 39]
+[89, 48]
+[111, 26]
+[119, 18]
+[40, 97]
+[79, 58]
+[91, 46]
+[61, 76]
+[43, 94]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.865767        0.717407             0.717407
+1-COLLAB-normal        0.849683        0.731217             0.726931
+2-COLLAB-normal        0.919841        0.677407             0.677407
+3-COLLAB-normal        0.740053        0.672698             0.680106
+4-COLLAB-normal        0.638042        0.594339             0.592804
+5-COLLAB-normal        0.633862        0.571164             0.582910
+6-COLLAB-normal        0.820582        0.712222             0.716508
+7-COLLAB-normal        0.672857        0.456931             0.459788
+8-COLLAB-normal        0.671164        0.403704             0.405185
+9-COLLAB-normal        0.671640        0.606190             0.607778
+10-COLLAB-normal       0.797407        0.720106             0.724497
+11-COLLAB-normal       0.758889        0.679418             0.679524
+12-COLLAB-normal       0.640476        0.504603             0.505979
+13-COLLAB-normal       0.704074        0.657725             0.656243
+14-COLLAB-normal       0.665503        0.442328             0.440635
+15-COLLAB-normal       0.728519        0.661534             0.661587
+16-COLLAB-normal       0.826508        0.729365             0.726455
+17-COLLAB-normal       0.647778        0.560212             0.578995
+18-COLLAB-normal       0.769577        0.679206             0.692487
+19-COLLAB-normal       0.739365        0.576138             0.580529
+20-COLLAB-normal       0.689947        0.645820             0.651587
+21-COLLAB-normal       0.661111        0.539735             0.539735
+22-COLLAB-normal       0.644074        0.555238             0.562487
+23-COLLAB-normal       0.700529        0.539630             0.546772
+24-COLLAB-normal       0.699841        0.462116             0.465026
+25-COLLAB-normal       0.771429        0.696243             0.694815
+26-COLLAB-normal       0.646825        0.608783             0.617460
+27-COLLAB-normal       0.644868        0.549683             0.543968
+28-COLLAB-normal       0.701164        0.639630             0.633598
+29-COLLAB-normal       0.713757        0.596825             0.602751
+mean                 0.721171        0.606254             0.609065
+std                  0.044386        0.039187             0.038421
+[12, 91]
+[16, 87]
+[9, 94]
+[52, 51]
+[50, 53]
+[66, 37]
+[26, 77]
+[95, 8]
+[100, 3]
+[72, 31]
+[27, 76]
+[29, 74]
+[80, 23]
+[35, 68]
+[95, 8]
+[33, 70]
+[21, 82]
+[64, 39]
+[25, 78]
+[87, 16]
+[46, 57]
+[88, 15]
+[68, 35]
+[87, 16]
+[90, 13]
+[28, 75]
+[63, 40]
+[62, 41]
+[39, 64]
+[24, 79]
+[83, 19]
+[56, 46]
+[19, 83]
+[31, 71]
+[77, 25]
+[17, 85]
+[38, 64]
+[38, 64]
+[44, 58]
+[61, 41]
+Done
+
+Done setting up devices.
+[12, 91]
+[16, 87]
+[9, 94]
+[52, 51]
+[50, 53]
+[66, 37]
+[26, 77]
+[95, 8]
+[100, 3]
+[72, 31]
+[27, 76]
+[29, 74]
+[80, 23]
+[35, 68]
+[95, 8]
+[33, 70]
+[21, 82]
+[64, 39]
+[25, 78]
+[87, 16]
+[46, 57]
+[88, 15]
+[68, 35]
+[87, 16]
+[90, 13]
+[28, 75]
+[63, 40]
+[62, 41]
+[39, 64]
+[24, 79]
+[83, 19]
+[56, 46]
+[19, 83]
+[31, 71]
+[77, 25]
+[17, 85]
+[38, 64]
+[38, 64]
+[44, 58]
+[61, 41]
+Done
+
+Done setting up devices.
+[12, 91]
+[16, 87]
+[9, 94]
+[52, 51]
+[50, 53]
+[66, 37]
+[26, 77]
+[95, 8]
+[100, 3]
+[72, 31]
+[27, 76]
+[29, 74]
+[80, 23]
+[35, 68]
+[95, 8]
+[33, 70]
+[21, 82]
+[64, 39]
+[25, 78]
+[87, 16]
+[46, 57]
+[88, 15]
+[68, 35]
+[87, 16]
+[90, 13]
+[28, 75]
+[63, 40]
+[62, 41]
+[39, 64]
+[24, 79]
+[83, 19]
+[56, 46]
+[19, 83]
+[31, 71]
+[77, 25]
+[17, 85]
+[38, 64]
+[38, 64]
+[44, 58]
+[61, 41]
+Done
+
+Done setting up devices.
+[12, 91]
+[16, 87]
+[9, 94]
+[52, 51]
+[50, 53]
+[66, 37]
+[26, 77]
+[95, 8]
+[100, 3]
+[72, 31]
+[27, 76]
+[29, 74]
+[80, 23]
+[35, 68]
+[95, 8]
+[33, 70]
+[21, 82]
+[64, 39]
+[25, 78]
+[87, 16]
+[46, 57]
+[88, 15]
+[68, 35]
+[87, 16]
+[90, 13]
+[28, 75]
+[63, 40]
+[62, 41]
+[39, 64]
+[24, 79]
+[83, 19]
+[56, 46]
+[19, 83]
+[31, 71]
+[77, 25]
+[17, 85]
+[38, 64]
+[38, 64]
+[44, 58]
+[61, 41]
+Done
+
+Done setting up devices.
+[12, 91]
+[16, 87]
+[9, 94]
+[52, 51]
+[50, 53]
+[66, 37]
+[26, 77]
+[95, 8]
+[100, 3]
+[72, 31]
+[27, 76]
+[29, 74]
+[80, 23]
+[35, 68]
+[95, 8]
+[33, 70]
+[21, 82]
+[64, 39]
+[25, 78]
+[87, 16]
+[46, 57]
+[88, 15]
+[68, 35]
+[87, 16]
+[90, 13]
+[28, 75]
+[63, 40]
+[62, 41]
+[39, 64]
+[24, 79]
+[83, 19]
+[56, 46]
+[19, 83]
+[31, 71]
+[77, 25]
+[17, 85]
+[38, 64]
+[38, 64]
+[44, 58]
+[61, 41]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.897143        0.812476             0.808476
+1-COLLAB-normal        0.844667        0.736381             0.728571
+2-COLLAB-normal        0.922381        0.758952             0.764571
+3-COLLAB-normal        0.654667        0.551238             0.563048
+4-COLLAB-normal        0.618952        0.585905             0.578190
+5-COLLAB-normal        0.666190        0.553238             0.564857
+6-COLLAB-normal        0.782571        0.697238             0.695333
+7-COLLAB-normal        0.819905        0.383333             0.393143
+8-COLLAB-normal        0.871905        0.438857             0.450571
+9-COLLAB-normal        0.681048        0.421048             0.436286
+10-COLLAB-normal       0.777048        0.676190             0.668095
+11-COLLAB-normal       0.732571        0.618762             0.613048
+12-COLLAB-normal       0.743810        0.415333             0.439048
+13-COLLAB-normal       0.723810        0.617714             0.613714
+14-COLLAB-normal       0.825524        0.403238             0.414857
+15-COLLAB-normal       0.733714        0.690476             0.690571
+16-COLLAB-normal       0.827238        0.715333             0.717143
+17-COLLAB-normal       0.634857        0.534952             0.538857
+18-COLLAB-normal       0.799619        0.692762             0.692667
+19-COLLAB-normal       0.757238        0.387714             0.397429
+20-COLLAB-normal       0.671905        0.604095             0.609619
+21-COLLAB-normal       0.776286        0.358286             0.381810
+22-COLLAB-normal       0.634857        0.472762             0.480571
+23-COLLAB-normal       0.770952        0.377333             0.386952
+24-COLLAB-normal       0.789524        0.358762             0.391714
+25-COLLAB-normal       0.808190        0.701905             0.698095
+26-COLLAB-normal       0.657810        0.584000             0.585810
+27-COLLAB-normal       0.608000        0.507429             0.503524
+28-COLLAB-normal       0.718286        0.646476             0.656190
+29-COLLAB-normal       0.809714        0.737524             0.733714
+30-COLLAB-normal       0.751143        0.423429             0.421524
+31-COLLAB-normal       0.646286        0.576857             0.572857
+32-COLLAB-normal       0.854952        0.735714             0.743619
+33-COLLAB-normal       0.770381        0.682762             0.682476
+34-COLLAB-normal       0.701905        0.475143             0.500476
+35-COLLAB-normal       0.876476        0.760857             0.760762
+36-COLLAB-normal       0.756762        0.715429             0.711429
+37-COLLAB-normal       0.776857        0.740000             0.730095
+38-COLLAB-normal       0.672571        0.587238             0.589333
+39-COLLAB-normal       0.667143        0.577143             0.590667
+mean                 0.750871        0.582857             0.587493
+std                  0.040841        0.021868             0.022484
+[46, 160]
+[63, 143]
+[48, 158]
+[90, 116]
+[119, 87]
+[119, 87]
+[63, 143]
+[162, 44]
+[182, 24]
+[135, 71]
+[64, 141]
+[80, 125]
+[153, 52]
+[76, 129]
+[166, 39]
+[93, 112]
+[55, 150]
+[124, 81]
+[70, 135]
+[145, 60]
+Done
+
+Done setting up devices.
+[46, 160]
+[63, 143]
+[48, 158]
+[90, 116]
+[119, 87]
+[119, 87]
+[63, 143]
+[162, 44]
+[182, 24]
+[135, 71]
+[64, 141]
+[80, 125]
+[153, 52]
+[76, 129]
+[166, 39]
+[93, 112]
+[55, 150]
+[124, 81]
+[70, 135]
+[145, 60]
+Done
+
+Done setting up devices.
+[46, 160]
+[63, 143]
+[48, 158]
+[90, 116]
+[119, 87]
+[119, 87]
+[63, 143]
+[162, 44]
+[182, 24]
+[135, 71]
+[64, 141]
+[80, 125]
+[153, 52]
+[76, 129]
+[166, 39]
+[93, 112]
+[55, 150]
+[124, 81]
+[70, 135]
+[145, 60]
+Done
+
+Done setting up devices.
+[46, 160]
+[63, 143]
+[48, 158]
+[90, 116]
+[119, 87]
+[119, 87]
+[63, 143]
+[162, 44]
+[182, 24]
+[135, 71]
+[64, 141]
+[80, 125]
+[153, 52]
+[76, 129]
+[166, 39]
+[93, 112]
+[55, 150]
+[124, 81]
+[70, 135]
+[145, 60]
+Done
+
+Done setting up devices.
+[46, 160]
+[63, 143]
+[48, 158]
+[90, 116]
+[119, 87]
+[119, 87]
+[63, 143]
+[162, 44]
+[182, 24]
+[135, 71]
+[64, 141]
+[80, 125]
+[153, 52]
+[76, 129]
+[166, 39]
+[93, 112]
+[55, 150]
+[124, 81]
+[70, 135]
+[145, 60]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.826551        0.695238             0.689408
+1-COLLAB-normal        0.764111        0.709733             0.707921
+2-COLLAB-normal        0.782578        0.680581             0.668920
+3-COLLAB-normal        0.722300        0.684413             0.686249
+4-COLLAB-normal        0.664111        0.623252             0.629106
+5-COLLAB-normal        0.689408        0.654495             0.668130
+6-COLLAB-normal        0.743856        0.643577             0.649384
+7-COLLAB-normal        0.678769        0.581626             0.606876
+8-COLLAB-normal        0.742114        0.663577             0.685947
+9-COLLAB-normal        0.692776        0.634727             0.642462
+10-COLLAB-normal       0.705366        0.627317             0.630244
+11-COLLAB-normal       0.758049        0.721951             0.726829
+12-COLLAB-normal       0.680976        0.602927             0.626341
+13-COLLAB-normal       0.713171        0.673171             0.680000
+14-COLLAB-normal       0.677073        0.605854             0.622439
+15-COLLAB-normal       0.677073        0.625366             0.631220
+16-COLLAB-normal       0.773659        0.713171             0.718049
+17-COLLAB-normal       0.703415        0.676098             0.673171
+18-COLLAB-normal       0.760976        0.681951             0.682927
+19-COLLAB-normal       0.689756        0.641951             0.652683
+mean                 0.722304        0.657049             0.663915
+std                  0.030832        0.017602             0.017022
+[29, 108]
+[37, 100]
+[20, 117]
+[55, 82]
+[71, 66]
+[74, 63]
+[40, 97]
+[105, 32]
+[110, 27]
+[74, 63]
+[42, 95]
+[52, 85]
+[94, 43]
+[56, 81]
+[109, 28]
+[50, 87]
+[36, 101]
+[85, 52]
+[50, 87]
+[99, 38]
+[62, 75]
+[88, 49]
+[84, 53]
+[97, 40]
+[112, 25]
+[49, 88]
+[71, 66]
+[85, 52]
+[64, 73]
+[53, 84]
+Done
+
+Done setting up devices.
+[29, 108]
+[37, 100]
+[20, 117]
+[55, 82]
+[71, 66]
+[74, 63]
+[40, 97]
+[105, 32]
+[110, 27]
+[74, 63]
+[42, 95]
+[52, 85]
+[94, 43]
+[56, 81]
+[109, 28]
+[50, 87]
+[36, 101]
+[85, 52]
+[50, 87]
+[99, 38]
+[62, 75]
+[88, 49]
+[84, 53]
+[97, 40]
+[112, 25]
+[49, 88]
+[71, 66]
+[85, 52]
+[64, 73]
+[53, 84]
+Done
+
+Done setting up devices.
+[29, 108]
+[37, 100]
+[20, 117]
+[55, 82]
+[71, 66]
+[74, 63]
+[40, 97]
+[105, 32]
+[110, 27]
+[74, 63]
+[42, 95]
+[52, 85]
+[94, 43]
+[56, 81]
+[109, 28]
+[50, 87]
+[36, 101]
+[85, 52]
+[50, 87]
+[99, 38]
+[62, 75]
+[88, 49]
+[84, 53]
+[97, 40]
+[112, 25]
+[49, 88]
+[71, 66]
+[85, 52]
+[64, 73]
+[53, 84]
+Done
+
+Done setting up devices.
+[29, 108]
+[37, 100]
+[20, 117]
+[55, 82]
+[71, 66]
+[74, 63]
+[40, 97]
+[105, 32]
+[110, 27]
+[74, 63]
+[42, 95]
+[52, 85]
+[94, 43]
+[56, 81]
+[109, 28]
+[50, 87]
+[36, 101]
+[85, 52]
+[50, 87]
+[99, 38]
+[62, 75]
+[88, 49]
+[84, 53]
+[97, 40]
+[112, 25]
+[49, 88]
+[71, 66]
+[85, 52]
+[64, 73]
+[53, 84]
+Done
+
+Done setting up devices.
+[29, 108]
+[37, 100]
+[20, 117]
+[55, 82]
+[71, 66]
+[74, 63]
+[40, 97]
+[105, 32]
+[110, 27]
+[74, 63]
+[42, 95]
+[52, 85]
+[94, 43]
+[56, 81]
+[109, 28]
+[50, 87]
+[36, 101]
+[85, 52]
+[50, 87]
+[99, 38]
+[62, 75]
+[88, 49]
+[84, 53]
+[97, 40]
+[112, 25]
+[49, 88]
+[71, 66]
+[85, 52]
+[64, 73]
+[53, 84]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.845556        0.746455             0.736085
+1-COLLAB-normal        0.778148        0.668201             0.663651
+2-COLLAB-normal        0.862698        0.718201             0.718095
+3-COLLAB-normal        0.727460        0.670899             0.677884
+4-COLLAB-normal        0.653968        0.595026             0.604021
+5-COLLAB-normal        0.612698        0.560106             0.568730
+6-COLLAB-normal        0.748360        0.676402             0.683757
+7-COLLAB-normal        0.636984        0.604656             0.610635
+8-COLLAB-normal        0.572698        0.515608             0.528836
+9-COLLAB-normal        0.595397        0.560370             0.573545
+10-COLLAB-normal       0.786878        0.690741             0.698095
+11-COLLAB-normal       0.738413        0.672646             0.691587
+12-COLLAB-normal       0.593545        0.570000             0.571481
+13-COLLAB-normal       0.715661        0.668889             0.662910
+14-COLLAB-normal       0.547989        0.502963             0.507460
+15-COLLAB-normal       0.740741        0.688148             0.688095
+16-COLLAB-normal       0.784286        0.713545             0.720794
+17-COLLAB-normal       0.640582        0.575979             0.577460
+18-COLLAB-normal       0.713915        0.634021             0.631005
+19-COLLAB-normal       0.663439        0.625238             0.637196
+20-COLLAB-normal       0.701058        0.617619             0.630688
+21-COLLAB-normal       0.563439        0.494180             0.515026
+22-COLLAB-normal       0.662328        0.631799             0.636243
+23-COLLAB-normal       0.672116        0.617989             0.638624
+24-COLLAB-normal       0.625185        0.585291             0.591429
+25-COLLAB-normal       0.700529        0.622963             0.630265
+26-COLLAB-normal       0.653492        0.613915             0.616931
+27-COLLAB-normal       0.653280        0.609471             0.606455
+28-COLLAB-normal       0.678307        0.602169             0.607884
+29-COLLAB-normal       0.710370        0.590847             0.596878
+mean                 0.685984        0.621478             0.627392
+std                  0.025074        0.021917             0.020088
+[17, 86]
+[25, 78]
+[20, 83]
+[56, 47]
+[50, 53]
+[62, 41]
+[31, 72]
+[83, 20]
+[93, 10]
+[67, 36]
+[32, 71]
+[35, 68]
+[68, 35]
+[40, 63]
+[92, 11]
+[39, 64]
+[28, 75]
+[62, 41]
+[35, 68]
+[74, 29]
+[48, 55]
+[78, 25]
+[64, 39]
+[80, 23]
+[84, 19]
+[32, 71]
+[58, 45]
+[61, 42]
+[41, 62]
+[38, 65]
+[76, 26]
+[57, 45]
+[26, 76]
+[36, 66]
+[66, 36]
+[23, 79]
+[42, 60]
+[35, 67]
+[44, 58]
+[55, 47]
+Done
+
+Done setting up devices.
+[17, 86]
+[25, 78]
+[20, 83]
+[56, 47]
+[50, 53]
+[62, 41]
+[31, 72]
+[83, 20]
+[93, 10]
+[67, 36]
+[32, 71]
+[35, 68]
+[68, 35]
+[40, 63]
+[92, 11]
+[39, 64]
+[28, 75]
+[62, 41]
+[35, 68]
+[74, 29]
+[48, 55]
+[78, 25]
+[64, 39]
+[80, 23]
+[84, 19]
+[32, 71]
+[58, 45]
+[61, 42]
+[41, 62]
+[38, 65]
+[76, 26]
+[57, 45]
+[26, 76]
+[36, 66]
+[66, 36]
+[23, 79]
+[42, 60]
+[35, 67]
+[44, 58]
+[55, 47]
+Done
+
+Done setting up devices.
+[17, 86]
+[25, 78]
+[20, 83]
+[56, 47]
+[50, 53]
+[62, 41]
+[31, 72]
+[83, 20]
+[93, 10]
+[67, 36]
+[32, 71]
+[35, 68]
+[68, 35]
+[40, 63]
+[92, 11]
+[39, 64]
+[28, 75]
+[62, 41]
+[35, 68]
+[74, 29]
+[48, 55]
+[78, 25]
+[64, 39]
+[80, 23]
+[84, 19]
+[32, 71]
+[58, 45]
+[61, 42]
+[41, 62]
+[38, 65]
+[76, 26]
+[57, 45]
+[26, 76]
+[36, 66]
+[66, 36]
+[23, 79]
+[42, 60]
+[35, 67]
+[44, 58]
+[55, 47]
+Done
+
+Done setting up devices.
+[17, 86]
+[25, 78]
+[20, 83]
+[56, 47]
+[50, 53]
+[62, 41]
+[31, 72]
+[83, 20]
+[93, 10]
+[67, 36]
+[32, 71]
+[35, 68]
+[68, 35]
+[40, 63]
+[92, 11]
+[39, 64]
+[28, 75]
+[62, 41]
+[35, 68]
+[74, 29]
+[48, 55]
+[78, 25]
+[64, 39]
+[80, 23]
+[84, 19]
+[32, 71]
+[58, 45]
+[61, 42]
+[41, 62]
+[38, 65]
+[76, 26]
+[57, 45]
+[26, 76]
+[36, 66]
+[66, 36]
+[23, 79]
+[42, 60]
+[35, 67]
+[44, 58]
+[55, 47]
+Done
+
+Done setting up devices.
+[17, 86]
+[25, 78]
+[20, 83]
+[56, 47]
+[50, 53]
+[62, 41]
+[31, 72]
+[83, 20]
+[93, 10]
+[67, 36]
+[32, 71]
+[35, 68]
+[68, 35]
+[40, 63]
+[92, 11]
+[39, 64]
+[28, 75]
+[62, 41]
+[35, 68]
+[74, 29]
+[48, 55]
+[78, 25]
+[64, 39]
+[80, 23]
+[84, 19]
+[32, 71]
+[58, 45]
+[61, 42]
+[41, 62]
+[38, 65]
+[76, 26]
+[57, 45]
+[26, 76]
+[36, 66]
+[66, 36]
+[23, 79]
+[42, 60]
+[35, 67]
+[44, 58]
+[55, 47]
+Done
+
+Done setting up devices.
+COLLAB_FedAvg_sim_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-COLLAB-normal        0.852476        0.663048             0.649619
+1-COLLAB-normal        0.791048        0.624667             0.617143
+2-COLLAB-normal        0.819048        0.630190             0.626571
+3-COLLAB-normal        0.656952        0.595238             0.604857
+4-COLLAB-normal        0.647048        0.526381             0.544000
+5-COLLAB-normal        0.717429        0.686286             0.694095
+6-COLLAB-normal        0.737524        0.610190             0.612190
+7-COLLAB-normal        0.669333        0.533524             0.548952
+8-COLLAB-normal        0.808000        0.694095             0.703810
+9-COLLAB-normal        0.735619        0.654190             0.667905
+10-COLLAB-normal       0.718286        0.652857             0.656667
+11-COLLAB-normal       0.724381        0.668286             0.666476
+12-COLLAB-normal       0.711143        0.680286             0.690000
+13-COLLAB-normal       0.654857        0.538476             0.523048
+14-COLLAB-normal       0.732667        0.591333             0.593333
+15-COLLAB-normal       0.681048        0.604000             0.601905
+16-COLLAB-normal       0.796476        0.699143             0.710571
+17-COLLAB-normal       0.702286        0.640190             0.641810
+18-COLLAB-normal       0.743810        0.590952             0.596762
+19-COLLAB-normal       0.650000        0.560667             0.570190
+20-COLLAB-normal       0.708571        0.656762             0.650952
+21-COLLAB-normal       0.702667        0.630095             0.638381
+22-COLLAB-normal       0.692762        0.630857             0.630857
+23-COLLAB-normal       0.678095        0.554000             0.575143
+24-COLLAB-normal       0.705048        0.588762             0.600190
+25-COLLAB-normal       0.742190        0.669905             0.670095
+26-COLLAB-normal       0.710762        0.666667             0.664571
+27-COLLAB-normal       0.677048        0.640667             0.650286
+28-COLLAB-normal       0.673905        0.615524             0.609905
+29-COLLAB-normal       0.764190        0.696190             0.692381
+30-COLLAB-normal       0.648571        0.514095             0.514000
+31-COLLAB-normal       0.723810        0.688476             0.696000
+32-COLLAB-normal       0.774857        0.591905             0.588095
+33-COLLAB-normal       0.769714        0.740286             0.745905
+34-COLLAB-normal       0.635429        0.543429             0.565048
+35-COLLAB-normal       0.788286        0.605333             0.601333
+36-COLLAB-normal       0.719524        0.660000             0.662000
+37-COLLAB-normal       0.784190        0.687333             0.683429
+38-COLLAB-normal       0.675810        0.587810             0.593714
+39-COLLAB-normal       0.740952        0.658000             0.667429
+mean                 0.721645        0.626752             0.630490
+std                  0.026193        0.020511             0.017386
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+/local/scratch/jzhou50/zjc/lib/python3.8/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/ogbg-molhiv/eps_0.01_0.1
+Preparing data (original features) ...
+[2045, 12]
+[2020, 37]
+[1988, 69]
+[1953, 104]
+[1991, 66]
+[2031, 26]
+[2050, 7]
+[1995, 61]
+[1937, 119]
+[1944, 112]
+[1971, 85]
+[1920, 136]
+[1993, 63]
+[2017, 39]
+[1939, 117]
+[2054, 2]
+[1901, 155]
+[1922, 134]
+[1968, 88]
+[2045, 11]
+Done
+
+Done setting up devices.
+[2045, 12]
+[2020, 37]
+[1988, 69]
+[1953, 104]
+[1991, 66]
+[2031, 26]
+[2050, 7]
+[1995, 61]
+[1937, 119]
+[1944, 112]
+[1971, 85]
+[1920, 136]
+[1993, 63]
+[2017, 39]
+[1939, 117]
+[2054, 2]
+[1901, 155]
+[1922, 134]
+[1968, 88]
+[2045, 11]
+Done
+
+Done setting up devices.
+[2045, 12]
+[2020, 37]
+[1988, 69]
+[1953, 104]
+[1991, 66]
+[2031, 26]
+[2050, 7]
+[1995, 61]
+[1937, 119]
+[1944, 112]
+[1971, 85]
+[1920, 136]
+[1993, 63]
+[2017, 39]
+[1939, 117]
+[2054, 2]
+[1901, 155]
+[1922, 134]
+[1968, 88]
+[2045, 11]
+Done
+
+Done setting up devices.
+[2045, 12]
+[2020, 37]
+[1988, 69]
+[1953, 104]
+[1991, 66]
+[2031, 26]
+[2050, 7]
+[1995, 61]
+[1937, 119]
+[1944, 112]
+[1971, 85]
+[1920, 136]
+[1993, 63]
+[2017, 39]
+[1939, 117]
+[2054, 2]
+[1901, 155]
+[1922, 134]
+[1968, 88]
+[2045, 11]
+Done
+
+Done setting up devices.
+[2045, 12]
+[2020, 37]
+[1988, 69]
+[1953, 104]
+[1991, 66]
+[2031, 26]
+[2050, 7]
+[1995, 61]
+[1937, 119]
+[1944, 112]
+[1971, 85]
+[1920, 136]
+[1993, 63]
+[2017, 39]
+[1939, 117]
+[2054, 2]
+[1901, 155]
+[1922, 134]
+[1968, 88]
+[2045, 11]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.994459        0.993973             0.993973
+1-ogbg-molhiv-normal        0.983862        0.982792             0.983181
+2-ogbg-molhiv-normal        0.967914        0.967039             0.967136
+3-ogbg-molhiv-normal        0.953040        0.951386             0.952067
+4-ogbg-molhiv-normal        0.969958        0.969277             0.969374
+5-ogbg-molhiv-normal        0.987458        0.986874             0.986680
+6-ogbg-molhiv-normal        0.996793        0.996307             0.996404
+7-ogbg-molhiv-normal        0.972472        0.971694             0.971792
+8-ogbg-molhiv-normal        0.944358        0.943482             0.943385
+9-ogbg-molhiv-normal        0.949027        0.947179             0.947860
+10-ogbg-molhiv-normal       0.962744        0.961480             0.961966
+11-ogbg-molhiv-normal       0.938620        0.937745             0.938231
+12-ogbg-molhiv-normal       0.970623        0.969553             0.969651
+13-ogbg-molhiv-normal       0.981518        0.980350             0.980447
+14-ogbg-molhiv-normal       0.947569        0.945915             0.946693
+15-ogbg-molhiv-normal       0.999416        0.998833             0.999124
+16-ogbg-molhiv-normal       0.928698        0.926849             0.927432
+17-ogbg-molhiv-normal       0.938814        0.937647             0.938328
+18-ogbg-molhiv-normal       0.960019        0.959338             0.959436
+19-ogbg-molhiv-normal       0.995234        0.993580             0.993579
+mean                        0.967130        0.966065             0.966337
+std                         0.001112        0.000889             0.000881
+[1364, 7]
+[1347, 24]
+[1314, 57]
+[1311, 60]
+[1317, 54]
+[1356, 15]
+[1365, 6]
+[1337, 34]
+[1294, 77]
+[1296, 75]
+[1326, 45]
+[1279, 92]
+[1330, 41]
+[1354, 17]
+[1306, 65]
+[1370, 1]
+[1282, 89]
+[1284, 87]
+[1316, 55]
+[1369, 2]
+[1352, 19]
+[1369, 2]
+[1298, 73]
+[1289, 82]
+[1325, 46]
+[1356, 15]
+[1303, 68]
+[1279, 91]
+[1305, 65]
+[1291, 79]
+Done
+
+Done setting up devices.
+[1364, 7]
+[1347, 24]
+[1314, 57]
+[1311, 60]
+[1317, 54]
+[1356, 15]
+[1365, 6]
+[1337, 34]
+[1294, 77]
+[1296, 75]
+[1326, 45]
+[1279, 92]
+[1330, 41]
+[1354, 17]
+[1306, 65]
+[1370, 1]
+[1282, 89]
+[1284, 87]
+[1316, 55]
+[1369, 2]
+[1352, 19]
+[1369, 2]
+[1298, 73]
+[1289, 82]
+[1325, 46]
+[1356, 15]
+[1303, 68]
+[1279, 91]
+[1305, 65]
+[1291, 79]
+Done
+
+Done setting up devices.
+[1364, 7]
+[1347, 24]
+[1314, 57]
+[1311, 60]
+[1317, 54]
+[1356, 15]
+[1365, 6]
+[1337, 34]
+[1294, 77]
+[1296, 75]
+[1326, 45]
+[1279, 92]
+[1330, 41]
+[1354, 17]
+[1306, 65]
+[1370, 1]
+[1282, 89]
+[1284, 87]
+[1316, 55]
+[1369, 2]
+[1352, 19]
+[1369, 2]
+[1298, 73]
+[1289, 82]
+[1325, 46]
+[1356, 15]
+[1303, 68]
+[1279, 91]
+[1305, 65]
+[1291, 79]
+Done
+
+Done setting up devices.
+[1364, 7]
+[1347, 24]
+[1314, 57]
+[1311, 60]
+[1317, 54]
+[1356, 15]
+[1365, 6]
+[1337, 34]
+[1294, 77]
+[1296, 75]
+[1326, 45]
+[1279, 92]
+[1330, 41]
+[1354, 17]
+[1306, 65]
+[1370, 1]
+[1282, 89]
+[1284, 87]
+[1316, 55]
+[1369, 2]
+[1352, 19]
+[1369, 2]
+[1298, 73]
+[1289, 82]
+[1325, 46]
+[1356, 15]
+[1303, 68]
+[1279, 91]
+[1305, 65]
+[1291, 79]
+Done
+
+Done setting up devices.
+[1364, 7]
+[1347, 24]
+[1314, 57]
+[1311, 60]
+[1317, 54]
+[1356, 15]
+[1365, 6]
+[1337, 34]
+[1294, 77]
+[1296, 75]
+[1326, 45]
+[1279, 92]
+[1330, 41]
+[1354, 17]
+[1306, 65]
+[1370, 1]
+[1282, 89]
+[1284, 87]
+[1316, 55]
+[1369, 2]
+[1352, 19]
+[1369, 2]
+[1298, 73]
+[1289, 82]
+[1325, 46]
+[1356, 15]
+[1303, 68]
+[1279, 91]
+[1305, 65]
+[1291, 79]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.994896        0.994312             0.994458
+1-ogbg-molhiv-normal        0.983660        0.981909             0.982200
+2-ogbg-molhiv-normal        0.964557        0.963098             0.964119
+3-ogbg-molhiv-normal        0.959445        0.957839             0.958277
+4-ogbg-molhiv-normal        0.962947        0.961635             0.962655
+5-ogbg-molhiv-normal        0.990519        0.989789             0.989789
+6-ogbg-molhiv-normal        0.996356        0.996356             0.996356
+7-ogbg-molhiv-normal        0.977391        0.976515             0.976515
+8-ogbg-molhiv-normal        0.948358        0.945881             0.946755
+9-ogbg-molhiv-normal        0.948650        0.947190             0.947190
+10-ogbg-molhiv-normal       0.967760        0.967031             0.967176
+11-ogbg-molhiv-normal       0.940042        0.938438             0.939605
+12-ogbg-molhiv-normal       0.973303        0.969947             0.971259
+13-ogbg-molhiv-normal       0.988915        0.986872             0.986725
+14-ogbg-molhiv-normal       0.956088        0.953754             0.955066
+15-ogbg-molhiv-normal       0.999273        0.997086             0.997086
+16-ogbg-molhiv-normal       0.941504        0.939462             0.939900
+17-ogbg-molhiv-normal       0.941362        0.940048             0.940340
+18-ogbg-molhiv-normal       0.966005        0.964549             0.965131
+19-ogbg-molhiv-normal       0.998543        0.998397             0.998543
+20-ogbg-molhiv-normal       0.987453        0.987161             0.987307
+21-ogbg-molhiv-normal       0.998543        0.997229             0.997229
+22-ogbg-molhiv-normal       0.950405        0.950259             0.950113
+23-ogbg-molhiv-normal       0.941794        0.941065             0.941357
+24-ogbg-molhiv-normal       0.972718        0.971259             0.972135
+25-ogbg-molhiv-normal       0.989789        0.988185             0.988623
+26-ogbg-molhiv-normal       0.955359        0.954338             0.954484
+27-ogbg-molhiv-normal       0.939708        0.938832             0.938978
+28-ogbg-molhiv-normal       0.956058        0.953139             0.954453
+29-ogbg-molhiv-normal       0.945839        0.944818             0.945547
+mean                        0.967908        0.966546             0.966979
+std                         0.000676        0.000675             0.000676
+[1023, 6]
+[1008, 21]
+[995, 34]
+[979, 50]
+[993, 36]
+[1021, 8]
+[1024, 5]
+[1004, 24]
+[975, 53]
+[973, 55]
+[990, 38]
+[966, 62]
+[1002, 26]
+[1012, 16]
+[988, 40]
+[1026, 2]
+[956, 72]
+[965, 63]
+[989, 39]
+[1026, 2]
+[1019, 9]
+[1024, 4]
+[967, 61]
+[964, 64]
+[990, 38]
+[1010, 18]
+[989, 39]
+[957, 71]
+[982, 46]
+[965, 63]
+[1004, 24]
+[999, 29]
+[969, 59]
+[977, 51]
+[1025, 3]
+[982, 46]
+[992, 36]
+[999, 29]
+[974, 54]
+[981, 47]
+Done
+
+Done setting up devices.
+[1023, 6]
+[1008, 21]
+[995, 34]
+[979, 50]
+[993, 36]
+[1021, 8]
+[1024, 5]
+[1004, 24]
+[975, 53]
+[973, 55]
+[990, 38]
+[966, 62]
+[1002, 26]
+[1012, 16]
+[988, 40]
+[1026, 2]
+[956, 72]
+[965, 63]
+[989, 39]
+[1026, 2]
+[1019, 9]
+[1024, 4]
+[967, 61]
+[964, 64]
+[990, 38]
+[1010, 18]
+[989, 39]
+[957, 71]
+[982, 46]
+[965, 63]
+[1004, 24]
+[999, 29]
+[969, 59]
+[977, 51]
+[1025, 3]
+[982, 46]
+[992, 36]
+[999, 29]
+[974, 54]
+[981, 47]
+Done
+
+Done setting up devices.
+[1023, 6]
+[1008, 21]
+[995, 34]
+[979, 50]
+[993, 36]
+[1021, 8]
+[1024, 5]
+[1004, 24]
+[975, 53]
+[973, 55]
+[990, 38]
+[966, 62]
+[1002, 26]
+[1012, 16]
+[988, 40]
+[1026, 2]
+[956, 72]
+[965, 63]
+[989, 39]
+[1026, 2]
+[1019, 9]
+[1024, 4]
+[967, 61]
+[964, 64]
+[990, 38]
+[1010, 18]
+[989, 39]
+[957, 71]
+[982, 46]
+[965, 63]
+[1004, 24]
+[999, 29]
+[969, 59]
+[977, 51]
+[1025, 3]
+[982, 46]
+[992, 36]
+[999, 29]
+[974, 54]
+[981, 47]
+Done
+
+Done setting up devices.
+[1023, 6]
+[1008, 21]
+[995, 34]
+[979, 50]
+[993, 36]
+[1021, 8]
+[1024, 5]
+[1004, 24]
+[975, 53]
+[973, 55]
+[990, 38]
+[966, 62]
+[1002, 26]
+[1012, 16]
+[988, 40]
+[1026, 2]
+[956, 72]
+[965, 63]
+[989, 39]
+[1026, 2]
+[1019, 9]
+[1024, 4]
+[967, 61]
+[964, 64]
+[990, 38]
+[1010, 18]
+[989, 39]
+[957, 71]
+[982, 46]
+[965, 63]
+[1004, 24]
+[999, 29]
+[969, 59]
+[977, 51]
+[1025, 3]
+[982, 46]
+[992, 36]
+[999, 29]
+[974, 54]
+[981, 47]
+Done
+
+Done setting up devices.
+[1023, 6]
+[1008, 21]
+[995, 34]
+[979, 50]
+[993, 36]
+[1021, 8]
+[1024, 5]
+[1004, 24]
+[975, 53]
+[973, 55]
+[990, 38]
+[966, 62]
+[1002, 26]
+[1012, 16]
+[988, 40]
+[1026, 2]
+[956, 72]
+[965, 63]
+[989, 39]
+[1026, 2]
+[1019, 9]
+[1024, 4]
+[967, 61]
+[964, 64]
+[990, 38]
+[1010, 18]
+[989, 39]
+[957, 71]
+[982, 46]
+[965, 63]
+[1004, 24]
+[999, 29]
+[969, 59]
+[977, 51]
+[1025, 3]
+[982, 46]
+[992, 36]
+[999, 29]
+[974, 54]
+[981, 47]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.994753        0.992617             0.993005
+1-ogbg-molhiv-normal        0.981345        0.979403             0.979792
+2-ogbg-molhiv-normal        0.968709        0.967544             0.967739
+3-ogbg-molhiv-normal        0.956663        0.955496             0.955690
+4-ogbg-molhiv-normal        0.968316        0.967734             0.967734
+5-ogbg-molhiv-normal        0.993199        0.990864             0.990864
+6-ogbg-molhiv-normal        0.995335        0.994167             0.994362
+7-ogbg-molhiv-normal        0.978408        0.976462             0.976851
+8-ogbg-molhiv-normal        0.952539        0.950590             0.950394
+9-ogbg-molhiv-normal        0.949422        0.948061             0.948644
+10-ogbg-molhiv-normal       0.965967        0.965191             0.965191
+11-ogbg-molhiv-normal       0.943981        0.942421             0.943006
+12-ogbg-molhiv-normal       0.976655        0.973347             0.973541
+13-ogbg-molhiv-normal       0.984438        0.983267             0.983462
+14-ogbg-molhiv-normal       0.962837        0.961477             0.961283
+15-ogbg-molhiv-normal       0.999029        0.999029             0.999029
+16-ogbg-molhiv-normal       0.938724        0.938142             0.938336
+17-ogbg-molhiv-normal       0.944551        0.944551             0.944551
+18-ogbg-molhiv-normal       0.963624        0.962259             0.962648
+19-ogbg-molhiv-normal       0.998447        0.994562             0.994951
+20-ogbg-molhiv-normal       0.991830        0.989299             0.989299
+21-ogbg-molhiv-normal       0.997282        0.995534             0.995728
+22-ogbg-molhiv-normal       0.946887        0.945525             0.946109
+23-ogbg-molhiv-normal       0.949425        0.947284             0.947088
+24-ogbg-molhiv-normal       0.965570        0.963043             0.963821
+25-ogbg-molhiv-normal       0.984052        0.982691             0.982885
+26-ogbg-molhiv-normal       0.967909        0.966933             0.966934
+27-ogbg-molhiv-normal       0.936192        0.935803             0.935997
+28-ogbg-molhiv-normal       0.958371        0.955844             0.956623
+29-ogbg-molhiv-normal       0.942813        0.942034             0.942813
+30-ogbg-molhiv-normal       0.979574        0.978988             0.978988
+31-ogbg-molhiv-normal       0.974134        0.971995             0.971994
+32-ogbg-molhiv-normal       0.950195        0.949223             0.949028
+33-ogbg-molhiv-normal       0.953314        0.951953             0.952537
+34-ogbg-molhiv-normal       0.998058        0.997864             0.997476
+35-ogbg-molhiv-normal       0.959143        0.957780             0.958168
+36-ogbg-molhiv-normal       0.970822        0.969849             0.969655
+37-ogbg-molhiv-normal       0.974900        0.972954             0.973341
+38-ogbg-molhiv-normal       0.951363        0.949804             0.949998
+39-ogbg-molhiv-normal       0.961677        0.960316             0.961094
+mean                        0.968261        0.966797             0.967016
+std                         0.001508        0.001400             0.001363
+[2024, 33]
+[1942, 115]
+[2009, 48]
+[2016, 41]
+[2007, 50]
+[1955, 102]
+[2047, 10]
+[1956, 100]
+[1981, 75]
+[1995, 61]
+[1952, 104]
+[1989, 67]
+[2035, 21]
+[1997, 59]
+[1929, 127]
+[1939, 117]
+[1958, 98]
+[1992, 64]
+[1950, 106]
+[2011, 45]
+Done
+
+Done setting up devices.
+[2024, 33]
+[1942, 115]
+[2009, 48]
+[2016, 41]
+[2007, 50]
+[1955, 102]
+[2047, 10]
+[1956, 100]
+[1981, 75]
+[1995, 61]
+[1952, 104]
+[1989, 67]
+[2035, 21]
+[1997, 59]
+[1929, 127]
+[1939, 117]
+[1958, 98]
+[1992, 64]
+[1950, 106]
+[2011, 45]
+Done
+
+Done setting up devices.
+[2024, 33]
+[1942, 115]
+[2009, 48]
+[2016, 41]
+[2007, 50]
+[1955, 102]
+[2047, 10]
+[1956, 100]
+[1981, 75]
+[1995, 61]
+[1952, 104]
+[1989, 67]
+[2035, 21]
+[1997, 59]
+[1929, 127]
+[1939, 117]
+[1958, 98]
+[1992, 64]
+[1950, 106]
+[2011, 45]
+Done
+
+Done setting up devices.
+[2024, 33]
+[1942, 115]
+[2009, 48]
+[2016, 41]
+[2007, 50]
+[1955, 102]
+[2047, 10]
+[1956, 100]
+[1981, 75]
+[1995, 61]
+[1952, 104]
+[1989, 67]
+[2035, 21]
+[1997, 59]
+[1929, 127]
+[1939, 117]
+[1958, 98]
+[1992, 64]
+[1950, 106]
+[2011, 45]
+Done
+
+Done setting up devices.
+[2024, 33]
+[1942, 115]
+[2009, 48]
+[2016, 41]
+[2007, 50]
+[1955, 102]
+[2047, 10]
+[1956, 100]
+[1981, 75]
+[1995, 61]
+[1952, 104]
+[1989, 67]
+[2035, 21]
+[1997, 59]
+[1929, 127]
+[1939, 117]
+[1958, 98]
+[1992, 64]
+[1950, 106]
+[2011, 45]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.985903        0.984736             0.985028
+1-ogbg-molhiv-normal        0.951189        0.948369             0.949438
+2-ogbg-molhiv-normal        0.979290        0.977346             0.977443
+3-ogbg-molhiv-normal        0.980554        0.977637             0.977832
+4-ogbg-molhiv-normal        0.977055        0.975889             0.975792
+5-ogbg-molhiv-normal        0.956541        0.954693             0.955568
+6-ogbg-molhiv-normal        0.995139        0.991831             0.991540
+7-ogbg-molhiv-normal        0.956418        0.954861             0.954958
+8-ogbg-molhiv-normal        0.964689        0.962062             0.962354
+9-ogbg-molhiv-normal        0.974903        0.973541             0.974125
+10-ogbg-molhiv-normal       0.954861        0.953207             0.953596
+11-ogbg-molhiv-normal       0.970429        0.967901             0.967707
+12-ogbg-molhiv-normal       0.990760        0.989203             0.989495
+13-ogbg-molhiv-normal       0.975780        0.973252             0.973836
+14-ogbg-molhiv-normal       0.942803        0.941052             0.942122
+15-ogbg-molhiv-normal       0.948933        0.946305             0.947278
+16-ogbg-molhiv-normal       0.958753        0.956031             0.957100
+17-ogbg-molhiv-normal       0.974321        0.971500             0.972570
+18-ogbg-molhiv-normal       0.953794        0.950973             0.952043
+19-ogbg-molhiv-normal       0.979278        0.978209             0.977820
+mean                        0.968570        0.966430             0.966882
+std                         0.000592        0.000638             0.000757
+[1352, 19]
+[1304, 67]
+[1335, 36]
+[1353, 18]
+[1327, 44]
+[1295, 76]
+[1361, 10]
+[1308, 63]
+[1309, 62]
+[1313, 58]
+[1307, 64]
+[1323, 48]
+[1360, 11]
+[1344, 27]
+[1292, 79]
+[1299, 72]
+[1302, 69]
+[1331, 40]
+[1299, 72]
+[1347, 24]
+[1359, 12]
+[1320, 51]
+[1357, 14]
+[1281, 90]
+[1308, 63]
+[1288, 83]
+[1322, 49]
+[1330, 40]
+[1312, 58]
+[1346, 24]
+Done
+
+Done setting up devices.
+[1352, 19]
+[1304, 67]
+[1335, 36]
+[1353, 18]
+[1327, 44]
+[1295, 76]
+[1361, 10]
+[1308, 63]
+[1309, 62]
+[1313, 58]
+[1307, 64]
+[1323, 48]
+[1360, 11]
+[1344, 27]
+[1292, 79]
+[1299, 72]
+[1302, 69]
+[1331, 40]
+[1299, 72]
+[1347, 24]
+[1359, 12]
+[1320, 51]
+[1357, 14]
+[1281, 90]
+[1308, 63]
+[1288, 83]
+[1322, 49]
+[1330, 40]
+[1312, 58]
+[1346, 24]
+Done
+
+Done setting up devices.
+[1352, 19]
+[1304, 67]
+[1335, 36]
+[1353, 18]
+[1327, 44]
+[1295, 76]
+[1361, 10]
+[1308, 63]
+[1309, 62]
+[1313, 58]
+[1307, 64]
+[1323, 48]
+[1360, 11]
+[1344, 27]
+[1292, 79]
+[1299, 72]
+[1302, 69]
+[1331, 40]
+[1299, 72]
+[1347, 24]
+[1359, 12]
+[1320, 51]
+[1357, 14]
+[1281, 90]
+[1308, 63]
+[1288, 83]
+[1322, 49]
+[1330, 40]
+[1312, 58]
+[1346, 24]
+Done
+
+Done setting up devices.
+[1352, 19]
+[1304, 67]
+[1335, 36]
+[1353, 18]
+[1327, 44]
+[1295, 76]
+[1361, 10]
+[1308, 63]
+[1309, 62]
+[1313, 58]
+[1307, 64]
+[1323, 48]
+[1360, 11]
+[1344, 27]
+[1292, 79]
+[1299, 72]
+[1302, 69]
+[1331, 40]
+[1299, 72]
+[1347, 24]
+[1359, 12]
+[1320, 51]
+[1357, 14]
+[1281, 90]
+[1308, 63]
+[1288, 83]
+[1322, 49]
+[1330, 40]
+[1312, 58]
+[1346, 24]
+Done
+
+Done setting up devices.
+[1352, 19]
+[1304, 67]
+[1335, 36]
+[1353, 18]
+[1327, 44]
+[1295, 76]
+[1361, 10]
+[1308, 63]
+[1309, 62]
+[1313, 58]
+[1307, 64]
+[1323, 48]
+[1360, 11]
+[1344, 27]
+[1292, 79]
+[1299, 72]
+[1302, 69]
+[1331, 40]
+[1299, 72]
+[1347, 24]
+[1359, 12]
+[1320, 51]
+[1357, 14]
+[1281, 90]
+[1308, 63]
+[1288, 83]
+[1322, 49]
+[1330, 40]
+[1312, 58]
+[1346, 24]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.987018        0.985704             0.985558
+1-ogbg-molhiv-normal        0.962211        0.960170             0.960170
+2-ogbg-molhiv-normal        0.974474        0.973452             0.973452
+3-ogbg-molhiv-normal        0.986872        0.985850             0.985996
+4-ogbg-molhiv-normal        0.973306        0.972138             0.972576
+5-ogbg-molhiv-normal        0.953174        0.951132             0.951569
+6-ogbg-molhiv-normal        0.995475        0.992994             0.993140
+7-ogbg-molhiv-normal        0.961634        0.959591             0.960175
+8-ogbg-molhiv-normal        0.958715        0.956088             0.956234
+9-ogbg-molhiv-normal        0.961926        0.960613             0.961197
+10-ogbg-molhiv-normal       0.959448        0.957989             0.957990
+11-ogbg-molhiv-normal       0.968494        0.967472             0.967910
+12-ogbg-molhiv-normal       0.992855        0.988921             0.988921
+13-ogbg-molhiv-normal       0.981914        0.980311             0.980310
+14-ogbg-molhiv-normal       0.948504        0.947337             0.947337
+15-ogbg-molhiv-normal       0.955657        0.953908             0.954492
+16-ogbg-molhiv-normal       0.952444        0.948362             0.948362
+17-ogbg-molhiv-normal       0.975347        0.973159             0.973743
+18-ogbg-molhiv-normal       0.953616        0.952303             0.952887
+19-ogbg-molhiv-normal       0.984244        0.981616             0.981617
+20-ogbg-molhiv-normal       0.994315        0.991694             0.991985
+21-ogbg-molhiv-normal       0.970533        0.967910             0.968784
+22-ogbg-molhiv-normal       0.989789        0.986285             0.986285
+23-ogbg-molhiv-normal       0.935814        0.933770             0.934062
+24-ogbg-molhiv-normal       0.960615        0.955800             0.956967
+25-ogbg-molhiv-normal       0.947046        0.945152             0.945880
+26-ogbg-molhiv-normal       0.966304        0.965866             0.965866
+27-ogbg-molhiv-normal       0.973431        0.972409             0.972263
+28-ogbg-molhiv-normal       0.963066        0.958978             0.959562
+29-ogbg-molhiv-normal       0.985985        0.984672             0.984964
+mean                        0.969141        0.967055             0.967342
+std                         0.001134        0.001257             0.001206
+[1012, 17]
+[970, 59]
+[1003, 26]
+[1010, 19]
+[1002, 27]
+[970, 59]
+[1020, 9]
+[982, 46]
+[989, 39]
+[993, 35]
+[979, 49]
+[987, 41]
+[1019, 9]
+[1006, 22]
+[980, 48]
+[968, 60]
+[986, 42]
+[998, 30]
+[979, 49]
+[1012, 16]
+[1022, 6]
+[993, 35]
+[1021, 7]
+[953, 75]
+[982, 46]
+[957, 71]
+[999, 29]
+[997, 31]
+[981, 47]
+[1009, 19]
+[997, 31]
+[993, 35]
+[1025, 3]
+[1016, 12]
+[972, 56]
+[968, 60]
+[985, 43]
+[969, 59]
+[1017, 11]
+[963, 65]
+Done
+
+Done setting up devices.
+[1012, 17]
+[970, 59]
+[1003, 26]
+[1010, 19]
+[1002, 27]
+[970, 59]
+[1020, 9]
+[982, 46]
+[989, 39]
+[993, 35]
+[979, 49]
+[987, 41]
+[1019, 9]
+[1006, 22]
+[980, 48]
+[968, 60]
+[986, 42]
+[998, 30]
+[979, 49]
+[1012, 16]
+[1022, 6]
+[993, 35]
+[1021, 7]
+[953, 75]
+[982, 46]
+[957, 71]
+[999, 29]
+[997, 31]
+[981, 47]
+[1009, 19]
+[997, 31]
+[993, 35]
+[1025, 3]
+[1016, 12]
+[972, 56]
+[968, 60]
+[985, 43]
+[969, 59]
+[1017, 11]
+[963, 65]
+Done
+
+Done setting up devices.
+[1012, 17]
+[970, 59]
+[1003, 26]
+[1010, 19]
+[1002, 27]
+[970, 59]
+[1020, 9]
+[982, 46]
+[989, 39]
+[993, 35]
+[979, 49]
+[987, 41]
+[1019, 9]
+[1006, 22]
+[980, 48]
+[968, 60]
+[986, 42]
+[998, 30]
+[979, 49]
+[1012, 16]
+[1022, 6]
+[993, 35]
+[1021, 7]
+[953, 75]
+[982, 46]
+[957, 71]
+[999, 29]
+[997, 31]
+[981, 47]
+[1009, 19]
+[997, 31]
+[993, 35]
+[1025, 3]
+[1016, 12]
+[972, 56]
+[968, 60]
+[985, 43]
+[969, 59]
+[1017, 11]
+[963, 65]
+Done
+
+Done setting up devices.
+[1012, 17]
+[970, 59]
+[1003, 26]
+[1010, 19]
+[1002, 27]
+[970, 59]
+[1020, 9]
+[982, 46]
+[989, 39]
+[993, 35]
+[979, 49]
+[987, 41]
+[1019, 9]
+[1006, 22]
+[980, 48]
+[968, 60]
+[986, 42]
+[998, 30]
+[979, 49]
+[1012, 16]
+[1022, 6]
+[993, 35]
+[1021, 7]
+[953, 75]
+[982, 46]
+[957, 71]
+[999, 29]
+[997, 31]
+[981, 47]
+[1009, 19]
+[997, 31]
+[993, 35]
+[1025, 3]
+[1016, 12]
+[972, 56]
+[968, 60]
+[985, 43]
+[969, 59]
+[1017, 11]
+[963, 65]
+Done
+
+Done setting up devices.
+[1012, 17]
+[970, 59]
+[1003, 26]
+[1010, 19]
+[1002, 27]
+[970, 59]
+[1020, 9]
+[982, 46]
+[989, 39]
+[993, 35]
+[979, 49]
+[987, 41]
+[1019, 9]
+[1006, 22]
+[980, 48]
+[968, 60]
+[986, 42]
+[998, 30]
+[979, 49]
+[1012, 16]
+[1022, 6]
+[993, 35]
+[1021, 7]
+[953, 75]
+[982, 46]
+[957, 71]
+[999, 29]
+[997, 31]
+[981, 47]
+[1009, 19]
+[997, 31]
+[993, 35]
+[1025, 3]
+[1016, 12]
+[972, 56]
+[968, 60]
+[985, 43]
+[969, 59]
+[1017, 11]
+[963, 65]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.984258        0.983869             0.983869
+1-ogbg-molhiv-normal        0.951610        0.948499             0.949277
+2-ogbg-molhiv-normal        0.978813        0.977065             0.976870
+3-ogbg-molhiv-normal        0.983287        0.980762             0.980762
+4-ogbg-molhiv-normal        0.975320        0.973378             0.973184
+5-ogbg-molhiv-normal        0.944026        0.943248             0.943247
+6-ogbg-molhiv-normal        0.992228        0.991452             0.991452
+7-ogbg-molhiv-normal        0.960117        0.959145             0.959146
+8-ogbg-molhiv-normal        0.963626        0.961680             0.962071
+9-ogbg-molhiv-normal        0.967123        0.962261             0.963040
+10-ogbg-molhiv-normal       0.959534        0.957975             0.957975
+11-ogbg-molhiv-normal       0.967696        0.967307             0.966723
+12-ogbg-molhiv-normal       0.993000        0.992805             0.992805
+13-ogbg-molhiv-normal       0.980354        0.977437             0.977632
+14-ogbg-molhiv-normal       0.960116        0.958170             0.959142
+15-ogbg-molhiv-normal       0.945134        0.943189             0.943384
+16-ogbg-molhiv-normal       0.962646        0.961286             0.961870
+17-ogbg-molhiv-normal       0.971596        0.971206             0.971207
+18-ogbg-molhiv-normal       0.956811        0.954478             0.955256
+19-ogbg-molhiv-normal       0.989688        0.988907             0.989103
+20-ogbg-molhiv-normal       0.994165        0.992414             0.992608
+21-ogbg-molhiv-normal       0.971207        0.968679             0.968679
+22-ogbg-molhiv-normal       0.993194        0.992029             0.992612
+23-ogbg-molhiv-normal       0.934641        0.932307             0.932114
+24-ogbg-molhiv-normal       0.961866        0.959726             0.960505
+25-ogbg-molhiv-normal       0.938142        0.935803             0.936387
+26-ogbg-molhiv-normal       0.977233        0.976259             0.976845
+27-ogbg-molhiv-normal       0.971788        0.971007             0.970812
+28-ogbg-molhiv-normal       0.961490        0.960324             0.960517
+29-ogbg-molhiv-normal       0.983656        0.981516             0.981710
+30-ogbg-molhiv-normal       0.974714        0.972966             0.973354
+31-ogbg-molhiv-normal       0.970818        0.970037             0.969843
+32-ogbg-molhiv-normal       0.997087        0.990276             0.990082
+33-ogbg-molhiv-normal       0.990277        0.988526             0.988721
+34-ogbg-molhiv-normal       0.948837        0.945141             0.945725
+35-ogbg-molhiv-normal       0.945521        0.943576             0.943771
+36-ogbg-molhiv-normal       0.962069        0.961483             0.961289
+37-ogbg-molhiv-normal       0.950196        0.949223             0.949222
+38-ogbg-molhiv-normal       0.989301        0.989301             0.989301
+39-ogbg-molhiv-normal       0.945522        0.943965             0.944548
+mean                        0.968718        0.966967             0.967167
+std                         0.001214        0.001021             0.001062
+[1950, 107]
+[1937, 120]
+[1949, 108]
+[1979, 78]
+[1993, 64]
+[2004, 53]
+[1932, 125]
+[2039, 17]
+[2054, 2]
+[2027, 29]
+[1943, 113]
+[1959, 97]
+[2033, 23]
+[1965, 91]
+[2037, 19]
+[1976, 80]
+[1930, 126]
+[1995, 61]
+[1958, 98]
+[2024, 32]
+Done
+
+Done setting up devices.
+[1950, 107]
+[1937, 120]
+[1949, 108]
+[1979, 78]
+[1993, 64]
+[2004, 53]
+[1932, 125]
+[2039, 17]
+[2054, 2]
+[2027, 29]
+[1943, 113]
+[1959, 97]
+[2033, 23]
+[1965, 91]
+[2037, 19]
+[1976, 80]
+[1930, 126]
+[1995, 61]
+[1958, 98]
+[2024, 32]
+Done
+
+Done setting up devices.
+[1950, 107]
+[1937, 120]
+[1949, 108]
+[1979, 78]
+[1993, 64]
+[2004, 53]
+[1932, 125]
+[2039, 17]
+[2054, 2]
+[2027, 29]
+[1943, 113]
+[1959, 97]
+[2033, 23]
+[1965, 91]
+[2037, 19]
+[1976, 80]
+[1930, 126]
+[1995, 61]
+[1958, 98]
+[2024, 32]
+Done
+
+Done setting up devices.
+[1950, 107]
+[1937, 120]
+[1949, 108]
+[1979, 78]
+[1993, 64]
+[2004, 53]
+[1932, 125]
+[2039, 17]
+[2054, 2]
+[2027, 29]
+[1943, 113]
+[1959, 97]
+[2033, 23]
+[1965, 91]
+[2037, 19]
+[1976, 80]
+[1930, 126]
+[1995, 61]
+[1958, 98]
+[2024, 32]
+Done
+
+Done setting up devices.
+[1950, 107]
+[1937, 120]
+[1949, 108]
+[1979, 78]
+[1993, 64]
+[2004, 53]
+[1932, 125]
+[2039, 17]
+[2054, 2]
+[2027, 29]
+[1943, 113]
+[1959, 97]
+[2033, 23]
+[1965, 91]
+[2037, 19]
+[1976, 80]
+[1930, 126]
+[1995, 61]
+[1958, 98]
+[2024, 32]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.953138        0.950902             0.951485
+1-ogbg-molhiv-normal        0.945551        0.943607             0.944093
+2-ogbg-molhiv-normal        0.952655        0.951002             0.951294
+3-ogbg-molhiv-normal        0.968207        0.965776             0.966359
+4-ogbg-molhiv-normal        0.972191        0.970636             0.970636
+5-ogbg-molhiv-normal        0.977345        0.975692             0.975790
+6-ogbg-molhiv-normal        0.947502        0.944488             0.945558
+7-ogbg-molhiv-normal        0.994163        0.992898             0.993092
+8-ogbg-molhiv-normal        0.999513        0.997763             0.997568
+9-ogbg-molhiv-normal        0.986478        0.984143             0.984726
+10-ogbg-molhiv-normal       0.947277        0.945039             0.945817
+11-ogbg-molhiv-normal       0.956713        0.954768             0.955741
+12-ogbg-molhiv-normal       0.991051        0.990565             0.990662
+13-ogbg-molhiv-normal       0.960313        0.958659             0.959145
+14-ogbg-molhiv-normal       0.990759        0.988815             0.988718
+15-ogbg-molhiv-normal       0.964885        0.964009             0.964107
+16-ogbg-molhiv-normal       0.945235        0.943484             0.943387
+17-ogbg-molhiv-normal       0.973542        0.971208             0.971402
+18-ogbg-molhiv-normal       0.957396        0.955548             0.955840
+19-ogbg-molhiv-normal       0.986576        0.985701             0.985798
+mean                        0.968524        0.966735             0.967061
+std                         0.001396        0.001273             0.001285
+[1287, 84]
+[1293, 78]
+[1280, 91]
+[1327, 44]
+[1317, 54]
+[1329, 42]
+[1293, 78]
+[1367, 4]
+[1368, 3]
+[1338, 33]
+[1296, 75]
+[1298, 73]
+[1357, 14]
+[1316, 55]
+[1354, 17]
+[1317, 54]
+[1276, 95]
+[1325, 46]
+[1295, 76]
+[1352, 19]
+[1308, 63]
+[1354, 17]
+[1331, 40]
+[1350, 21]
+[1358, 13]
+[1303, 68]
+[1333, 38]
+[1335, 35]
+[1323, 47]
+[1304, 66]
+Done
+
+Done setting up devices.
+[1287, 84]
+[1293, 78]
+[1280, 91]
+[1327, 44]
+[1317, 54]
+[1329, 42]
+[1293, 78]
+[1367, 4]
+[1368, 3]
+[1338, 33]
+[1296, 75]
+[1298, 73]
+[1357, 14]
+[1316, 55]
+[1354, 17]
+[1317, 54]
+[1276, 95]
+[1325, 46]
+[1295, 76]
+[1352, 19]
+[1308, 63]
+[1354, 17]
+[1331, 40]
+[1350, 21]
+[1358, 13]
+[1303, 68]
+[1333, 38]
+[1335, 35]
+[1323, 47]
+[1304, 66]
+Done
+
+Done setting up devices.
+[1287, 84]
+[1293, 78]
+[1280, 91]
+[1327, 44]
+[1317, 54]
+[1329, 42]
+[1293, 78]
+[1367, 4]
+[1368, 3]
+[1338, 33]
+[1296, 75]
+[1298, 73]
+[1357, 14]
+[1316, 55]
+[1354, 17]
+[1317, 54]
+[1276, 95]
+[1325, 46]
+[1295, 76]
+[1352, 19]
+[1308, 63]
+[1354, 17]
+[1331, 40]
+[1350, 21]
+[1358, 13]
+[1303, 68]
+[1333, 38]
+[1335, 35]
+[1323, 47]
+[1304, 66]
+Done
+
+Done setting up devices.
+[1287, 84]
+[1293, 78]
+[1280, 91]
+[1327, 44]
+[1317, 54]
+[1329, 42]
+[1293, 78]
+[1367, 4]
+[1368, 3]
+[1338, 33]
+[1296, 75]
+[1298, 73]
+[1357, 14]
+[1316, 55]
+[1354, 17]
+[1317, 54]
+[1276, 95]
+[1325, 46]
+[1295, 76]
+[1352, 19]
+[1308, 63]
+[1354, 17]
+[1331, 40]
+[1350, 21]
+[1358, 13]
+[1303, 68]
+[1333, 38]
+[1335, 35]
+[1323, 47]
+[1304, 66]
+Done
+
+Done setting up devices.
+[1287, 84]
+[1293, 78]
+[1280, 91]
+[1327, 44]
+[1317, 54]
+[1329, 42]
+[1293, 78]
+[1367, 4]
+[1368, 3]
+[1338, 33]
+[1296, 75]
+[1298, 73]
+[1357, 14]
+[1316, 55]
+[1354, 17]
+[1317, 54]
+[1276, 95]
+[1325, 46]
+[1295, 76]
+[1352, 19]
+[1308, 63]
+[1354, 17]
+[1331, 40]
+[1350, 21]
+[1358, 13]
+[1303, 68]
+[1333, 38]
+[1335, 35]
+[1323, 47]
+[1304, 66]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.947780        0.945593             0.946029
+1-ogbg-molhiv-normal        0.950548        0.948944             0.949673
+2-ogbg-molhiv-normal        0.940776        0.939610             0.939756
+3-ogbg-molhiv-normal        0.972433        0.970535             0.970973
+4-ogbg-molhiv-normal        0.963383        0.962363             0.962508
+5-ogbg-molhiv-normal        0.973452        0.972431             0.972868
+6-ogbg-molhiv-normal        0.949527        0.947340             0.948359
+7-ogbg-molhiv-normal        0.997083        0.996353             0.996062
+8-ogbg-molhiv-normal        0.997813        0.997083             0.997229
+9-ogbg-molhiv-normal        0.975931        0.973889             0.973889
+10-ogbg-molhiv-normal       0.949675        0.946463             0.947193
+11-ogbg-molhiv-normal       0.951419        0.950981             0.950981
+12-ogbg-molhiv-normal       0.991246        0.990662             0.990370
+13-ogbg-molhiv-normal       0.965428        0.963240             0.963969
+14-ogbg-molhiv-normal       0.989792        0.987313             0.987605
+15-ogbg-molhiv-normal       0.962657        0.960613             0.960759
+16-ogbg-molhiv-normal       0.936689        0.934646             0.935229
+17-ogbg-molhiv-normal       0.968929        0.966303             0.967179
+18-ogbg-molhiv-normal       0.949237        0.947193             0.948069
+19-ogbg-molhiv-normal       0.987599        0.986578             0.986723
+20-ogbg-molhiv-normal       0.958131        0.957256             0.957547
+21-ogbg-molhiv-normal       0.988332        0.987456             0.987164
+22-ogbg-molhiv-normal       0.971554        0.971554             0.971554
+23-ogbg-molhiv-normal       0.986433        0.985996             0.985996
+24-ogbg-molhiv-normal       0.991103        0.988915             0.988916
+25-ogbg-molhiv-normal       0.954634        0.953614             0.953905
+26-ogbg-molhiv-normal       0.977389        0.975054             0.975491
+27-ogbg-molhiv-normal       0.976934        0.975036             0.975912
+28-ogbg-molhiv-normal       0.968613        0.966423             0.966715
+29-ogbg-molhiv-normal       0.955182        0.953723             0.954015
+mean                        0.968323        0.966772             0.967088
+std                         0.001195        0.001230             0.001115
+[969, 60]
+[968, 61]
+[964, 65]
+[994, 35]
+[993, 36]
+[1004, 25]
+[977, 52]
+[1022, 6]
+[1026, 2]
+[1010, 18]
+[975, 53]
+[970, 58]
+[1017, 11]
+[983, 45]
+[1023, 5]
+[979, 49]
+[964, 64]
+[999, 29]
+[978, 50]
+[1017, 11]
+[986, 42]
+[1019, 9]
+[999, 29]
+[1017, 11]
+[1019, 9]
+[968, 60]
+[1000, 28]
+[998, 30]
+[989, 39]
+[969, 59]
+[1017, 11]
+[994, 34]
+[967, 61]
+[977, 51]
+[1012, 16]
+[974, 54]
+[980, 48]
+[987, 41]
+[985, 43]
+[995, 33]
+Done
+
+Done setting up devices.
+[969, 60]
+[968, 61]
+[964, 65]
+[994, 35]
+[993, 36]
+[1004, 25]
+[977, 52]
+[1022, 6]
+[1026, 2]
+[1010, 18]
+[975, 53]
+[970, 58]
+[1017, 11]
+[983, 45]
+[1023, 5]
+[979, 49]
+[964, 64]
+[999, 29]
+[978, 50]
+[1017, 11]
+[986, 42]
+[1019, 9]
+[999, 29]
+[1017, 11]
+[1019, 9]
+[968, 60]
+[1000, 28]
+[998, 30]
+[989, 39]
+[969, 59]
+[1017, 11]
+[994, 34]
+[967, 61]
+[977, 51]
+[1012, 16]
+[974, 54]
+[980, 48]
+[987, 41]
+[985, 43]
+[995, 33]
+Done
+
+Done setting up devices.
+[969, 60]
+[968, 61]
+[964, 65]
+[994, 35]
+[993, 36]
+[1004, 25]
+[977, 52]
+[1022, 6]
+[1026, 2]
+[1010, 18]
+[975, 53]
+[970, 58]
+[1017, 11]
+[983, 45]
+[1023, 5]
+[979, 49]
+[964, 64]
+[999, 29]
+[978, 50]
+[1017, 11]
+[986, 42]
+[1019, 9]
+[999, 29]
+[1017, 11]
+[1019, 9]
+[968, 60]
+[1000, 28]
+[998, 30]
+[989, 39]
+[969, 59]
+[1017, 11]
+[994, 34]
+[967, 61]
+[977, 51]
+[1012, 16]
+[974, 54]
+[980, 48]
+[987, 41]
+[985, 43]
+[995, 33]
+Done
+
+Done setting up devices.
+[969, 60]
+[968, 61]
+[964, 65]
+[994, 35]
+[993, 36]
+[1004, 25]
+[977, 52]
+[1022, 6]
+[1026, 2]
+[1010, 18]
+[975, 53]
+[970, 58]
+[1017, 11]
+[983, 45]
+[1023, 5]
+[979, 49]
+[964, 64]
+[999, 29]
+[978, 50]
+[1017, 11]
+[986, 42]
+[1019, 9]
+[999, 29]
+[1017, 11]
+[1019, 9]
+[968, 60]
+[1000, 28]
+[998, 30]
+[989, 39]
+[969, 59]
+[1017, 11]
+[994, 34]
+[967, 61]
+[977, 51]
+[1012, 16]
+[974, 54]
+[980, 48]
+[987, 41]
+[985, 43]
+[995, 33]
+Done
+
+Done setting up devices.
+[969, 60]
+[968, 61]
+[964, 65]
+[994, 35]
+[993, 36]
+[1004, 25]
+[977, 52]
+[1022, 6]
+[1026, 2]
+[1010, 18]
+[975, 53]
+[970, 58]
+[1017, 11]
+[983, 45]
+[1023, 5]
+[979, 49]
+[964, 64]
+[999, 29]
+[978, 50]
+[1017, 11]
+[986, 42]
+[1019, 9]
+[999, 29]
+[1017, 11]
+[1019, 9]
+[968, 60]
+[1000, 28]
+[998, 30]
+[989, 39]
+[969, 59]
+[1017, 11]
+[994, 34]
+[967, 61]
+[977, 51]
+[1012, 16]
+[974, 54]
+[980, 48]
+[987, 41]
+[985, 43]
+[995, 33]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.951016        0.949074             0.949851
+1-ogbg-molhiv-normal        0.947720        0.945390             0.945778
+2-ogbg-molhiv-normal        0.944995        0.942275             0.942469
+3-ogbg-molhiv-normal        0.969287        0.967151             0.967734
+4-ogbg-molhiv-normal        0.967349        0.966961             0.966961
+5-ogbg-molhiv-normal        0.979200        0.977646             0.977840
+6-ogbg-molhiv-normal        0.951797        0.950050             0.950632
+7-ogbg-molhiv-normal        0.994165        0.992218             0.992412
+8-ogbg-molhiv-normal        0.998058        0.994753             0.994753
+9-ogbg-molhiv-normal        0.985413        0.984633             0.985023
+10-ogbg-molhiv-normal       0.955633        0.954857             0.955439
+11-ogbg-molhiv-normal       0.951371        0.950012             0.950400
+12-ogbg-molhiv-normal       0.992801        0.991442             0.991830
+13-ogbg-molhiv-normal       0.962444        0.960497             0.961275
+14-ogbg-molhiv-normal       0.995136        0.992806             0.992806
+15-ogbg-molhiv-normal       0.954866        0.954476             0.954476
+16-ogbg-molhiv-normal       0.944747        0.943776             0.943580
+17-ogbg-molhiv-normal       0.975098        0.973929             0.974904
+18-ogbg-molhiv-normal       0.959347        0.957403             0.957599
+19-ogbg-molhiv-normal       0.990272        0.988331             0.988525
+20-ogbg-molhiv-normal       0.960903        0.959733             0.960122
+21-ogbg-molhiv-normal       0.991248        0.987552             0.987941
+22-ogbg-molhiv-normal       0.973734        0.970433             0.971016
+23-ogbg-molhiv-normal       0.992996        0.992996             0.992801
+24-ogbg-molhiv-normal       0.992413        0.991633             0.991828
+25-ogbg-molhiv-normal       0.947096        0.945151             0.945540
+26-ogbg-molhiv-normal       0.974326        0.973157             0.973158
+27-ogbg-molhiv-normal       0.974123        0.972181             0.972763
+28-ogbg-molhiv-normal       0.965172        0.963029             0.964196
+29-ogbg-molhiv-normal       0.951740        0.949990             0.950574
+30-ogbg-molhiv-normal       0.989301        0.988331             0.988331
+31-ogbg-molhiv-normal       0.972763        0.972568             0.972568
+32-ogbg-molhiv-normal       0.946897        0.944756             0.945146
+33-ogbg-molhiv-normal       0.954280        0.951748             0.951748
+34-ogbg-molhiv-normal       0.984826        0.983657             0.983656
+35-ogbg-molhiv-normal       0.953119        0.952340             0.952340
+36-ogbg-molhiv-normal       0.954284        0.952332             0.952332
+37-ogbg-molhiv-normal       0.965963        0.964603             0.964409
+38-ogbg-molhiv-normal       0.961677        0.958371             0.958759
+39-ogbg-molhiv-normal       0.968875        0.967710             0.967710
+mean                        0.968661        0.966999             0.967281
+std                         0.001072        0.001220             0.001223
+[1953, 104]
+[1946, 111]
+[1953, 104]
+[1982, 75]
+[1992, 65]
+[2003, 54]
+[1946, 111]
+[2025, 31]
+[2044, 12]
+[2015, 41]
+[1954, 102]
+[1963, 93]
+[2025, 31]
+[1967, 89]
+[2024, 32]
+[1983, 73]
+[1938, 118]
+[1994, 62]
+[1969, 87]
+[2008, 48]
+Done
+
+Done setting up devices.
+[1953, 104]
+[1946, 111]
+[1953, 104]
+[1982, 75]
+[1992, 65]
+[2003, 54]
+[1946, 111]
+[2025, 31]
+[2044, 12]
+[2015, 41]
+[1954, 102]
+[1963, 93]
+[2025, 31]
+[1967, 89]
+[2024, 32]
+[1983, 73]
+[1938, 118]
+[1994, 62]
+[1969, 87]
+[2008, 48]
+Done
+
+Done setting up devices.
+[1953, 104]
+[1946, 111]
+[1953, 104]
+[1982, 75]
+[1992, 65]
+[2003, 54]
+[1946, 111]
+[2025, 31]
+[2044, 12]
+[2015, 41]
+[1954, 102]
+[1963, 93]
+[2025, 31]
+[1967, 89]
+[2024, 32]
+[1983, 73]
+[1938, 118]
+[1994, 62]
+[1969, 87]
+[2008, 48]
+Done
+
+Done setting up devices.
+[1953, 104]
+[1946, 111]
+[1953, 104]
+[1982, 75]
+[1992, 65]
+[2003, 54]
+[1946, 111]
+[2025, 31]
+[2044, 12]
+[2015, 41]
+[1954, 102]
+[1963, 93]
+[2025, 31]
+[1967, 89]
+[2024, 32]
+[1983, 73]
+[1938, 118]
+[1994, 62]
+[1969, 87]
+[2008, 48]
+Done
+
+Done setting up devices.
+[1953, 104]
+[1946, 111]
+[1953, 104]
+[1982, 75]
+[1992, 65]
+[2003, 54]
+[1946, 111]
+[2025, 31]
+[2044, 12]
+[2015, 41]
+[1954, 102]
+[1963, 93]
+[2025, 31]
+[1967, 89]
+[2024, 32]
+[1983, 73]
+[1938, 118]
+[1994, 62]
+[1969, 87]
+[2008, 48]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.954691        0.952064             0.953718
+1-ogbg-molhiv-normal        0.953723        0.951680             0.952069
+2-ogbg-molhiv-normal        0.956056        0.953722             0.954209
+3-ogbg-molhiv-normal        0.967331        0.965387             0.966164
+4-ogbg-molhiv-normal        0.973066        0.971802             0.971899
+5-ogbg-molhiv-normal        0.975692        0.973747             0.973747
+6-ogbg-molhiv-normal        0.951483        0.948371             0.948954
+7-ogbg-molhiv-normal        0.985798        0.984047             0.984922
+8-ogbg-molhiv-normal        0.994651        0.992121             0.992802
+9-ogbg-molhiv-normal        0.982395        0.978796             0.979185
+10-ogbg-molhiv-normal       0.956226        0.954669             0.955350
+11-ogbg-molhiv-normal       0.961769        0.959141             0.960115
+12-ogbg-molhiv-normal       0.985798        0.983074             0.982977
+13-ogbg-molhiv-normal       0.961283        0.960212             0.960018
+14-ogbg-molhiv-normal       0.984923        0.983269             0.983463
+15-ogbg-molhiv-normal       0.968776        0.966928             0.967706
+16-ogbg-molhiv-normal       0.950583        0.948539             0.949123
+17-ogbg-molhiv-normal       0.972278        0.970333             0.970721
+18-ogbg-molhiv-normal       0.964205        0.961578             0.962552
+19-ogbg-molhiv-normal       0.980352        0.977045             0.976363
+mean                        0.969054        0.966826             0.967303
+std                         0.000920        0.000890             0.001023
+[1291, 80]
+[1305, 66]
+[1285, 86]
+[1329, 42]
+[1317, 54]
+[1328, 43]
+[1301, 70]
+[1360, 11]
+[1358, 13]
+[1331, 40]
+[1305, 66]
+[1305, 66]
+[1353, 18]
+[1319, 52]
+[1345, 26]
+[1321, 50]
+[1282, 89]
+[1323, 48]
+[1307, 64]
+[1341, 30]
+[1312, 59]
+[1349, 22]
+[1327, 44]
+[1336, 35]
+[1353, 18]
+[1307, 64]
+[1326, 45]
+[1330, 40]
+[1325, 45]
+[1313, 57]
+Done
+
+Done setting up devices.
+[1291, 80]
+[1305, 66]
+[1285, 86]
+[1329, 42]
+[1317, 54]
+[1328, 43]
+[1301, 70]
+[1360, 11]
+[1358, 13]
+[1331, 40]
+[1305, 66]
+[1305, 66]
+[1353, 18]
+[1319, 52]
+[1345, 26]
+[1321, 50]
+[1282, 89]
+[1323, 48]
+[1307, 64]
+[1341, 30]
+[1312, 59]
+[1349, 22]
+[1327, 44]
+[1336, 35]
+[1353, 18]
+[1307, 64]
+[1326, 45]
+[1330, 40]
+[1325, 45]
+[1313, 57]
+Done
+
+Done setting up devices.
+[1291, 80]
+[1305, 66]
+[1285, 86]
+[1329, 42]
+[1317, 54]
+[1328, 43]
+[1301, 70]
+[1360, 11]
+[1358, 13]
+[1331, 40]
+[1305, 66]
+[1305, 66]
+[1353, 18]
+[1319, 52]
+[1345, 26]
+[1321, 50]
+[1282, 89]
+[1323, 48]
+[1307, 64]
+[1341, 30]
+[1312, 59]
+[1349, 22]
+[1327, 44]
+[1336, 35]
+[1353, 18]
+[1307, 64]
+[1326, 45]
+[1330, 40]
+[1325, 45]
+[1313, 57]
+Done
+
+Done setting up devices.
+[1291, 80]
+[1305, 66]
+[1285, 86]
+[1329, 42]
+[1317, 54]
+[1328, 43]
+[1301, 70]
+[1360, 11]
+[1358, 13]
+[1331, 40]
+[1305, 66]
+[1305, 66]
+[1353, 18]
+[1319, 52]
+[1345, 26]
+[1321, 50]
+[1282, 89]
+[1323, 48]
+[1307, 64]
+[1341, 30]
+[1312, 59]
+[1349, 22]
+[1327, 44]
+[1336, 35]
+[1353, 18]
+[1307, 64]
+[1326, 45]
+[1330, 40]
+[1325, 45]
+[1313, 57]
+Done
+
+Done setting up devices.
+[1291, 80]
+[1305, 66]
+[1285, 86]
+[1329, 42]
+[1317, 54]
+[1328, 43]
+[1301, 70]
+[1360, 11]
+[1358, 13]
+[1331, 40]
+[1305, 66]
+[1305, 66]
+[1353, 18]
+[1319, 52]
+[1345, 26]
+[1321, 50]
+[1282, 89]
+[1323, 48]
+[1307, 64]
+[1341, 30]
+[1312, 59]
+[1349, 22]
+[1327, 44]
+[1336, 35]
+[1353, 18]
+[1307, 64]
+[1326, 45]
+[1330, 40]
+[1325, 45]
+[1313, 57]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.948507        0.945298             0.946319
+1-ogbg-molhiv-normal        0.960178        0.959448             0.959302
+2-ogbg-molhiv-normal        0.945733        0.943255             0.944132
+3-ogbg-molhiv-normal        0.975344        0.973302             0.974177
+4-ogbg-molhiv-normal        0.964117        0.961784             0.962368
+5-ogbg-molhiv-normal        0.971848        0.968932             0.969370
+6-ogbg-molhiv-normal        0.955800        0.951429             0.951574
+7-ogbg-molhiv-normal        0.993439        0.993293             0.993147
+8-ogbg-molhiv-normal        0.991249        0.989060             0.989352
+9-ogbg-molhiv-normal        0.975201        0.975201             0.975201
+10-ogbg-molhiv-normal       0.954924        0.953173             0.953465
+11-ogbg-molhiv-normal       0.956382        0.955214             0.955652
+12-ogbg-molhiv-normal       0.988913        0.986869             0.986869
+13-ogbg-molhiv-normal       0.964993        0.962803             0.963241
+14-ogbg-molhiv-normal       0.984684        0.982641             0.983371
+15-ogbg-molhiv-normal       0.966448        0.965136             0.965282
+16-ogbg-molhiv-normal       0.942530        0.940194             0.940486
+17-ogbg-molhiv-normal       0.969650        0.968046             0.967900
+18-ogbg-molhiv-normal       0.959010        0.957550             0.958134
+19-ogbg-molhiv-normal       0.980305        0.977680             0.977534
+20-ogbg-molhiv-normal       0.959007        0.954044             0.954190
+21-ogbg-molhiv-normal       0.985123        0.984101             0.984393
+22-ogbg-molhiv-normal       0.969367        0.967469             0.967907
+23-ogbg-molhiv-normal       0.976223        0.974763             0.975055
+24-ogbg-molhiv-normal       0.987748        0.986726             0.986580
+25-ogbg-molhiv-normal       0.959881        0.958423             0.958861
+26-ogbg-molhiv-normal       0.971847        0.969804             0.970825
+27-ogbg-molhiv-normal       0.975182        0.972993             0.973577
+28-ogbg-molhiv-normal       0.971241        0.970365             0.970803
+29-ogbg-molhiv-normal       0.963650        0.961898             0.962482
+mean                        0.968951        0.967030             0.967385
+std                         0.000967        0.001114             0.001125
+[973, 56]
+[972, 57]
+[969, 60]
+[1000, 29]
+[993, 36]
+[1000, 29]
+[984, 45]
+[1013, 15]
+[1022, 6]
+[1006, 22]
+[980, 48]
+[974, 54]
+[1012, 16]
+[987, 41]
+[1022, 6]
+[983, 45]
+[971, 57]
+[998, 30]
+[986, 42]
+[1008, 20]
+[987, 41]
+[1012, 16]
+[995, 33]
+[1011, 17]
+[1014, 14]
+[970, 58]
+[997, 31]
+[995, 33]
+[989, 39]
+[979, 49]
+[1010, 18]
+[995, 33]
+[971, 57]
+[980, 48]
+[1005, 23]
+[977, 51]
+[986, 42]
+[986, 42]
+[983, 45]
+[989, 39]
+Done
+
+Done setting up devices.
+[973, 56]
+[972, 57]
+[969, 60]
+[1000, 29]
+[993, 36]
+[1000, 29]
+[984, 45]
+[1013, 15]
+[1022, 6]
+[1006, 22]
+[980, 48]
+[974, 54]
+[1012, 16]
+[987, 41]
+[1022, 6]
+[983, 45]
+[971, 57]
+[998, 30]
+[986, 42]
+[1008, 20]
+[987, 41]
+[1012, 16]
+[995, 33]
+[1011, 17]
+[1014, 14]
+[970, 58]
+[997, 31]
+[995, 33]
+[989, 39]
+[979, 49]
+[1010, 18]
+[995, 33]
+[971, 57]
+[980, 48]
+[1005, 23]
+[977, 51]
+[986, 42]
+[986, 42]
+[983, 45]
+[989, 39]
+Done
+
+Done setting up devices.
+[973, 56]
+[972, 57]
+[969, 60]
+[1000, 29]
+[993, 36]
+[1000, 29]
+[984, 45]
+[1013, 15]
+[1022, 6]
+[1006, 22]
+[980, 48]
+[974, 54]
+[1012, 16]
+[987, 41]
+[1022, 6]
+[983, 45]
+[971, 57]
+[998, 30]
+[986, 42]
+[1008, 20]
+[987, 41]
+[1012, 16]
+[995, 33]
+[1011, 17]
+[1014, 14]
+[970, 58]
+[997, 31]
+[995, 33]
+[989, 39]
+[979, 49]
+[1010, 18]
+[995, 33]
+[971, 57]
+[980, 48]
+[1005, 23]
+[977, 51]
+[986, 42]
+[986, 42]
+[983, 45]
+[989, 39]
+Done
+
+Done setting up devices.
+[973, 56]
+[972, 57]
+[969, 60]
+[1000, 29]
+[993, 36]
+[1000, 29]
+[984, 45]
+[1013, 15]
+[1022, 6]
+[1006, 22]
+[980, 48]
+[974, 54]
+[1012, 16]
+[987, 41]
+[1022, 6]
+[983, 45]
+[971, 57]
+[998, 30]
+[986, 42]
+[1008, 20]
+[987, 41]
+[1012, 16]
+[995, 33]
+[1011, 17]
+[1014, 14]
+[970, 58]
+[997, 31]
+[995, 33]
+[989, 39]
+[979, 49]
+[1010, 18]
+[995, 33]
+[971, 57]
+[980, 48]
+[1005, 23]
+[977, 51]
+[986, 42]
+[986, 42]
+[983, 45]
+[989, 39]
+Done
+
+Done setting up devices.
+[973, 56]
+[972, 57]
+[969, 60]
+[1000, 29]
+[993, 36]
+[1000, 29]
+[984, 45]
+[1013, 15]
+[1022, 6]
+[1006, 22]
+[980, 48]
+[974, 54]
+[1012, 16]
+[987, 41]
+[1022, 6]
+[983, 45]
+[971, 57]
+[998, 30]
+[986, 42]
+[1008, 20]
+[987, 41]
+[1012, 16]
+[995, 33]
+[1011, 17]
+[1014, 14]
+[970, 58]
+[997, 31]
+[995, 33]
+[989, 39]
+[979, 49]
+[1010, 18]
+[995, 33]
+[971, 57]
+[980, 48]
+[1005, 23]
+[977, 51]
+[986, 42]
+[986, 42]
+[983, 45]
+[989, 39]
+Done
+
+Done setting up devices.
+ogbg-molhiv_FedAvg_sim_200
+                       best_test_acc  final_test_acc  final_best_test_acc
+0-ogbg-molhiv-normal        0.954124        0.950628             0.951209
+1-ogbg-molhiv-normal        0.953550        0.952578             0.952772
+2-ogbg-molhiv-normal        0.951991        0.949465             0.950049
+3-ogbg-molhiv-normal        0.974539        0.972404             0.972598
+4-ogbg-molhiv-normal        0.970652        0.969680             0.969875
+5-ogbg-molhiv-normal        0.976287        0.973371             0.973370
+6-ogbg-molhiv-normal        0.966970        0.965026             0.965416
+7-ogbg-molhiv-normal        0.986379        0.985214             0.985408
+8-ogbg-molhiv-normal        0.996107        0.993578             0.993772
+9-ogbg-molhiv-normal        0.981516        0.980545             0.980545
+10-ogbg-molhiv-normal       0.957211        0.956045             0.956045
+11-ogbg-molhiv-normal       0.951752        0.949416             0.950195
+12-ogbg-molhiv-normal       0.984828        0.980750             0.980944
+13-ogbg-molhiv-normal       0.967324        0.965767             0.965962
+14-ogbg-molhiv-normal       0.995136        0.991629             0.992409
+15-ogbg-molhiv-normal       0.959338        0.957394             0.957784
+16-ogbg-molhiv-normal       0.953698        0.952919             0.953309
+17-ogbg-molhiv-normal       0.971789        0.966545             0.966545
+18-ogbg-molhiv-normal       0.963618        0.961284             0.961479
+19-ogbg-molhiv-normal       0.982301        0.980745             0.980745
+20-ogbg-molhiv-normal       0.963422        0.961085             0.960890
+21-ogbg-molhiv-normal       0.987350        0.986185             0.986379
+22-ogbg-molhiv-normal       0.969846        0.967511             0.967512
+23-ogbg-molhiv-normal       0.986969        0.985217             0.985217
+24-ogbg-molhiv-normal       0.986578        0.983083             0.983471
+25-ogbg-molhiv-normal       0.948446        0.946305             0.946693
+26-ogbg-molhiv-normal       0.973547        0.972574             0.972962
+27-ogbg-molhiv-normal       0.972966        0.970830             0.971607
+28-ogbg-molhiv-normal       0.967719        0.963247             0.963051
+29-ogbg-molhiv-normal       0.954279        0.951165             0.951359
+30-ogbg-molhiv-normal       0.985797        0.984822             0.984822
+31-ogbg-molhiv-normal       0.971025        0.968110             0.968888
+32-ogbg-molhiv-normal       0.950395        0.949810             0.950005
+33-ogbg-molhiv-normal       0.957201        0.955842             0.956424
+34-ogbg-molhiv-normal       0.985223        0.984251             0.984251
+35-ogbg-molhiv-normal       0.955259        0.954093             0.954093
+36-ogbg-molhiv-normal       0.961482        0.958179             0.958568
+37-ogbg-molhiv-normal       0.964206        0.961680             0.962069
+38-ogbg-molhiv-normal       0.957391        0.957001             0.957196
+39-ogbg-molhiv-normal       0.968672        0.966726             0.967114
+mean                        0.969172        0.967067             0.967325
+std                         0.001430        0.001856             0.001888

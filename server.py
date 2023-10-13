@@ -8,7 +8,7 @@ from init_client_graph import dist_simi_metrix
 from federated import graph_gen,graph_dic,graph_aggregate,bi_graph_dic
 import copy
 from queue import Queue
-from graph_utils import normalize
+from graph_utils import normalize,flattenw
 from analyze_dataset import structure_sim
 
 class Server():
@@ -19,6 +19,8 @@ class Server():
         self.extractors = [e.to(device) for e in extractors]
 
         self.W = {key: value for key, value in self.model.named_parameters()}
+
+        self.control = {key: torch.zeros_like(value) for key, value in self.model.named_parameters()}
         
         self.ex_Ws = [{key: value for key, value in ex.named_parameters()}
             for ex in self.extractors]
@@ -87,7 +89,8 @@ class Server():
                 sours.append((dW, client.train_size))
                 total_size += client.train_size
             # pass train_size, and weighted aggregate
-            reduce_add_average(targets=targs, sources=sours, total_size=total_size)
+            for targ in targs:
+                reduce_add_average(target=targ, sources=sours, total_size=total_size)
 
     def compute_max_update_norm(self, cluster):
         max_dW = -np.inf
@@ -162,10 +165,7 @@ class Server():
         res_matrix = torch.cat(res_embed,dim = 0)
         
         return res_matrix
-    
-
             
-
     def graph_build(self, client_dWs, A, args, norm = True):
 
         # get the client gradient 
@@ -192,7 +192,43 @@ class Server():
         return res_A
     
     def graph_update(self, clients, clients_dWs, A, args):
+         
+        #1 flatten corresponding parameters and perform aggregating 
+        if args.sharing_mode == 'gradient':
+            param_matrix = torch.stack([flattenw(c.dW).detach() for c in clients],dim = 0)
+        elif args.sharing_mode == 'difference':
+            param_matrix = torch.stack([flattenw(c.dW).detach() for c in clients],dim = 0)
+            pmean = torch.mean(param_matrix,dim = 0)[None,:]
+            param_matrix -= args.diff_rate*pmean
+        elif args.sharing_mode == 'ALA':
+            param_matrix = torch.stack([flattenw(c.dW).detach() for c in clients],dim = 0)
         
+        #2 aggregate and update the parameters
+        aggregated_param = torch.mm(A.to(param_matrix.device),param_matrix)
+        for i in range(args.layers - 1):
+            aggregated_param = torch.mm(A,aggregated_param)
+        resparam = (args.serveralpha * aggregated_param) + ((1 - args.serveralpha) * param_matrix)
+        
+        if args.sharing_mode == 'ALA':
+            meanalpha = 0
+            for i in range(len(clients)):
+                meanalpha += clients[i].ALA_aggregate(aggregated_param[i,:],args)
+            meanalpha /= len(clients)
+            print('average accept rate: {:.4f}'.format(meanalpha))
+            return
+        #3 construct the right form of parameters according to sharing mode
+        if args.sharing_mode == 'gradient':
+            addparam = torch.stack([flattenw(c.W_old).detach() for c in clients],dim = 0)
+        elif args.sharing_mode == 'difference':
+            addparam = args.diff_rate*pmean + torch.stack([flattenw(c.W_old).detach() for c in clients],dim = 0)
+
+        resparam += addparam
+
+        for i,c in enumerate(clients):
+            c.load_param_matrix(resparam[i,:])
+
+        '''
+        #2 reload aggregated parameters
         res_dWs = graph_aggregate(clients_dWs,A,args)
 
         targs,sours = [],[]
@@ -209,7 +245,20 @@ class Server():
             sours.append(dW)
         
         group_add(targs,sours)
-    
+        '''
+    def ala_tuning(self,train_data,aparam,param,args):
+        """
+
+        args:
+        param: the parameters of the local model
+        aparam: parameters of the corresponding server model
+        train data: the train data of the client
+
+        returns:
+        tuning aggregation result
+
+        """
+        
     def tograph_update(self, clients, clients_Ws, A, args):
 
         res_Ws = graph_aggregate(clients_Ws,A,args)
@@ -226,63 +275,29 @@ class Server():
         
         return res_A
 
-    '''
-    # this function is for learning client graph with intervals
-    def inter_graph_update(self, clients, w_que, A = 0, interval = 2):
-        if interval == 1:
-            self.graph_update(clients,A)
-            return 
-
-        assert isinstance(w_que,Queue)
+    def scaffold_update(self, clients, local_epoch,args):
         
-        # 1 get gradient for computing client graph
-        old_ws = {}
-        if w_que.qsize() == interval:
-            old_ws = w_que.get()
-        else:
-            old_ws = copy_oldclientweights(clients,self.W.keys())
-        
-        targs = copy_clientweights(clients,self.W.keys())
-        
-        gclient_dWs = group_sub(targs,old_ws)
-        
-        # 1.1 prepare the initial client graph
-        A = dist_simi_metrix(gclient_dWs)
-        A = torch.max(A,dim = 1).values[:,None] - A
-        
-        # 2 get gradient for update
-        client_dWs = []
+        # haven't implement trianing with client sampling
         for client in clients:
-            dW = {}
             for k in self.W.keys():
-                dW[k] = copy.deepcopy(client.dW[k])
-            client_dWs.append(dW)
-
-        res_dWs,res_A,quality = graph_dic(client_dWs,client_dWs,A)
+                # update client control parameters
+                client.dcontrol[k].data = (1/(local_epoch*args.lr))*(self.W[k].data - client.W[k].data) - self.control[k].data
+                client.control[k].data += client.dcontrol[k].data
+                
+                # compute dW
+                client.dW[k] = client.W[k].data - self.W[k].data
         
-        print(res_A)
-        print('graph_quality: ',quality)
+        total_size = len(clients)
+
+        reduce_add_average(self.W,[[c.dW,1] for c in clients],total_size)
+        reduce_add_average(self.control,[[c.dcontrol,1] for c in clients],total_size)
+
+
+
+
         
-        
-        targs,sours = [],[]
-        for client,res_dW in zip(clients,res_dWs):
-            W = {}
-            dW = {}
 
-            for k in self.W.keys():
-                W[k] = client.W[k]
-                dW[k] = copy.deepcopy(res_dW[k])#/interval
 
-            targs.append(W)
-            sours.append(dW)
-        
-        group_add(targs,sours)
-
-        targs = copy_clientweights(clients,self.W.keys())
-        w_que.put(targs)
-
-        return w_que
-    '''
 
             
 
@@ -313,11 +328,10 @@ def pairwise_angles(sources):
 
     return angles.numpy()
 
-def reduce_add_average(targets, sources, total_size):
-    for target in targets:
-        for name in target:
-            tmp = torch.div(torch.sum(torch.stack([torch.mul(source[0][name].data, source[1]) for source in sources]), dim=0), total_size).clone()
-            target[name].data += tmp
+def reduce_add_average(target, sources, total_size):
+    for name in target.keys():
+        tmp = torch.div(torch.sum(torch.stack([torch.mul(source[0][name].data, source[1]) for source in sources]), dim=0), total_size).clone()
+        target[name].data += tmp
 
 def group_add(targets,sources):
     

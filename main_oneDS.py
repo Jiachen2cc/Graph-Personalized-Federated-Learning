@@ -4,16 +4,20 @@ import random
 import copy
 
 import torch
+import numpy as np
 from pathlib import Path
 import pandas as pd
 
 import setupGC
 from training import *
-from analyze_dataset import structure_sim
+from analyze_dataset import structure_sim,pg_analysis,label_dis
 from client import Client_GC
 from utils import cross_res_analyze
 from graph_utils import normalize
 from data_utils import gcfl_param,device
+import time
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 def set_seed(seed):
     random.seed(seed)
@@ -24,7 +28,6 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.benckmark = False
     torch.backends.cudnn.deterministic = True
-set_seed(0)
 
 def process_sfl(clients, server,args):
     # structure federated learning based on the gradients of the model
@@ -69,9 +72,6 @@ def process_fedavg(clients, server,args = None):
     '''
 
 def process_fedprox(clients, server, mu):
-    print("\nDone setting up FedProx devices.")
-
-    print("Running FedProx ...")
     allAccs = run_fedprox(clients, server, args.num_rounds, args.local_epoch, mu, samp=None)
 
     return allAccs
@@ -83,6 +83,10 @@ def process_fedprox(clients, server, mu):
     frame.to_csv(outfile)
     print(f"Wrote to file: {outfile}")
     '''
+
+def process_scaffold(clients,server,args):
+    allAccs = run_scaffold(clients, server, args.num_rounds,args.local_epoch,args)
+    return allAccs
 
 def process_gcfl(clients, server, args):
 
@@ -134,7 +138,9 @@ parser.add_argument('--dropout', type=float, default=0.5,
 parser.add_argument('--batch_size', type=int, default=128,
                         help='Batch size for node classification.')
 parser.add_argument('--seed', help='seed for randomness;',
-                        type=int, default=0)
+                        type=int, default = 0)
+parser.add_argument('--multiseed', help = 'enable multiseed experiment',
+                        type = int, default = 0)
 # input and output
 parser.add_argument('--datapath', type=str, default='./data',
                         help='The input path of data.')
@@ -152,8 +158,15 @@ parser.add_argument('--overlap', help='whether clients have overlapped data',
                         type=bool, default=False)
 parser.add_argument('--standardize', help='whether to standardize the distance matrix',
                         type=bool, default=False)
+
+# the repeat time for the experiment
 parser.add_argument('--fold_num', type = int, default = 5,
                     help = 'the k for k-fold cross-validation')
+parser.add_argument('--test_fold', type = int, default = 0,
+                    help = 'the number of used fold')
+parser.add_argument('--repeat_num',type = int, default = 1,
+                    help = 'the repeat times for main experiment')
+
 # server & local model sharing options
 parser.add_argument('--server_sharing',type = str, default = 'full',
                         choices = ['center','full'])
@@ -166,21 +179,22 @@ parser.add_argument('--epsilon2', help='the threshold epsilon2 for GCFL',
                         type=float, default=0.1)
 
 # SFL parameters
-parser.add_argument('--gen_mode', type = str, default = 'GAE',
+parser.add_argument('--gen_mode', type = str, default = 'GAEAT',
                     help = 'the type of graph generator')
 parser.add_argument('--glr', type = float, default = 1e-3,
                     help = 'the learning rate of graph generator')
 parser.add_argument('--gweight_decay', type = float, default = 5e-4,
                     help = 'the weight decay of graph generator')
-parser.add_argument('--mask_ratio', type = float, default = 0.1)
+parser.add_argument('--mask_ratio', type = float, default = 0.)
+parser.add_argument('--loss_gama', type = float, default = 0.5)
 parser.add_argument('--compress_mode', type = str, default = 'shape',
                     help = 'the parameter compression model',
                     choices = ['continous','discrete','shape'])
-parser.add_argument('--compress_dim', type = int, default = 1000)
-parser.add_argument('--gc_epoch', type = int, default = 200,
+parser.add_argument('--compress_dim', type = int, default = 100)
+parser.add_argument('--gc_epoch', type = int, default = 100,
                     help = 'the epoch for training ')
 parser.add_argument('--layers', type = int, default = 1)
-parser.add_argument('--serveralpha', type = float, default = 1,
+parser.add_argument('--serveralpha', type = float, default = 0.95,
                     help = 'server prop alpha')
 parser.add_argument('--serverbeta',type = float, default = 0.1,
                     help = 'parameter replace rate')
@@ -232,32 +246,42 @@ parser.add_argument('--hetero',type = int, default = 0,
                     help = 'choose whether to strengthen the hetergeneity between datasets')
 parser.add_argument('--target_dataset', type = str, default = 'IMDB-BINARY')
 
-parser.add_argument('--toy_rate',type = float, default = 0.7,
+parser.add_argument('--split_way', type = str, default = 'toy',
+                    help = ' the split methods for global datasets',choices = ['toy','label_skew','blabel_skew','random'])
+# toy split
+parser.add_argument('--toy_rate',type = float, default = 0.5,
                     help = 'the rate for label split')
 parser.add_argument('--num_clients',type = int, default = 2,
                     help = 'the number of client')
-parser.add_argument('--num_splits',type = int, default = 10,
+parser.add_argument('--num_splits',type = int, default = 6,
                     help = 'the split number of each client dataset')
+# label skew & skew balance
+parser.add_argument('--skew_rate',type = float, default = 1,
+                    help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
 parser.add_argument('--Federated_mode', type = str, default ='SFL',
-                        choices = ['Selftraining','FedAvg','FedProx','SFL','biSFL','toSFL','GCFL'])
-parser.add_argument('--initial_graph', type = str, default = 'sim',
-                        choices = ['degree_disb','triangle_disb','distance','hop2_disb','uniform','sim','ans'])
+                        choices = ['Selftraining','FedAvg','FedProx','SFL','biSFL','toSFL','GCFL','Scaffold'])
+parser.add_argument('--initial_graph', type = str, default = 'property',
+                        choices = ['uniform','sim','ans','property','randomc'])
 parser.add_argument('--graph_eps', type = float, default = 0.3,
                         help = 'the eps term for initial client graph normalization')
-parser.add_argument('--para_choice', type = str, default = 'embed',
-                        choices = ['param','embed','ans','self','avg'])
+parser.add_argument('--graph_rate', type = float, default = 0.05,
+                    help = 'the update rate of the initial graph')
+parser.add_argument('--para_choice', type = str, default = 'param',
+                        choices = ['param','embed','ans','self','avg','label'])
+parser.add_argument('--graph_choice', type = str,default = 'embed',
+                    help = 'the choice for parameterize the initial graph')
 parser.add_argument('--input_choice', type = str, default = 'diff',
                         choices = ['whole','gradient','seq','diff','ans'])
-parser.add_argument('--diff_rate',type = float, default = 0.95,
+parser.add_argument('--diff_rate',type = float, default = 1,
                     help = 'the remove rate of mean value')
 parser.add_argument('--timelen', type = int, default = 20)
 
 
 # update model sharing mechanism
 parser.add_argument('--sharing_mode', type = str, default = 'gradient',
-                        choices = ['gradient','total'])
+                        choices = ['gradient','total','difference','ALA'])
 
 # feature normalization method
 parser.add_argument('--norm_way', type = str, default = 'F_norm',
@@ -277,6 +301,23 @@ parser.add_argument('--sigmoid',type = int, default = 1,
 parser.add_argument('--discrete',type = int, default = 0,
                     help = 'whether to train a discrete or continual client graph')
 
+# control parameter for ablation study
+# lu : graph learner      | initialization graph update
+# l  : only graph learner | no graph update
+# n  : no graph learner   | no update  
+
+parser.add_argument('--ablation',type = str,default = 'lu',
+                    choices = ['lu','l','u','n'])
+# ALA train
+parser.add_argument('--ala_ratio', type = float, default = 0.2,
+                    help = 'the ratio for the subdataset')
+parser.add_argument('--ala_lr', type = float, default = 1,
+                    help = 'the learning rate for ala tuning')
+parser.add_argument('--ala_threshold', type = float, default = 1e-2,
+                    help = 'the threshold for stopping ala tuning')
+parser.add_argument('--ala_round', type = int, default = 5,
+                    help = 'the max training round for ALA step')
+
 try:
     args = parser.parse_args()
 except IOError as msg:
@@ -284,11 +325,6 @@ except IOError as msg:
 
 seed_dataSplit = 123
 
-# set seeds
-random.seed(args.seed)
-np.random.seed(args.seed)
-torch.manual_seed(args.seed)
-torch.cuda.manual_seed(args.seed)
 
 #args.device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
 args.device = device
@@ -326,28 +362,30 @@ else:
 if args.repeat is not None:
     Path(os.path.join(outpath, 'repeats')).mkdir(parents=True, exist_ok=True)
 
-def training_round(args):
+def preparation(args):
 
-    #splitedData, df_stats = setupGC.prepareData_multiDS(args.datapath, args.data_group, args.batch_size, convert_x=args.convert_x, seed=seed_dataSplit)
-    splitedData = setupGC.prepareData_oneDS(args.num_clients,args,seed=seed_dataSplit)
-    #splitedData = setupGC.prepareData_fakeDS(args,seed = seed_dataSplit)
-    #property_report = setupGC.property_counts(args,seed=None)
-    print("Done")
-    
-    
+    splitedData = setupGC.prepareData_oneDS(args.num_clients,args,seed=args.seed)
     init_clients, init_server, init_idx_clients = setupGC.setup_devices(splitedData, args)
-    print("\nDone setting up devices.")
-    
 
+    return init_clients, init_server
+    
+def training_round(init_clients,init_server,args):
+    
+    
     idx_clients = copy.deepcopy(init_clients)
     cross_results,cross_A = [],[]
-    for idx in range(5):
+    tarfold = range(args.fold_num) if args.test_fold == args.fold_num else [args.test_fold] 
+    for idx in tarfold:
 
         # split the train and test dataset
         for client in idx_clients:
             assert isinstance(client,Client_GC)
             struc_feature = client.split_traintest(idx,args.batch_size,args)
         
+        #analyze the propeties of all the datasets
+        #pg_analysis(idx_clients)
+        #exit(0)
+
         if args.Federated_mode == 'SFL':
             res,avgA = process_sfl(copy.deepcopy(idx_clients), copy.deepcopy(init_server), args)
             cross_A.append(avgA)
@@ -361,6 +399,8 @@ def training_round(args):
             res = process_fedavg(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'FedProx':
             res = process_fedprox(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server), mu = args.mu)
+        elif args.Federated_mode == 'Scaffold':
+            res = process_scaffold(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'GCFL':
             res = process_gcflplusdWs(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
         cross_results.append(res)
@@ -369,7 +409,6 @@ def training_round(args):
     return cross_results,cross_A
 
 def report_results(cross_results,args):
-
     report = cross_res_analyze(cross_results)
     print(args.data_group+'_'+args.Federated_mode+'_'+args.initial_graph+'_'+str(args.num_rounds))
     print(report)
@@ -382,13 +421,17 @@ def report_results(cross_results,args):
 
 # to ensure the result re-run the algorithm under same arguments and return report
 def multi_rounds_traing(rounds,args):
-
+    test_seeds = [0,10,42,111,123] if args.multiseed else [args.seed]
     multi_results,multi_A = [],[]
-
-    for r in range(rounds):
-        res,resA = training_round(args)
-        multi_results.extend(res)
-        multi_A.extend(resA)
+    
+    for seed in test_seeds:
+        args.seed = seed
+        set_seed(args.seed)
+        ics,iss = preparation(args)
+        for _ in range(rounds):
+            res,resA = training_round(ics,iss,args)
+            multi_results.extend(res)
+            multi_A.extend(resA)
 
     if len(multi_A) != 0:
         res = torch.concat([a.unsqueeze(0) for a in multi_A],dim = 0)
@@ -409,12 +452,26 @@ if __name__ == '__main__':
     
     if args.Federated_mode == 'GCFL':
         args = gcfl_args(args)
-    
-    multi_rounds_traing(1,args)
-    
-    
-    #multi_rounds_traing(1,args)
-    #args.Federated_mode = 'Selftraining'
-    #multi_rounds_traing(5,args)
-    #args.Federated_mode = 'FedAvg'
-    #multi_rounds_traing(5,args)
+    '''
+    for sr in [0.5,1,2,4]:
+        for ns in [10,15,20]:
+            args.split_way = 'blabel_skew'
+            args.skew_rate = sr
+            args.num_splits = ns
+            multi_rounds_traing(5,args)
+    '''
+    start = time.time()
+    multi_rounds_traing(args.repeat_num,args)
+    print('training time:{:.4f}'.format(time.time()-start))
+    '''
+    for s in range(1,11):
+        args.num_splits = s
+        args.Federated_mode = 'SFL'
+        multi_rounds_traing(5,args)
+        args.Federated_mode = 'Selftraining'
+        multi_rounds_traing(5,args)
+        args.Federated_mode = 'FedAvg'
+        multi_rounds_traing(5,args)
+        args.Federated_mode = 'FedProx'
+        multi_rounds_traing(5,args)
+    '''

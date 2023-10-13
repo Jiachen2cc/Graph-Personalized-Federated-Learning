@@ -1,4 +1,4 @@
-from torch_geometric.datasets import TUDataset
+from torch_geometric.datasets import TUDataset,GNNBenchmarkDataset
 from torch_geometric.transforms import OneHotDegree
 from utils import get_maxDegree
 from torch_geometric.transforms import BaseTransform
@@ -6,11 +6,13 @@ from torch_geometric.data import Data
 import torch.nn.functional as F
 import torch
 from torch_geometric.data.datapipes import functional_transform
+from ogb.graphproppred import PygGraphPropPredDataset
 from sklearn.model_selection import StratifiedKFold
 import numpy as np
 from perturbations import *
 from analyze_dataset import *
 from dataset_builder import *
+from ogb.graphproppred.mol_encoder import AtomEncoder, BondEncoder
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -61,9 +63,17 @@ gcfl_param = {
     'PROTEINS': [0.03,0.06],
     'IMDB-BINARY': [0.025,0.045],
     'NCI1':[0.04,0.08],
+    'Yeast':[0.05,0.1],
     'molecules':[0.07,0.28],
     'biochem':[0.07,0.35],
     'mix':[0.08,0.04]
+}
+
+dataset_format = {
+    'TuDataset':['AIDS','BZR','COX2','DD','DHFR','ENZYMES','NCI1','PROTEINS',
+                 'PRC_MR','NCI-H23','alchemy_full','DBLP_v1','PC-3','MCF-7','MOLT-4','NCI-H23',
+                 'OVCAR-8','P388','SF-295','SN12C','SW-620','UACC257','Yeast'],
+    'GNNBenchmark':['PATTERN','CLUSTER','MNIST','CIFAR10','TSP','CYCLES'],
 }
 
 def data_process(datapath, data, convert_x = False):
@@ -79,13 +89,30 @@ def data_process(datapath, data, convert_x = False):
             f"{datapath}/TUDataset", data, pre_transform=OneHotDegree(88, cat=False))
     elif data == 'scalefree':
         tudataset = scalefree_data('data/artifdataset')
-    else:
+    elif data in ['ogbg-molhiv']:
+        tudataset = ogb_process(PygGraphPropPredDataset(name = 'ogbg-molhiv', root = f"{datapath}/"),data)
+    elif data in dataset_format['TuDataset']:
         tudataset = TUDataset(f"{datapath}/TUDataset", data, use_node_attr = False)
         if convert_x:
             maxdegree = get_maxDegree(tudataset)
             tudataset = TUDataset(
                 f"{datapath}/TUDataset", data, transform=OneHotDegree(maxdegree, cat=False))
-    return tudataset
+    elif data in dataset_format['GNNBenchmark']:
+        tudataset = GNNBenchmarkDataset(f"{datapath}/Benchmark",data,split = 'train') + GNNBenchmarkDataset(f"{datapath}/Benchmark",data,split = 'val') + GNNBenchmarkDataset(f"{datapath}/Benchmark",data,split = 'test')
+        #graphs = [g for g in tudataset]
+
+    graphs = [g for g in tudataset]
+    if(data == 'Yeast'):
+        graphs = balancelabel_downsample(graphs)
+        
+    #print('num of graphs',len(graphs))
+    #print('avg nodes',np.mean(np.array([g.num_nodes for g in graphs])))
+    #print('avg edges',np.mean(np.array([g.num_edges/2 for g in graphs])))
+    #print('classes',max([g.y for g in graphs]))
+    #show_label_distribution(graphs)
+    #exit(0)
+    
+    return graphs
 
 def load_attr(datapath, data):
 
@@ -184,6 +211,7 @@ def graph_process(data,graphs,args):
             print(average_degree(graphs))
 
         elif args.noise_type == 'node':
+
             print('node perturbation!')
             node_num = np.mean(np.array([graph.x.shape[0] for graph in graphs]))
             print('average node num before node downsampling',node_num)
@@ -229,7 +257,7 @@ def toy_split(graphs,rate = 0.5):
     return datasets
 
 
-def label_balanced_downsample(labels,down_rate,seed = 0):
+def label_balanced_downsample(labels,down_rate):
     
     random.seed(0)
 
@@ -241,10 +269,30 @@ def label_balanced_downsample(labels,down_rate,seed = 0):
     
     res = []
     for k in range(label_num):
-        sample_num = max(int(down_rate * len(label_dict[k])),10)
+        sample_num = max(int(down_rate * len(label_dict[k])),min(10,len(label_dict[k])))
         res.extend(random.sample(label_dict[k],sample_num))
     
     return res
+
+def balancelabel_downsample(graphs):
+    
+    random.seed(0)
+    labels = [g.y.item() for g in graphs]
+
+    label_num = np.max(labels)+1
+    label_dict = {k:[] for k in range(label_num)}
+
+    for idx in range(len(labels)):
+        label_dict[labels[idx]].append(idx)
+
+    downnum = min(len(label_dict[k]) for k in range(label_num))
+
+    res = []
+    for k in range(label_num):
+        res.extend(random.sample(label_dict[k],downnum))
+    
+    downgraphs = [graphs[idx] for idx in res]
+    return downgraphs
 
 
 def uniform_split(graphs,num_splits):
@@ -294,6 +342,28 @@ def show_label_distribution(graphs):
     label_dis = [np.sum(labels == i) for i in range(label_num)]
 
     print(label_dis)
+
+def ogb_process(dataset,name):
+
+    atom_encoder = AtomEncoder(emb_dim = 100)
+    prodataset = []
+
+    if name == 'ogbg-molhiv':
+        # feature process
+        for graph in dataset:
+            prograph = graph.clone()
+            px = atom_encoder(graph.x).detach()
+            py = graph.y[0]
+            prograph.__setitem__('x',px)
+            prograph.__setitem__('y',py)
+            #prograph = Data(x=px,y=py,edge_index = graph.edge_index)
+            prodataset.append(prograph)
+
+    return prodataset
+            
+            
+
+
 
 
 

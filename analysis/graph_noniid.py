@@ -42,10 +42,10 @@ def main_ratio_KStest_distDiff_nodeDegrees(ds_pair):
 
 
 def aggregate_ratioFiles(ks, indir, suffix):
-    # ks = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "NCI1",
+    # ks = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "COLLAB",
     #       "ENZYMES", "DD", "PROTEINS",
     #       "IMDB-BINARY", "IMDB-MULTI", "COLLAB", "REDDIT-BINARY"]
-    # ks = ["AIDS", "BZR", "COX2", "DHFR", "ENZYMES", "MUTAG", "NCI1", "PROTEINS", "PTC_MR"]
+    # ks = ["AIDS", "BZR", "COX2", "DHFR", "ENZYMES", "MUTAG", "COLLAB", "PROTEINS", "PTC_MR"]
     df = pd.DataFrame(index=ks, columns=ks)
     for tmpfile in os.listdir(os.path.join(indir, 'tmps')):
         if tmpfile.startswith(f'tmp_ratio_noniid_{suffix}_'):
@@ -318,7 +318,7 @@ def _feature_analysis_mixtiny_JS(datasets, all_dict_sim):
 def analyze_struct_feature_mixtiny():
     seed_dataSplit = 123
     datapath = "./data/"
-    datasets = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "NCI1",  # small molecules
+    datasets = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "COLLAB",  # small molecules
                 "ENZYMES", "DD", "PROTEINS",  # bioinformatics
                 "COLLAB", "IMDB-BINARY", "IMDB-MULTI"]  # social networks
 
@@ -455,14 +455,14 @@ def _feature_analysis_mix(datasets, all_dict_diff, suffix):
 def compare_struct_feature_mix():
     seed_dataSplit = 123
     datapath = "./data/"
-    datasets = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "NCI1",  # small molecules
+    datasets = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "COLLAB",  # small molecules
                 "ENZYMES", "DD", "PROTEINS",  # bioinformatics
                 "COLLAB", "IMDB-BINARY", "IMDB-MULTI"]  # social networks
 
     clusters_cfl = [['MUTAG', 'BZR', 'AIDS', 'ENZYMES', 'PROTEINS', 'COLLAB', 'IMDB-BINARY', 'IMDB-MULTI'],
-                    ['COX2', 'DHFR', 'PTC_MR', 'NCI1', 'DD']]
+                    ['COX2', 'DHFR', 'PTC_MR', 'COLLAB', 'DD']]
 
-    clusters_cfldtw = [['MUTAG', 'BZR', 'DHFR', 'PTC_MR', 'NCI1', 'ENZYMES', 'DD', 'COLLAB', 'IMDB-BINARY', 'IMDB-MULTI'],
+    clusters_cfldtw = [['MUTAG', 'BZR', 'DHFR', 'PTC_MR', 'COLLAB', 'ENZYMES', 'DD', 'COLLAB', 'IMDB-BINARY', 'IMDB-MULTI'],
                        ['COX2', 'AIDS', 'PROTEINS']]
 
     list_tudatasets = {}
@@ -581,7 +581,7 @@ def analyze_struct_feature_heterogeneity():
     datapath = "./data/"
 
     # ######################## cross datasets ##########################
-    # dss = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "NCI1",
+    # dss = ["MUTAG", "BZR", "COX2", "DHFR", "PTC_MR", "AIDS", "COLLAB",
     #         "ENZYMES", "DD", "PROTEINS",
     #         "IMDB-BINARY", "IMDB-MULTI", "COLLAB", "REDDIT-BINARY"]
     datasets = ["ENZYMES", "DD", "PROTEINS"]

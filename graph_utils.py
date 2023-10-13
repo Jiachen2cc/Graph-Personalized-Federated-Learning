@@ -199,6 +199,7 @@ def state_dict2metrix(models_state):
 
     return param_metrix
 
+
 def para2metrix(models_state,cmode,cdim):
 
     key_shapes = [list(param.data.shape) for _,param in models_state[0].items()]
@@ -210,6 +211,12 @@ def para2metrix(models_state,cmode,cdim):
     elif cmode == 'shape':
         compress_param = compress_shape(param_metrix.cpu(),key_shapes)
     elif cmode is None:
-        compress_param = param_metrix.cpu()
+        # simple avg pool compress
+        stri = param_metrix.shape[1]//cdim
+        compress_param = torch.avg_pool1d(param_metrix,stri,stri)
     
     return compress_param
+
+def flattenw(w):
+    #return torch.cat([v.flatten() for v in w.data()])
+    return torch.cat([v.flatten() for v in w.values()])

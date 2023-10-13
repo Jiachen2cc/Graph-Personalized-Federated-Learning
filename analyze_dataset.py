@@ -168,8 +168,131 @@ def homo_analyze(dataset):
     print('average homophily edges:{:.4f},homophily edge rate:{:.4f}'.format(avg_homo,homo_rate))
     return avg_homo, homo_rate
 
+def pfeature(dataset):
+
+    res = torch.stack([network_properties(graph) for graph in dataset],dim = 0)
+    dfeature = torch.mean(res,dim = 0)
+    dstd = torch.std(res,dim = 0)
 
 
+    return [dfeature,dstd]
+
+def cons_feature(datasets):
+
+    fm = torch.stack([pfeature(d)[0] for d in datasets],dim = 0)
+    fstd = torch.stack([pfeature(d)[1] for d in datasets],dim = 0)
+    
+    #print('mean dataset features')
+    #print(fm)
+    #print(torch.std(fm,dim = 0))
+    #print('std dataset features')
+    #print(fstd)
+    #print(torch.mean(fstd,dim = 0))
+    #print(torch.mean(torch.std(fm,dim = 0)/(torch.mean(fstd,dim = 0))))
+    #print(torch.mean(torch.std(fm/fstd,dim = 0)))
+    # row normalization
+    #fm /= (torch.sum(fm*fm,dim = 1)[:,None])**0.5
+    # data normalization
+    fmean = torch.mean(fm,dim = 0)
+    #fres = (fm - fmean)**2
+    mean_res = torch.std(fm,dim = 0)
+    fm = (fm - fmean)/mean_res
+    # row normalization
+    fm /= (torch.sum(fm*fm,dim = 1)[:,None])**0.5
+    # compute
+    simi = torch.matmul(fm,fm.T)
+    simi = simi * (simi>=0).float()
+    #simi /= torch.sum(simi,dim = 1)[:,None]
+    #print(simi)
+    return simi
+
+def pg_analysis(clients):
+    cons_feature([c.train_data for c in clients])
+    cons_feature([c.sample_uniform() for c in clients])
+    
+
+    fm = torch.stack([pfeature(c.train_data)[0] for c in clients],dim = 0)
+    fstd = torch.stack([pfeature(c.train_data)[1] for c in clients],dim = 0)
+    '''
+    print('mean dataset features')
+    print(fm)
+    print(torch.std(fm,dim = 0))
+    print('std dataset features')
+    print(fstd)
+    print(torch.mean(fstd,dim = 0))
+    print(torch.mean(torch.std(fm,dim = 0)/(torch.mean(fstd,dim = 0))))
+    '''
+    # row normalization
+    #fm /= (torch.sum(fm*fm,dim = 1)[:,None])**0.5
+    # data normalization
+    fmean = torch.mean(fm,dim = 0)
+    #fres = (fm - fmean)**2
+    mean_res = torch.std(fm,dim = 0)
+    fm = (fm - fmean)/mean_res
+    # row normalization
+    fm /= (torch.sum(fm*fm,dim = 1)[:,None])**0.5
+    # compute
+    simi = torch.matmul(fm,fm.T)
+    simi = simi * (simi>=0).float()
+    #simi /= torch.sum(simi,dim = 1)[:,None]
+    #print(simi)
+    return simi
+
+
+def get_meanfeature(clients):
+
+    return torch.stack([pfeature(c.train_data)[0] for c in clients],dim = 0)
+
+
+    
+
+    # dim 0 normalization
+    
+
+
+
+
+
+
+def distance_norm(distance):
+
+    #res = torch.mean(distance,dim = 0)[None,:] - distance
+    res = distance
+    res = torch.mean(res,dim = 1)[:,None] - res
+    res = res * (res >= 0).float()
+    row_sum = torch.sum(res,dim = 1)
+    res = res / row_sum[:,None]
+
+    print(res)
+
+def simi_norm(feature):
+
+    df = np.stack(feature,axis = 0) - np.mean(feature,axis = 0)[None,:]
+    ndf = df/((np.sum(df*df,axis = 1))**0.5)[:,None]
+    #ndis -= np.mean(ndis,axis = 0)[None,:]
+    simi = torch.tensor(np.matmul(ndf,ndf.T))
+    simi = simi * (simi >= 0).float()
+    row_sum = torch.sum(simi,dim = 1)
+    simi = simi / row_sum[:,None]
+
+    print(simi)
+
+
+# design ideal client graph based on label distributions
+def label_dis(clients,eps):
+
+    align_disbs = len_align([c.get_labeldis() for c in clients])
+    fdis_matrix = distance_matrix(JS_d,align_disbs)
+    #fsim_matrix = (1+eps)*torch.max(fdis_matrix, dim = 1).values[:,None] - fdis_matrix
+    fsim_matrix = (1+eps)*torch.mean(fdis_matrix, dim = 1)[:,None] - fdis_matrix + 1e-12
+    
+    #filter 
+    mask = (fsim_matrix >= 0).float()
+    fsim_matrix = mask * fsim_matrix
+
+    #row normalization
+    fsim_matrix /= torch.sum(fsim_matrix,dim = 1)[:,None]
+    return fsim_matrix
 
 
 
