@@ -193,7 +193,7 @@ def train_single_fold(clients,server,fold_id,args):
         total_data_points = sum([clients[k].train_size for k in party_list_this_round])
         fed_avg_freqs = {k: clients[k].train_size/ total_data_points for k in party_list_this_round}
 
-        manipulate_gradient(args, None, nets_this_round, benign_client_list, nets_param_start)
+        #manipulate_gradient(args, None, nets_this_round, benign_client_list, nets_param_start)
 
         graph_matrix = update_graph_matrix_neighbor(graph_matrix, nets_this_round, global_parameters, dw, fed_avg_freqs, args.alpha, args.difference_measure)   # Graph Matrix is not normalized yet
         #print(graph_matrix)
