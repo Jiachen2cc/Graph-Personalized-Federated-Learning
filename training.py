@@ -19,7 +19,7 @@ from recover_model import GCN_DAE
 from client import Client_GC
 from utils import graph_truncate,mean_diff,cluster_uniform_graph,random_con_graph
 import math
-from graph_utils import normalize
+from graph_utils import normalize,update_graph_matrix,graph_aggregate
 import torch.nn.functional as F
 from tqdm import tqdm
 from utils import rule_selector
@@ -42,7 +42,7 @@ def mean_performance(clients):
 
     mean_loss,mean_acc = 0,0
     for client in clients:
-        loss,acc = client.evaluate()
+        loss,acc,_ = client.evaluate()
         mean_loss += loss
         mean_acc += acc
     mean_loss /= len(clients)
@@ -111,9 +111,8 @@ def run_selftrain_GC(clients, server, args):
 
     # all clients are initialized with the same weights
     for client in clients:
-        client.download_from_server(server)
+        client.download_from_server(args,server)
     
-    #writer = SummaryWriter('run/exp1')
     feature_dim = clients[0].data[0].x.shape[1] if args.setting == 'single' else args.hidden
     graph_batch = random_graphbatch(20,20,40,feature_dim,seed = 0)
     
@@ -136,10 +135,7 @@ def run_selftrain_GC(clients, server, args):
 
         oparamsim += cos_sim(ofeature.detach().cpu())
         paramsim += cos_sim(feature.detach().cpu())
-        print(torch.sum(oparamsim-paramsim))
-        #print('the similarity of the model parameters')
         client_simi = simi_ana(clients,None,server.W.keys())
-        #print('the similarity of the inference result')
         embed_simi = cos_sim(embed)
         
         client_similarity += client_simi
@@ -178,7 +174,7 @@ def run_selftrain_GC(clients, server, args):
 def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=None, frac=1.0):
 
     for client in clients:
-        client.download_from_server(server)
+        client.download_from_server(args,server)
 
     if samp is None:
         sampling_fn = server.randomSample_clients
@@ -186,15 +182,6 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
     
     for c_round in range(1, COMMUNICATION_ROUNDS + 1):
         
-        '''
-        if c_round == 1:
-            selected_clients = clients
-        else:
-            selected_clients = sampling_fn(clients, frac)
-        '''
-        # do not select global model
-        #if args.global_model:
-        #    selected_clients = clients[:-1]
         for client in clients:
             client.local_train(local_epoch)
 
@@ -221,7 +208,7 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
             clf_ana(clients,server)
         
         for client in selected_clients:
-            client.download_from_server(server)
+            client.download_from_server(args,server)
         
         for client in clients:
             client.evaluate()
@@ -239,10 +226,100 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
     #monitor_performance(writer,allloss,allacc)
     return allAccs
 
-def run_scaffold(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, args, samp = None, frac=1.0):
+def run_fedstar(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, args, samp = None, frac=1.0):
+    
+    for client in clients:
+        client.download_from_server(args,server)
+    
+    if samp is None:
+        sampling_fn = server.randomSample_clients
+        frac = 1.0
+    
+    for c_round in range(1, COMMUNICARION_ROUNDS + 1):
+        
+        if c_round == 1:
+            selected_clients = clients
+        else:
+            selected_clients = sampling_fn(clients, frac)
+            
+        for client in clients:
+            client.local_train(local_epoch)
+            
+        server.aggregate_weights_se(selected_clients)
+        
+        for client in selected_clients:
+            client.download_from_server(args,server)
+        
+        for client in clients:
+            client.evaluate()
+        print(mean_performance(clients))
+    
+    allAccs = analyze_train(clients)
+    
+    return allAccs
+
+def run_pFedGraph(clients, server: Server, COMMUNICATION_ROUNDS, local_epoch, args, samp = None, frac = 1.0):
+    for client in clients:
+        client.download_from_server(args,server)
+
+    if samp is None:
+        sampling_fn = server.randomSample_clients
+        frac = 1.0
+    if samp == 'random':
+        sampling_fn = server.randomSample_clients
+
+    #initialize
+    cluster_models = {}
+    global_parameters = {k:v for k,v in server.W.items()}
+    total_size = sum([client.train_size for client in clients])
+    size_freqs = {k:clients[k].train_size/total_size for k in range(len(clients))}
+    
+    graph_matrix = torch.ones((len(clients),len(clients)))/(len(clients)-1)
+    graph_matrix[range(len(clients)),range(len(clients))] = 0
+    
+    for c_round in range(1, COMMUNICATION_ROUNDS + 1):
+        #if (c_round) % 50 == 0:
+        #    print(f"  > round {c_round}")
+        
+        if c_round == 1:
+            selected_clients = clients
+        else:
+            selected_clients = sampling_fn(clients, frac)
+        for idx,client in enumerate(selected_clients):
+            if idx in cluster_models.keys():
+                client.local_train_fedgraph(local_epoch, cluster_models[idx],args.lam)
+            else:
+                client.local_train_fedgraph(local_epoch,lam = args.lam)
+            #client.local_train(local_epoch)
+                
+        graph_matrix = update_graph_matrix(graph_matrix,clients,global_parameters,size_freqs,args.fedgraphalpha)
+        cluster_models = graph_aggregate(graph_matrix,clients,args.device)
+        
+        #server.aggregate_weights(clients)
+        # compute client graph and perform graph aggregation
+        
+        '''
+        server.aggregate_weights(selected_clients)
+        for client in selected_clients:
+            client.download_from_server(args,server)
+
+            # cache the aggregated weights for next round
+            client.cache_weights()
+        '''
+        
+        for client in clients:
+            client.evaluate()
+            
+
+    allAccs = analyze_train(clients)
+    
+    return allAccs
+    
+
+def run_scaffold(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, args, samp = None, frac = 1.0):
 
     for client in clients:
-        client.download_from_server(server)
+        client.download_from_server(args,server)
 
     if samp is None:
         sampling_fn = server.randomSample_clients
@@ -265,14 +342,9 @@ def run_scaffold(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, arg
     return allAccs
 
 
-
-
-
-
-
-def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, mu, samp=None, frac=1.0):
+def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=None, frac=1.0):
     for client in clients:
-        client.download_from_server(server)
+        client.download_from_server(args,server)
 
     if samp is None:
         sampling_fn = server.randomSample_clients
@@ -290,11 +362,11 @@ def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, mu, samp=Non
         else:
             selected_clients = sampling_fn(clients, frac)
         for client in selected_clients:
-            client.local_train_prox(local_epoch, mu)
+            client.local_train_prox(local_epoch, args.mu)
 
         server.aggregate_weights(selected_clients)
         for client in selected_clients:
-            client.download_from_server(server)
+            client.download_from_server(args,server)
 
             # cache the aggregated weights for next round
             client.cache_weights()
@@ -306,195 +378,6 @@ def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, mu, samp=Non
     
     return allAccs
 
-    
-
-    def highlight_max(s):
-        is_max = s == s.max()
-        return ['background-color: yellow' if v else '' for v in is_max]
-
-    fs = frame.style.apply(highlight_max).data
-    print(fs)
-    return frame
-
-def run_bisfl(clients,server,COMMUNICATION_ROUNDS, local_epoch, args):
-    assert isinstance(server,Server)
-
-    for client in clients:
-        client.download_from_server(server)
-    
-
-    # compute the initial graph 
-    init_A = None
-    if args.initial_graph != 'distance':
-        distributions = [client.structure_feature_analysis(args.initial_graph) for client in clients]
-        init_A = structure_sim(distributions).to(args.device)
-    A = None
-
-    for cround in range(1, COMMUNICATION_ROUNDS + 1):
-
-        for client in clients:
-            client.compute_weight_update(local_epoch)
-            #client.reset()
-
-        # get local weights
-        client_Ws = get_dW(clients,server.W.keys())
-
-        simi_ana(clients,None,server.W.keys())
-        # 1 build client graph
-        # interval update
-        if init_A is None:
-            init_A = dist_simi_metrix(client_Ws,args.graph_eps).to(args.device)
-
-        interval_print(init_A,cround,20,'initial client graph')
-        #A = server.graph_build(client_Ws,init_A,args)
-        # try fixed graphs 
-        #A = init_A
-        #print(A)
-        # 2 update the local models
-        server.bigraph_update(clients,client_Ws,init_A,args)
-        
-        # 3 evaluate new aggregated model
-        for client in clients:
-            client.evaluate()
-    
-
-    allAccs = analyze_train(clients)
-    return allAccs
-
-def run_tosfl(clients,server,COMMUNICATION_ROUNDS, local_epoch, args):
-    
-    '''
-    writer1 = SummaryWriter(log_dir = 'runs',comment = 'structure federated learning(01)')
-    writer3 = SummaryWriter(log_dir = 'runs',comment = 'structure federated learning(03)')
-    writer6 = SummaryWriter(log_dir = 'runs',comment = 'structure federated learning(06)')
-    '''
-    
-    assert isinstance(server,Server)
-    
-    
-    for client in clients:
-        client.download_from_server(server)
-    
-    best_acc = []
-
-    allAccs,final_accs = {},{}
-    #initialize
-    for client in clients:
-        allAccs[client.name] = {'best_test_acc':[],'final_test_acc':None}
-        final_accs[client.name] = []
-
-    # compute the initial graph 
-    init_A = None
-    if args.initial_graph != 'distance':
-        distributions = [client.structure_feature_analysis(args.initial_graph) for client in clients]
-        init_A = structure_sim(distributions).to(args.device)
-    #init_A = 
-    #interval update
-    A = None
-    graph_batch = random_graphbatch(10,30,args.hidden,seed = args.seed)
-    records_A = []
-    for cround in range(1, COMMUNICATION_ROUNDS + 1):
-
-        #A = torch.from_numpy(server.compute_pairwise_similarities(clients)).to(args.device)
-        
-        for client in clients:
-
-            client.compute_weight_update(local_epoch)
-            #client.reset()
-        # generate the graph based on the initial graph
-        # compute client_dWS
-        # interval compute 
-        client_Ws = get_dW(clients,server.W.keys())
-        embed = server.graph_modelembedding(clients,graph_batch.to(args.device))
-        #compress_param = (para2metrix(client_Ws,args.compress_mode,args.compress_dim)).to(args.device)
-        #embed = compress_param
-        
-        #print('the norm of input features')
-        #print(torch.norm(embed,dim = 1))
-        
-        
-        print('client parameters similarity')
-        cs = simi_ana(clients,None,server.W.keys())
-        '''
-        writer1.add_scalar('para_sim',cs[0,1],cround)
-        writer3.add_scalar('para_sim',cs[0,3],cround)
-        writer6.add_scalar('para_sim',cs[0,6],cround)
-        '''
-        print('embedding similarity')
-        ecs = cos_sim(embed)
-        print(ecs)
-        '''
-        writer1.add_scalar('embed_sim',ecs[0,1],cround)
-        writer3.add_scalar('embed_sim',ecs[0,3],cround)
-        writer6.add_scalar('embed_sim',ecs[0,6],cround)
-        '''
-        # 5 rounds interval for knowledge sharing
-
-        if cround >= 25 and cround % 2 == 0:
-            # 1 build client graph
-            # interval update
-            if init_A is None:
-                dis_A = dist_simi_metrix(client_Ws)
-                init_A = dis_A
-            init_A = normalize(init_A,'sym').to(args.device)
-            
-            print('init client graph')
-            print(init_A)
-            
-            _,A = generate_adj(embed,init_A,args)
-            
-            #A = init_A
-            #A = fake_graph(len(clients),'test1')
-            print('result client graph')
-            print(A)
-            
-            records_A.append(A)
-
-            # try fixed graphs 
-            #A = init_A
-            #print(A)
-            # 2 update the local models
-
-            # fix the client graph to test the relationship between client graph model and client similarity
-            # since simply sharing the whole model is not good enough we try to only sharing the gradient
-            server.tograph_update(clients,client_Ws,A.to('cpu'),args)
-        
-        
-        
-        
-        all_loss,all_acc = [],[]
-        for client in clients:
-            loss, acc = client.evaluate()
-            allAccs[client.name]['best_test_acc'].append(acc)
-            allAccs[client.name]['final_test_acc'] = acc
-            if COMMUNICATION_ROUNDS - cround <= COUNT_LEN - 1:
-                final_accs[client.name].append(acc)
-
-            all_loss.append(loss)
-            all_acc.append(acc)
-
-        mean_loss = np.array(all_loss).mean()
-        mean_acc = np.array(all_acc).mean()
-
-        #print('loss:{:.4f},acc:{:.4f}'.format(mean_loss,mean_acc))
-        best_acc.append(mean_acc)
-    
-    print(len(records_A))
-    graph_diff(records_A)
-
-    best_acc = np.array(best_acc).max()
-    #print('best_acc:{:.4f}'.format(best_acc))
-
-    best_final = best_final_acc(final_accs,COUNT_LEN)
-    for key in allAccs.keys():
-        allAccs[key]['best_test_acc'] = np.max(np.array(allAccs[key]['best_test_acc']))
-        allAccs[key]['final_best_test_acc'] = best_final[key]
-    '''
-    writer1.close()
-    writer3.close()
-    writer6.close()
-    '''
-    return allAccs
 
 def pre_finigraph(tag,clients,eps,args):
     # prepare all the initial client graph except for 
@@ -606,12 +489,12 @@ def collect_info(info,ofeature,feature,initA,resA):
 
     return info
 
-def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
+def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
 
     assert isinstance(server,Server)
     
     #seq_grads = {c.id:[] for c in clients}
-    [client.download_from_server(server) for client in clients]
+    [client.download_from_server(args,server) for client in clients]
     
     # generate the input feature based on the gradients sequence
     
@@ -705,7 +588,7 @@ def run_sfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
     #print(average_A)
     return allAccs,average_A
                
-def run_gcfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2):
+def run_gcfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2,args):
     assert isinstance(server,Server)
 
     cluster_indices = [np.arange(len(clients)).astype("int")]
@@ -717,13 +600,13 @@ def run_gcfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2):
             #print(f"  > round {c_round}")
         if c_round == 1:
             for client in clients:
-                client.download_from_server(server)
+                client.download_from_server(args,server)
 
         participating_clients = server.randomSample_clients(clients, frac=1.0)
 
         for client in participating_clients:
             client.compute_weight_update(local_epoch)
-            client.reset() # ???  reset the model weight with the weight before training
+            client.reset() 
 
         similarities = server.compute_pairwise_similarities(clients)
 
@@ -764,20 +647,20 @@ def run_gcfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2):
 
     return all_Accs
 
-def run_gcflplus(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2, seq_length, standardize):
+def run_gcflplus(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2, seq_length, standardize, args):
     cluster_indices = [np.arange(len(clients)).astype("int")]
     client_clusters = [[clients[i] for i in idcs] for idcs in cluster_indices]
 
     seqs_grads = {c.id:[] for c in clients}
     for client in clients:
-        client.download_from_server(server)
+        client.download_from_server(args,server)
 
     for c_round in range(1, COMMUNICATION_ROUNDS + 1):
         if (c_round) % 50 == 0:
             print(f"  > round {c_round}")
         if c_round == 1:
             for client in clients:
-                client.download_from_server(server)
+                client.download_from_server(args,server)
         
         participating_clients = server.randomSample_clients(clients, frac=1.0)
 
@@ -829,13 +712,13 @@ def run_gcflplus(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_
 
     return frame
 
-def run_gcflplus_dWs(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2, seq_length, standardize):
+def run_gcflplus_dWs(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2, seq_length, standardize, args):
     cluster_indices = [np.arange(len(clients)).astype("int")]
     client_clusters = [[clients[i] for i in idcs] for idcs in cluster_indices]
 
     seqs_grads = {c.id:[] for c in clients}
     for client in clients:
-        client.download_from_server(server)
+        client.download_from_server(args,server)
 
     for c_round in range(1, COMMUNICATION_ROUNDS + 1):
         if (c_round) % 50 == 0:
@@ -843,7 +726,7 @@ def run_gcflplus_dWs(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, 
             #print(f"  > round {c_round}")
         if c_round == 1:
             for client in clients:
-                client.download_from_server(server)
+                client.download_from_server(args,server)
 
         participating_clients = server.randomSample_clients(clients, frac=1.0)
 

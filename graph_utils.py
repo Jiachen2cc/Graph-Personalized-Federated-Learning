@@ -7,6 +7,8 @@ import torch.nn.functional as F
 from sklearn.neighbors import kneighbors_graph
 import copy
 from model_compression import continous_compress,compress_shape
+import cvxpy as cp
+
 
 
 # ？？？ 有区别吗
@@ -154,7 +156,7 @@ def normalize(adj, mode, sparse=False):
 
         return torch.sparse.FloatTensor(adj.indices(), new_values, adj.size())
 
-def matri2dict(models_state,paramtreix, keys, key_shapes):
+def matri2dict(models_state, paramtreix, keys, key_shapes):
 
     models_dic = copy.deepcopy(models_state)
     for i in range(len(models_dic)):
@@ -220,3 +222,88 @@ def para2metrix(models_state,cmode,cdim):
 def flattenw(w):
     #return torch.cat([v.flatten() for v in w.data()])
     return torch.cat([v.flatten() for v in w.values()])
+
+# graph learning for pFedgraph
+
+def cal_model_cosine_difference(clients,initial_global):
+    diff_matrix = torch.zeros((len(clients),len(clients)))
+    dws = []
+    for i in range(len(clients)):
+        dwc = {}
+        for key in initial_global.keys():
+            if 'graph' in key:
+                dwc[key] = clients[i].W[key] - initial_global[key]
+        #exit(0)
+        dwc = sd_matrixing(dwc)
+        dws.append(dwc)
+    
+    for i in range(len(clients)):
+        for j in range(len(clients)):
+            diff = - torch.nn.functional.cosine_similarity(dws[i].unsqueeze(0),dws[j].unsqueeze(0))
+            if diff < -0.9:
+               diff = -1.0
+            diff_matrix[i,j] = diff
+            
+    return diff_matrix
+            
+            
+def optimizing_graph_matrix_neighbor(graph_matrix, index_clientid, model_difference_matrix, lamba, fed_avg_freqs):
+    n = model_difference_matrix.shape[0]
+    p = np.array(list(fed_avg_freqs.values()))
+    P = lamba * np.identity(n)
+    P = cp.atoms.affine.wraps.psd_wrap(P)
+    G = - np.identity(n)
+    h = np.zeros(n)
+    A = np.ones((1, n))
+    b = np.ones(1)
+    for i in range(model_difference_matrix.shape[0]):
+        model_difference_vector = model_difference_matrix[i]
+        d = model_difference_vector.numpy()
+        q = d - 2 * lamba * p
+        x = cp.Variable(n)
+        prob = cp.Problem(cp.Minimize(cp.quad_form(x, P) + q.T @ x),
+                  [G @ x <= h,
+                   A @ x == b]
+                  )
+        prob.solve()
+
+        graph_matrix[index_clientid[i], index_clientid] = torch.Tensor(x.value)
+    return graph_matrix
+
+def update_graph_matrix(graph_matrix,clients,initial_global,size_freqs,alpha):
+    
+    diff_matrix = cal_model_cosine_difference(clients,initial_global)
+    #print('difference')
+    #print(diff_matrix)
+    graph_matrix = optimizing_graph_matrix_neighbor(graph_matrix,range(len(clients)),diff_matrix,
+                                                    alpha,size_freqs)
+    
+    return graph_matrix
+
+def graph_aggregate(graph_matrix,clients,device):
+    
+    paramvector = {i:sd_matrixing(clients[i].W) for i in range(len(clients))}
+    cluster_model_vectors = {}
+    
+    for i in range(len(clients)):
+        tmp_state = torch.zeros(paramvector[i].shape)
+        cluster_state = torch.zeros(paramvector[i].shape)
+        agg_weight = graph_matrix[i]
+        
+        for nid in range(len(clients)):
+            para = paramvector[nid]
+            tmp_state += agg_weight[nid] * para
+            cluster_state += agg_weight[nid] * para / torch.linalg.norm(para)
+        
+        cluster_model_vectors[i] = cluster_state
+        
+        # load models
+        clients[i].load_param_matrix(tmp_state.to(device))
+        
+    
+    return cluster_model_vectors
+        
+        
+        
+            
+            

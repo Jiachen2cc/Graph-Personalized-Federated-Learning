@@ -43,6 +43,16 @@ class Server():
         for k in self.W.keys():
             self.W[k].data = torch.div(torch.sum(torch.stack([torch.mul(client.W[k].data, client.train_size) for client in selected_clients]), dim=0), total_size).clone()
     
+    # Weight aggregation FedStar
+    def aggregate_weights_se(self, selected_clients):
+        # pass train_size, and weighted aggregate
+        total_size = 0
+        for client in selected_clients:
+            total_size += client.train_size
+        for k in self.W.keys():
+            if '_s' in k:
+                self.W[k].data = torch.div(torch.sum(torch.stack([torch.mul(client.W[k].data, client.train_size) for client in selected_clients]), dim=0), total_size).clone()
+
 
     def compute_pairwise_similarities(self, clients):
         client_dWs = []

@@ -182,17 +182,6 @@ def cons_feature(datasets):
     fm = torch.stack([pfeature(d)[0] for d in datasets],dim = 0)
     fstd = torch.stack([pfeature(d)[1] for d in datasets],dim = 0)
     
-    #print('mean dataset features')
-    #print(fm)
-    #print(torch.std(fm,dim = 0))
-    #print('std dataset features')
-    #print(fstd)
-    #print(torch.mean(fstd,dim = 0))
-    #print(torch.mean(torch.std(fm,dim = 0)/(torch.mean(fstd,dim = 0))))
-    #print(torch.mean(torch.std(fm/fstd,dim = 0)))
-    # row normalization
-    #fm /= (torch.sum(fm*fm,dim = 1)[:,None])**0.5
-    # data normalization
     fmean = torch.mean(fm,dim = 0)
     #fres = (fm - fmean)**2
     mean_res = torch.std(fm,dim = 0)
@@ -213,18 +202,7 @@ def pg_analysis(clients):
 
     fm = torch.stack([pfeature(c.train_data)[0] for c in clients],dim = 0)
     fstd = torch.stack([pfeature(c.train_data)[1] for c in clients],dim = 0)
-    '''
-    print('mean dataset features')
-    print(fm)
-    print(torch.std(fm,dim = 0))
-    print('std dataset features')
-    print(fstd)
-    print(torch.mean(fstd,dim = 0))
-    print(torch.mean(torch.std(fm,dim = 0)/(torch.mean(fstd,dim = 0))))
-    '''
-    # row normalization
-    #fm /= (torch.sum(fm*fm,dim = 1)[:,None])**0.5
-    # data normalization
+    
     fmean = torch.mean(fm,dim = 0)
     #fres = (fm - fmean)**2
     mean_res = torch.std(fm,dim = 0)
@@ -242,15 +220,6 @@ def pg_analysis(clients):
 def get_meanfeature(clients):
 
     return torch.stack([pfeature(c.train_data)[0] for c in clients],dim = 0)
-
-
-    
-
-    # dim 0 normalization
-    
-
-
-
 
 
 

@@ -1,0 +1,290 @@
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[1231, 824]
+[822, 1233]
+NCI1_fedstar_property_200
+               best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal       0.826277        0.802433             0.811192
+1-NCI1-normal       0.801946        0.783942             0.793187
+mean                0.814112        0.793187             0.802190
+std                 0.009084        0.007732             0.009598
+training time:447.4088
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[616, 412]
+[615, 412]
+[411, 617]
+[411, 616]
+NCI1_fedstar_property_200
+               best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal       0.786938        0.767511             0.768482
+1-NCI1-normal       0.784840        0.770225             0.770220
+2-NCI1-normal       0.752901        0.723727             0.735373
+3-NCI1-normal       0.764419        0.742055             0.742036
+mean                0.772274        0.750880             0.754028
+std                 0.015095        0.022694             0.017720
+training time:515.2163
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[411, 274]
+[410, 275]
+[410, 275]
+[274, 411]
+[274, 411]
+[274, 411]
+NCI1_fedstar_property_200
+               best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal       0.783942        0.718248             0.751825
+1-NCI1-normal       0.769343        0.741606             0.738686
+2-NCI1-normal       0.770803        0.747445             0.750365
+3-NCI1-normal       0.759124        0.696350             0.727007
+4-NCI1-normal       0.737226        0.671533             0.700730
+5-NCI1-normal       0.756204        0.715328             0.718248
+mean                0.762774        0.715085             0.731144
+std                 0.007499        0.010219             0.010002
+training time:547.0039
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[308, 206]
+[308, 206]
+[308, 206]
+[307, 206]
+[206, 308]
+[206, 308]
+[205, 309]
+[205, 308]
+NCI1_fedstar_property_200
+               best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal       0.768456        0.712107             0.708205
+1-NCI1-normal       0.770531        0.735504             0.749153
+2-NCI1-normal       0.785932        0.731487             0.731506
+3-NCI1-normal       0.766057        0.721226             0.727032
+4-NCI1-normal       0.741234        0.673177             0.680925
+5-NCI1-normal       0.727737        0.665601             0.667447
+6-NCI1-normal       0.776356        0.708243             0.725776
+7-NCI1-normal       0.734970        0.705673             0.697982
+mean                0.758909        0.706627             0.711003
+std                 0.012911        0.022240             0.018437
+training time:524.0820
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[247, 164]
+[246, 165]
+[246, 165]
+[246, 165]
+[246, 165]
+[165, 246]
+[165, 246]
+[164, 247]
+[164, 247]
+[164, 247]
+NCI1_fedstar_property_200
+               best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal       0.751748        0.661651             0.676256
+1-NCI1-normal       0.798090        0.746988             0.761622
+2-NCI1-normal       0.785777        0.739671             0.749251
+3-NCI1-normal       0.771349        0.698296             0.688540
+4-NCI1-normal       0.766618        0.686277             0.717925
+5-NCI1-normal       0.759095        0.720071             0.727593
+6-NCI1-normal       0.744431        0.690832             0.698237
+7-NCI1-normal       0.729974        0.674023             0.683720
+8-NCI1-normal       0.751631        0.678607             0.705289
+9-NCI1-normal       0.749309        0.710373             0.690949
+mean                0.760802        0.700679             0.709938
+std                 0.012809        0.015403             0.014288
+training time:525.3731
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[206, 137]
+[205, 138]
+[205, 138]
+[205, 137]
+[205, 137]
+[205, 137]
+[137, 206]
+[137, 206]
+[137, 206]
+[137, 205]
+[137, 205]
+[137, 205]
+NCI1_fedstar_property_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal        0.737468        0.681884             0.690921
+1-NCI1-normal        0.784442        0.743606             0.749446
+2-NCI1-normal        0.737681        0.670673             0.691049
+3-NCI1-normal        0.804092        0.707843             0.757246
+4-NCI1-normal        0.771995        0.701918             0.731074
+5-NCI1-normal        0.778048        0.737084             0.710784
+6-NCI1-normal        0.746547        0.694075             0.685337
+7-NCI1-normal        0.740367        0.687937             0.679071
+8-NCI1-normal        0.717306        0.664919             0.664919
+9-NCI1-normal        0.748551        0.686957             0.695908
+10-NCI1-normal       0.698977        0.643564             0.652089
+11-NCI1-normal       0.728048        0.663725             0.681245
+mean                 0.749460        0.690349             0.699091
+std                  0.008324        0.012045             0.008883
+training time:597.1392
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[176, 118]
+[176, 118]
+[176, 118]
+[176, 118]
+[176, 117]
+[176, 117]
+[175, 118]
+[118, 176]
+[118, 176]
+[118, 176]
+[117, 177]
+[117, 176]
+[117, 176]
+[117, 176]
+NCI1_fedstar_property_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal        0.751783        0.663355             0.656692
+1-NCI1-normal        0.796084        0.745120             0.745120
+2-NCI1-normal        0.779018        0.731268             0.717826
+3-NCI1-normal        0.758679        0.673816             0.714494
+4-NCI1-normal        0.774576        0.699532             0.706371
+5-NCI1-normal        0.737171        0.682466             0.682525
+6-NCI1-normal        0.802279        0.730859             0.740912
+7-NCI1-normal        0.772005        0.687025             0.734717
+8-NCI1-normal        0.768440        0.686967             0.690357
+9-NCI1-normal        0.734950        0.656575             0.687025
+10-NCI1-normal       0.772063        0.670193             0.690415
+11-NCI1-normal       0.764348        0.713033             0.733723
+12-NCI1-normal       0.651958        0.573466             0.576856
+13-NCI1-normal       0.740327        0.689246             0.679077
+mean                 0.757406        0.685923             0.696865
+std                  0.006911        0.012373             0.011075
+training time:590.2814
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[153, 103]
+[103, 154]
+[103, 154]
+[103, 154]
+[103, 154]
+[103, 154]
+[103, 154]
+[102, 155]
+[102, 154]
+NCI1_fedstar_property_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal        0.750905        0.649548             0.661312
+1-NCI1-normal        0.762670        0.680920             0.676848
+2-NCI1-normal        0.770814        0.700679             0.712443
+3-NCI1-normal        0.739291        0.669382             0.669457
+4-NCI1-normal        0.770362        0.688612             0.681146
+5-NCI1-normal        0.766440        0.696456             0.704223
+6-NCI1-normal        0.758597        0.696229             0.700377
+7-NCI1-normal        0.781222        0.734314             0.730468
+8-NCI1-normal        0.735520        0.680920             0.684842
+9-NCI1-normal        0.708296        0.654299             0.673454
+10-NCI1-normal       0.778582        0.700754             0.696908
+11-NCI1-normal       0.727526        0.642006             0.645626
+12-NCI1-normal       0.754525        0.680468             0.738989
+13-NCI1-normal       0.766139        0.696003             0.696305
+14-NCI1-normal       0.665460        0.575641             0.587406
+15-NCI1-normal       0.788989        0.718778             0.757692
+mean                 0.751584        0.679063             0.688594
+std                  0.008754        0.016968             0.009421
+training time:626.6973
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[137, 92]
+[137, 92]
+[137, 92]
+[137, 91]
+[137, 91]
+[137, 91]
+[137, 91]
+[136, 92]
+[136, 92]
+[92, 137]
+[92, 137]
+[92, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+NCI1_fedstar_property_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal        0.760290        0.694783             0.716522
+1-NCI1-normal        0.768502        0.672367             0.680966
+2-NCI1-normal        0.794589        0.729275             0.742319
+3-NCI1-normal        0.784638        0.683575             0.683478
+4-NCI1-normal        0.728406        0.680193             0.662802
+5-NCI1-normal        0.776618        0.710725             0.706377
+6-NCI1-normal        0.789179        0.709855             0.723092
+7-NCI1-normal        0.780386        0.736618             0.758261
+8-NCI1-normal        0.758551        0.674976             0.679227
+9-NCI1-normal        0.755459        0.685604             0.698551
+10-NCI1-normal       0.768599        0.668406             0.668213
+11-NCI1-normal       0.768696        0.672657             0.681449
+12-NCI1-normal       0.705990        0.614106             0.635942
+13-NCI1-normal       0.727923        0.636039             0.644831
+14-NCI1-normal       0.754396        0.653333             0.679710
+15-NCI1-normal       0.745797        0.627150             0.653816
+16-NCI1-normal       0.728019        0.627246             0.653623
+17-NCI1-normal       0.811401        0.767536             0.771884
+mean                 0.761524        0.680247             0.691170
+std                  0.018967        0.021239             0.014804
+training time:665.0672
+Output Path: ./outputs/seqLen10/multiDS-nonOverlap/NCI1/eps_0.01_0.1
+Preparing data (original features) ...
+[124, 82]
+[123, 83]
+[123, 83]
+[123, 83]
+[123, 83]
+[123, 82]
+[123, 82]
+[123, 82]
+[123, 82]
+[123, 82]
+[83, 123]
+[83, 123]
+[82, 124]
+[82, 124]
+[82, 124]
+[82, 123]
+[82, 123]
+[82, 123]
+[82, 123]
+[82, 123]
+NCI1_fedstar_property_200
+                best_test_acc  final_test_acc  final_best_test_acc
+0-NCI1-normal        0.762021        0.660511             0.675261
+1-NCI1-normal        0.767131        0.641231             0.660279
+2-NCI1-normal        0.742741        0.659930             0.674564
+3-NCI1-normal        0.801278        0.713705             0.709059
+4-NCI1-normal        0.699071        0.621603             0.592218
+5-NCI1-normal        0.780488        0.717073             0.726829
+6-NCI1-normal        0.819512        0.678049             0.682927
+7-NCI1-normal        0.760976        0.692683             0.707317
+8-NCI1-normal        0.795122        0.731707             0.741463
+9-NCI1-normal        0.736585        0.629268             0.643902
+10-NCI1-normal       0.767247        0.694657             0.723693
+11-NCI1-normal       0.762253        0.665389             0.694541
+12-NCI1-normal       0.733101        0.670035             0.679443
+13-NCI1-normal       0.704065        0.612079             0.626481
+14-NCI1-normal       0.728571        0.626597             0.655633
+15-NCI1-normal       0.760976        0.658537             0.673171
+16-NCI1-normal       0.775610        0.692683             0.702439
+17-NCI1-normal       0.702439        0.653659             0.653659
+18-NCI1-normal       0.707317        0.619512             0.629268
+19-NCI1-normal       0.809756        0.682927             0.707317
+mean                 0.755813        0.666092             0.677973
+std                  0.015678        0.024086             0.018383
+training time:714.5207

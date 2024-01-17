@@ -7,10 +7,10 @@ import torch
 from torch_geometric.datasets import TUDataset
 from torch_geometric.loader import DataLoader
 
-from models import GIN, serverGIN,GraphCNN,serverGraphCNN,GINclassifier,classiGIN,featureGIN,GINextractor
+from models import GIN, serverGIN,GINclassifier,classiGIN,featureGIN,GINextractor,GIN_dc,serverGIN_dc
 from server import Server
 from client import Client_GC
-from utils import get_stats, split_data, get_numGraphLabels,convert_to_nodeDegreeFeatures
+from utils import get_stats, split_data, get_numGraphLabels,convert_to_nodeDegreeFeatures,init_structure_encoding
 #from argument_setting import args
 from analyze_dataset import *
 
@@ -164,7 +164,7 @@ def label_skew_balance(graphs, num_client, seed, alpha=4):
             print(label_res)
         return [client_indices[i] for i in range(num_client)]
 
-
+'''
 def select_pertur(graphs,num_client,seed):
     # set seed
     random.seed(seed)
@@ -207,7 +207,7 @@ def feature_pertur_oneDS(data,chunks,chunks_idx,idx,args):
         chunks = feature_mix(chunks,args.mix_type,args.fmix_rate)
 
     return chunks
-    
+'''    
 def prepareData_oneDS(num_client, args, seed=None):
     
     data = args.data_group
@@ -257,12 +257,13 @@ def prepareData_oneDS(num_client, args, seed=None):
         show_label_distribution(chunks)
         #print(idx,len(chunks))
         
+        '''
         if args.feature_pertur:
             chunks = feature_pertur_oneDS(data,chunks,chunks_idx,idx,args)
         
         if idx == 1 and args.structure_pertur:
             chunks = edge_noise(chunks,args.prate,args.nrate)
-        
+        '''
         #show_label_distribution(chunks)
         
         train_idx_list, test_idx_list = kfold_split(chunks,args.fold_num,seed)
@@ -332,29 +333,6 @@ def prepareData_multiDS(args,seed=None):
         #               graphs_val=None, graphs_test=graphs_test)
     return splitedData#, df
 
-
-def prepareData_fakeDS(args,seed = None):
-
-    #cd_list = [[950,50,50],[50,950,50]]
-    #p_rates = [[0.1,0.15,0.8],[0.1,0.15,0.8]]
-    #datasets = arti_datasets(cd_list,seed = args.seed)
-    cd_list = [1000,1000]
-    datasets = toy_datasets(cd_list, seed = args.seed)
-
-    splitedData = {}
-    names = [f'fake{i}' for i in range(len(cd_list))]
-    for dataset,data in zip(datasets,names):
-        graphs = [x for x in dataset]
-        train_idx_list,test_idx_list = kfold_split(graphs, args.fold_num, seed)
-
-        num_node_features = graphs[0].num_node_features
-        num_graph_labels = get_numGraphLabels(graphs)
-        print(num_graph_labels)
-
-        splitedData[data] = (graphs,{'train': train_idx_list, 'test': test_idx_list},
-                             num_node_features, num_graph_labels, data)
-    return splitedData
-
 def setup_devices(splitedData, args):
     idx_clients = {}
     clients = []
@@ -362,8 +340,14 @@ def setup_devices(splitedData, args):
     for idx, ds in enumerate(splitedData.keys()):
         idx_clients[idx] = ds
         data, split_idx, num_node_features, num_graph_labels, dataset_name = splitedData[ds]
-        cmodel_gc = GIN(num_node_features, args.hidden,
+        if args.Federated_mode == 'fedstar':
+            data = init_structure_encoding(args,data,args.type_init)
+            cmodel_gc = GIN_dc(num_node_features, args.n_se, args.hidden,
                         num_graph_labels, args.nlayer, args.dropout)
+        else:
+            cmodel_gc = GIN(num_node_features, args.hidden,
+                        num_graph_labels, args.nlayer, args.dropout)
+        
         #cmodel_gc = GraphCNN(args.num_layers,args.num_mlp_layers,num_node_features,args.hidden_dim,num_graph_labels
         #,args.final_dropout,args.graph_pooling_type,args.neighbor_pooling_type,args.device)
         # optimizer = torch.optim.Adam(cmodel_gc.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -380,7 +364,11 @@ def setup_devices(splitedData, args):
     if args.server_sharing == 'center':
         smodel = serverGIN(nlayer=args.nlayer, nhid=args.hidden)
     elif args.server_sharing == 'full':
-        smodel = GIN(num_node_features, args.hidden,
+        if args.Federated_mode == 'fedstar':
+            smodel = GIN_dc(num_node_features, args.n_se, args.hidden,
+                    num_graph_labels, args.nlayer, args.dropout)
+        else:
+            smodel = GIN(num_node_features, args.hidden,
                     num_graph_labels, args.nlayer, args.dropout)
     elif args.server_sharing == 'center_class':
         smodel = classiGIN(num_node_features, args.hidden,

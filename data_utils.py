@@ -11,7 +11,7 @@ from sklearn.model_selection import StratifiedKFold
 import numpy as np
 from perturbations import *
 from analyze_dataset import *
-from dataset_builder import *
+#from sfl.delete import *
 from ogb.graphproppred.mol_encoder import AtomEncoder, BondEncoder
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -87,8 +87,8 @@ def data_process(datapath, data, convert_x = False):
     elif data == "IMDB-MULTI":
         tudataset = TUDataset(
             f"{datapath}/TUDataset", data, pre_transform=OneHotDegree(88, cat=False))
-    elif data == 'scalefree':
-        tudataset = scalefree_data('data/artifdataset')
+    #elif data == 'scalefree':
+    #    tudataset = scalefree_data('data/artifdataset')
     elif data in ['ogbg-molhiv']:
         tudataset = ogb_process(PygGraphPropPredDataset(name = 'ogbg-molhiv', root = f"{datapath}/"),data)
     elif data in dataset_format['TuDataset']:

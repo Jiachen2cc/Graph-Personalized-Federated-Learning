@@ -9,6 +9,7 @@ from data_utils import easy_datasets,label_balanced_downsample
 from perturbations import node_feature_perturbation,structure_perturbation
 from utils import get_roc_auc
 import torch.nn.functional as F
+from graph_utils import sd_matrixing
 
 class Client_GC():
     def __init__(self, model, client_id, client_name, dataset_name, data, split_idx, optimizer, args):
@@ -135,10 +136,15 @@ class Client_GC():
 
         return sfeature
 
-    def download_from_server(self, server):
+    def download_from_server(self, args, server):
         self.gconvNames = server.W.keys()
-        for k in server.W:
-            self.W[k].data = server.W[k].data.clone()
+        if args.Federated_mode == 'fedstar':
+            for k in server.W:
+                if '_s' in k:
+                    self.W[k].data = server.W[k].data.clone()
+        else:
+            for k in server.W:
+                self.W[k].data = server.W[k].data.clone()
     
     def download_weight(self,W):
         self.gconvNames = W.keys()
@@ -335,6 +341,29 @@ class Client_GC():
 
         grads_conv = {key: self.W[key].grad for key in self.gconvNames}
         self.convGradsNorm = torch.norm(flatten(grads_conv)).item()
+        
+    def local_train_fedgraph(self, local_epoch, cluster_model = None, lam = 0.01):
+        copy(target=self.W_old, source=self.W, keys=self.gconvNames)
+        
+        train_stats = train_gc_fedgraph(self.model, self.dataLoader, self.optimizer, local_epoch, self.args.device,
+                               cluster_model, lam)
+        self.train_stats = self.dict_extend(self.train_stats, train_stats)
+        
+        subtract_(target=self.dW, minuend=self.W, subtrahend=self.W_old)
+
+        self.train_stats = train_stats
+        self.weightsNorm = torch.norm(flatten(self.W)).item()
+
+        weights_conv = {key: self.W[key] for key in self.gconvNames}
+        self.convWeightsNorm = torch.norm(flatten(weights_conv)).item()
+
+        grads = {key: value.grad for key, value in self.W.items()}
+        self.gradsNorm = torch.norm(flatten(grads)).item()
+
+        grads_conv = {key: self.W[key].grad for key in self.gconvNames}
+        self.convGradsNorm = torch.norm(flatten(grads_conv)).item()
+        
+        
 
     def evaluate_prox(self, mu):
         return eval_gc_prox(self.model, self.dataLoader['test'], self.args.device, self.gconvNames, mu, self.W_old)
@@ -497,6 +526,51 @@ def train_gc_prox(model, dataloaders, optimizer, local_epoch, device, gconvNames
 
     return {'trainingLosses': losses_train, 'trainingAccs': accs_train, #'valLosses': losses_val, 'valAccs': accs_val,
             'testLosses': losses_test, 'testAccs': accs_test, 'convGradsNorm': convGradsNorm}
+
+
+def train_gc_fedgraph(model, dataloaders, optimizer, local_epoch, device, cluster_model = None, lam = 0.01):
+    losses_train, accs_train,losses_test, accs_test = [], [], [], []
+    convGradsNorm = []
+    train_loader,test_loader = dataloaders['train'],dataloaders['test']
+    
+    for epoch in range(local_epoch):
+        model.train()
+        total_loss = 0.
+        ngraphs = 0
+
+        acc_sum = 0
+
+        for _, batch in enumerate(train_loader):
+            batch.to(device)
+            optimizer.zero_grad()
+            pred = model(batch)
+            label = batch.y
+            acc_sum += pred.max(dim=1)[1].eq(label).sum().item()
+            loss = model.loss(pred, label) #+ mu / 2. * _prox_term(model, gconvNames, Wt)
+            # regulation term
+            if cluster_model is not None:
+                flatten_model = sd_matrixing({k:v for k,v in model.named_parameters()})
+                loss += lam * torch.dot(cluster_model, flatten_model)
+                
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item() * batch.num_graphs
+            ngraphs += batch.num_graphs
+        total_loss /= ngraphs
+        acc = acc_sum / ngraphs
+
+        #loss_v, acc_v = eval_gc(model, val_loader, device)
+        loss_tt, acc_tt,_ = eval_gc(model, test_loader, device)
+
+        losses_train.append(total_loss)
+        accs_train.append(acc)
+        losses_test.append(loss_tt)
+        accs_test.append(acc_tt)
+
+        #convGradsNorm.append(calc_gradsNorm(gconvNames, Ws))
+
+    return {'trainingLosses': losses_train, 'trainingAccs': accs_train, #'valLosses': losses_val, 'valAccs': accs_val,
+            'testLosses': losses_test, 'testAccs': accs_test} #, 'convGradsNorm': convGradsNorm}
 
 def eval_gc_prox(model, test_loader, device, gconvNames, mu, Wt):
     model.eval()

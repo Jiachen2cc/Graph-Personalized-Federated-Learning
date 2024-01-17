@@ -1,4 +1,3 @@
-from webbrowser import get
 import torch
 from recover_model import GCN_DAE
 import torch.nn.functional as F
@@ -6,7 +5,7 @@ import torch.optim as optim
 import copy
 #from argument_setting import args
 import numpy as np
-from util import get_random_mask
+#from wdelete import get_random_mask
 from model_compression import continous_compress, discrete_compress,compress_shape
 from graph_utils import normalize,matri2dict,state_dict2metrix
 from analyze_client import gradient_ana
@@ -40,6 +39,11 @@ def calc_sim(matrix):
 
 def val_cgraph(A:torch.Tensor):
     return A.var(dim = 1).mean()
+
+def get_random_mask(features,ratio):
+    probs = torch.full(features.shape, ratio)
+    mask = torch.bernoulli(probs)
+    return mask
 
 
 def graph_gen(models_state, pre_A, args):

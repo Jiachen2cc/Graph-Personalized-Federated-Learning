@@ -7,7 +7,7 @@ import torch.nn.functional as F
 #from argument_setting import args
 from graph_utils import symmetrize,no_negtive,normalize
 from layers import GCNConv_dense,GraphAttentionLayer
-from graph_contructor import MLP, FullParam, MLP_Diag
+#from sfl.delete import MLP, FullParam, MLP_Diag
 
 
 class GAE_dense(torch.nn.Module):

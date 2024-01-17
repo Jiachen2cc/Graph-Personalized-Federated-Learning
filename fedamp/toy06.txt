@@ -1,0 +1,140 @@
+[1231, 824]
+[822, 1233]
+epxeriment setting
+dataset NCI1, client number 2, skew rate 1
+mean client accuracy: 0.7338 accuracy standard deviation: 0.0118
+[616, 412]
+[615, 412]
+[411, 617]
+[411, 616]
+epxeriment setting
+dataset NCI1, client number 4, skew rate 1
+mean client accuracy: 0.7268 accuracy standard deviation: 0.0098
+[411, 274]
+[410, 275]
+[410, 275]
+[274, 411]
+[274, 411]
+[274, 411]
+epxeriment setting
+dataset NCI1, client number 6, skew rate 1
+mean client accuracy: 0.7253 accuracy standard deviation: 0.0162
+[308, 206]
+[308, 206]
+[308, 206]
+[307, 206]
+[206, 308]
+[206, 308]
+[205, 309]
+[205, 308]
+epxeriment setting
+dataset NCI1, client number 8, skew rate 1
+mean client accuracy: 0.7087 accuracy standard deviation: 0.0122
+[247, 164]
+[246, 165]
+[246, 165]
+[246, 165]
+[246, 165]
+[165, 246]
+[165, 246]
+[164, 247]
+[164, 247]
+[164, 247]
+epxeriment setting
+dataset NCI1, client number 10, skew rate 1
+mean client accuracy: 0.6985 accuracy standard deviation: 0.0050
+[206, 137]
+[205, 138]
+[205, 138]
+[205, 137]
+[205, 137]
+[205, 137]
+[137, 206]
+[137, 206]
+[137, 206]
+[137, 205]
+[137, 205]
+[137, 205]
+epxeriment setting
+dataset NCI1, client number 12, skew rate 1
+mean client accuracy: 0.6951 accuracy standard deviation: 0.0116
+[176, 118]
+[176, 118]
+[176, 118]
+[176, 118]
+[176, 117]
+[176, 117]
+[175, 118]
+[118, 176]
+[118, 176]
+[118, 176]
+[117, 177]
+[117, 176]
+[117, 176]
+[117, 176]
+epxeriment setting
+dataset NCI1, client number 14, skew rate 1
+mean client accuracy: 0.6847 accuracy standard deviation: 0.0126
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[154, 103]
+[153, 103]
+[103, 154]
+[103, 154]
+[103, 154]
+[103, 154]
+[103, 154]
+[103, 154]
+[102, 155]
+[102, 154]
+epxeriment setting
+dataset NCI1, client number 16, skew rate 1
+mean client accuracy: 0.6771 accuracy standard deviation: 0.0115
+[137, 92]
+[137, 92]
+[137, 92]
+[137, 91]
+[137, 91]
+[137, 91]
+[137, 91]
+[136, 92]
+[136, 92]
+[92, 137]
+[92, 137]
+[92, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+[91, 137]
+epxeriment setting
+dataset NCI1, client number 18, skew rate 1
+mean client accuracy: 0.6784 accuracy standard deviation: 0.0039
+[124, 82]
+[123, 83]
+[123, 83]
+[123, 83]
+[123, 83]
+[123, 82]
+[123, 82]
+[123, 82]
+[123, 82]
+[123, 82]
+[83, 123]
+[83, 123]
+[82, 124]
+[82, 124]
+[82, 124]
+[82, 123]
+[82, 123]
+[82, 123]
+[82, 123]
+[82, 123]
+epxeriment setting
+dataset NCI1, client number 20, skew rate 1
+mean client accuracy: 0.6694 accuracy standard deviation: 0.0125

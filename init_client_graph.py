@@ -1,5 +1,4 @@
 from audioop import avg
-from util import load_data
 #from argument_setting import args
 import numpy as np
 import torch
