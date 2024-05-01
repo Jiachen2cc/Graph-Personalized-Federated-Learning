@@ -17,7 +17,7 @@ from analyze_dataset import *
 from sklearn.model_selection import StratifiedKFold
 from perturbations import *
 from functest import arti_datasets,toy_datasets,feature_padding
-from data_utils import nofeature_datasets,graph_process,toy_split,load_attr,subchunk_split,show_label_distribution
+from data_utils import nofeature_datasets,graph_process,toy_split,load_attr,subchunk_split,show_label_distribution,fix_size_split
 
 
 
@@ -161,7 +161,7 @@ def label_skew_balance(graphs, num_client, seed, alpha=4):
             label_res = np.zeros(np.max(labels)+1).astype(int)
             for idx in client_idx:
                 label_res[int(labels[idx])] += 1
-            print(label_res)
+            #print(label_res)
         return [client_indices[i] for i in range(num_client)]
 
 '''
@@ -223,22 +223,37 @@ def prepareData_oneDS(num_client, args, seed=None):
     #graphs_chunks = label_skew_balance(graphs, num_client, seed,args.label_skew)
 
     # only split two clients
+    num_client *= args.num_splits
+    args.num_clients *= args.num_splits
     if args.split_way == 'toy':
         graphs_chunks_idx = toy_split(graphs,rate = args.toy_rate)
 
         if args.num_splits > 1:
             graphs_chunks_idx = subchunk_split(graphs,graphs_chunks_idx,args.num_splits if num_client > 1 else args.num_splits//2)
-            num_client *= args.num_splits
-            args.num_clients *= args.num_splits
+            #num_client *= args.num_splits
+            #args.num_clients *= args.num_splits
 
     elif args.split_way == 'label_skew':
-        num_client *= args.num_splits
+        #num_client *= args.num_splits
         graphs_chunks_idx = label_skew(graphs,num_client,seed,args.skew_rate)
         #exit(0)
     
     elif args.split_way == 'blabel_skew':
-        num_client *= args.num_splits
+        #num_client *= args.num_splits
         graphs_chunks_idx = label_skew_balance(graphs,num_client,seed,args.skew_rate)
+    
+    elif args.split_way == 'fix_num':
+        # toy cases for motivation: assume we use 20 client as most
+        # first split data into 2 groups
+        # Then split group into clients
+        max_number = 5
+        sample_per_client = len(graphs) // (2*max_number)
+        group_size = sample_per_client * max_number
+        graphs_chunks_idx = fix_size_split(graphs,group_size,args.toy_rate)
+        graphs_chunks_idx = subchunk_split(graphs,graphs_chunks_idx,max_number)
+        graphs_chunks_idx = graphs_chunks_idx[0:args.num_splits] + graphs_chunks_idx[max_number:max_number+args.num_splits]
+    
+        
     
     splitedData = {}
     num_node_features = graphs[0].num_node_features

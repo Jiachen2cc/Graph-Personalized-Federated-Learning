@@ -33,11 +33,11 @@ def get_args():
     parser.add_argument('--repeat_num', type = int,
                         default = 1)
     # toy split
-    parser.add_argument('--toy_rate',type = float, default = 0.6,
+    parser.add_argument('--toy_rate',type = float, default = 0.7,
                     help = 'the rate for label split')
     parser.add_argument('--num_clients',type = int, default = 2,
                     help = 'the number of client')
-    parser.add_argument('--num_splits',type = int, default = 7,
+    parser.add_argument('--num_splits',type = int, default = 5,
                     help = 'the split number of each client dataset')
     # label skew & skew balance
     parser.add_argument('--skew_rate',type = float, default = 1,

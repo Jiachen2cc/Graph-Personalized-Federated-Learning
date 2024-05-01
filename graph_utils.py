@@ -11,7 +11,7 @@ import cvxpy as cp
 
 
 
-# ？？？ 有区别吗
+
 def nearest_neighbors_pre_exp(X, k, metric, i):
     adj = kneighbors_graph(X, k, metric=metric)
     adj = np.array(adj.todense(), dtype=np.float32)

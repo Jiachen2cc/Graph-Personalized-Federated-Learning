@@ -334,6 +334,38 @@ def subchunk_split(graphs,sub_chunk_idxs,num_splits):
     '''
     return all_chunk_idx
 
+
+def fix_size_split(graphs,fix_size,rate):
+    # split method designed for toy experiment: fixed size + vary client number
+    # first split data into two groups then use subchunk_split to further divide group data into clients
+    # group1: num_clients_per_group * client_size label ratio rate
+    # group2: num_clients_per_group * client_size label ratio 1-rate
+    # graphs: raw graph dataset
+    # fix_size: num_clients_per_group * client_size
+    # rate: number of label 0 / number of all data
+    labels = np.array([g.y.item() for g in graphs])
+    index0 = [k[0] for k in np.argwhere(labels == 0)]
+    index1 = [k[0] for k in np.argwhere(labels == 1)]
+    
+    if fix_size > min(len(index0),len(index1)):
+        print("fix size is too large to perform non-overlap split")
+        fix_size = min(len(index0),len(index1))
+    
+    group10 = np.random.choice(index0,int(fix_size*rate),False)
+    group11 = np.random.choice(index1,int(fix_size*(1-rate)),False)
+    
+    group1 = [idx for idx in group10] + [idx for idx in group11]
+    
+    index0 = list(set(index0) - set(group10))
+    index1 = list(set(index1) - set(group11))
+    
+    group20 = np.random.choice(index0,int(fix_size*(1-rate)),False)
+    group21 = np.random.choice(index1,int(fix_size*rate),False)
+    
+    group2 = [idx for idx in group20] + [idx for idx in group21]
+    
+    return [group1,group2]
+
 def show_label_distribution(graphs):
 
     labels = np.array([g.y.item() for g in graphs])

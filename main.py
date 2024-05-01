@@ -129,6 +129,7 @@ parser.add_argument('--outbase', type=str, default='./outputs',
 parser.add_argument('--outpath', type=str, default='./output')
 parser.add_argument('--repeat', help='index of repeating;',
                         type=int, default=None)
+parser.add_argument('--plotpath', type = str, default = './train_plot')
 # data process
 parser.add_argument('--data_group', help='specify the group of datasets',
                         type=str, default = 'NCI1')
@@ -138,6 +139,8 @@ parser.add_argument('--overlap', help='whether clients have overlapped data',
                         type=bool, default=False)
 parser.add_argument('--standardize', help='whether to standardize the distance matrix',
                         type=bool, default=False)
+parser.add_argument('--plot_train',type = int, default = 0,
+                    help = 'whether plot train')
 
 # the repeat time for the experiment
 parser.add_argument('--fold_num', type = int, default = 5,
@@ -240,17 +243,18 @@ parser.add_argument('--hetero',type = int, default = 0,
                     help = 'choose whether to strengthen the hetergeneity between datasets')
 parser.add_argument('--target_dataset', type = str, default = 'IMDB-BINARY')
 
-parser.add_argument('--split_way', type = str, default = 'toy',
-                    help = ' the split methods for global datasets',choices = ['toy','label_skew','blabel_skew','random'])
+parser.add_argument('--split_way', type = str, default = 'blabel_skew',
+                    help = ' the split methods for global datasets',choices = ['toy','label_skew','blabel_skew',
+                                                                               'random','fix_num'])
 # toy split
-parser.add_argument('--toy_rate',type = float, default = 0.6,
+parser.add_argument('--toy_rate',type = float, default = 0.5,
                     help = 'the rate for label split')
-parser.add_argument('--num_clients',type = int, default = 2,
+parser.add_argument('--num_clients',type = int, default = 1,
                     help = 'the number of client')
-parser.add_argument('--num_splits',type = int, default = 6,
+parser.add_argument('--num_splits',type = int, default = 25,
                     help = 'the split number of each client dataset')
 # label skew & skew balance
-parser.add_argument('--skew_rate',type = float, default = 1,
+parser.add_argument('--skew_rate',type = float, default = 0.5,
                     help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
@@ -267,7 +271,7 @@ parser.add_argument('--para_choice', type = str, default = 'param',
 parser.add_argument('--graph_choice', type = str,default = 'embed',
                     help = 'the choice for parameterize the initial graph')
 parser.add_argument('--input_choice', type = str, default = 'diff',
-                        choices = ['whole','gradient','seq','diff','ans'])
+                        choices = ['whole','gradient','seq','diff','ans','normalize'])
 parser.add_argument('--diff_rate',type = float, default = 1,
                     help = 'the remove rate of mean value')
 parser.add_argument('--timelen', type = int, default = 20)

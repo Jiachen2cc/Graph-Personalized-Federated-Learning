@@ -212,6 +212,8 @@ class Server():
             param_matrix -= args.diff_rate*pmean
         elif args.sharing_mode == 'ALA':
             param_matrix = torch.stack([flattenw(c.dW).detach() for c in clients],dim = 0)
+        elif args.sharing_mode == 'total':
+            param_matrix = torch.stack([flattenw(c.W).detach() for c in clients], dim = 0)
         
         #2 aggregate and update the parameters
         aggregated_param = torch.mm(A.to(param_matrix.device),param_matrix)
@@ -229,10 +231,11 @@ class Server():
         #3 construct the right form of parameters according to sharing mode
         if args.sharing_mode == 'gradient':
             addparam = torch.stack([flattenw(c.W_old).detach() for c in clients],dim = 0)
+            resparam += addparam
         elif args.sharing_mode == 'difference':
             addparam = args.diff_rate*pmean + torch.stack([flattenw(c.W_old).detach() for c in clients],dim = 0)
-
-        resparam += addparam
+            resparam += addparam
+        
 
         for i,c in enumerate(clients):
             c.load_param_matrix(resparam[i,:])
