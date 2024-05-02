@@ -119,7 +119,8 @@ def generate_adj(clients,param_metrix,pre_A,args,model = None):
     '''
     # preprocess the input parameters
     #param_metrix,pre_A = preprocess_input(param_metrix,pre_A)
-
+    if args.input_choice == 'normalize':
+        param_metrix = (param_metrix - param_metrix.mean(dim = 0))/param_metrix.std(dim = 0)
     Net = GCN_DAE(1,param_metrix.shape[1],128,param_metrix.shape[1],0.5,0,args.gen_mode,64,32,1).to(args.device)
     if model is not None:
         Net = model

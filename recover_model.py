@@ -45,8 +45,6 @@ class GAE_dense(torch.nn.Module):
 
 
 
-# 看上去可采用的策略：利用mse_loss对GAE进行初始化(x)
-# GAE通常会把dropout设成0  这里暂且设为）0.5
 class GCN_DAE(torch.nn.Module):
 
     def __init__(self, nlayers, in_dim, hidden_dim, nfeatures, dropout, 

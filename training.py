@@ -23,6 +23,7 @@ from graph_utils import normalize,update_graph_matrix,graph_aggregate
 import torch.nn.functional as F
 from tqdm import tqdm
 from utils import rule_selector
+from clientgraph.graph_cons import graph_constructor
 
 
 # the length for considering the best accuracy among the last serveral rounds
@@ -38,35 +39,6 @@ def interval_print(x,cur_round,interval,desc = None,out = False):
             print(desc)
         print(x)
     
-def mean_performance(clients):
-
-    mean_loss,mean_acc = 0,0
-    for client in clients:
-        loss,acc,_ = client.evaluate()
-        mean_loss += loss
-        mean_acc += acc
-    mean_loss /= len(clients)
-    mean_acc /= len(clients)
-    return mean_loss,mean_acc
-
-def monitor_performance(writer,clients):
-
-    assert isinstance(writer,SummaryWriter)
-    #assert isinstance(client,Client_GC)
-    # monitor loss
-    for client in clients:
-        trainloss,trainacc,testloss,testacc = client.train_stats.values()
-        #print(trainloss)
-        for idx in range(len(np.array(trainloss))):
-            writer.add_scalar('Loss/train',trainloss[idx],idx)
-        for idx in range(len(testloss)):
-            writer.add_scalar('Loss/eval',testloss[idx],idx)
-        #monitor acc
-        for idx in range(len(trainacc)):
-            writer.add_scalar('Acc/train',trainacc[idx],idx)
-        for idx in range(len(testacc)):
-            writer.add_scalar('Acc/test',testacc[idx],idx)
-    writer.close()
     
 def best_final_acc(client_final_accs,length):
 
@@ -83,19 +55,23 @@ def best_final_acc(client_final_accs,length):
 
     return best_final_acc
 
-def analyze_train(clients):
+def analyze_train(clients,args):
 
     allAccs,final_accs,final_rocs = {},{},{}
+    avg_stats = np.zeros(len(clients[0].eval_stats['testAccs']))
     for client in clients:
         # initialize
         allAccs[client.name] = {}
         stats = np.array(client.eval_stats['testAccs'])
+        avg_stats = avg_stats + stats
         #rstats = np.array(client.eval_stats['testRocs'])
         allAccs[client.name]['best_test_acc'] = np.max(stats)
         allAccs[client.name]['final_test_acc'] = stats[-1]
-        final_accs[client.name] = stats[-(COUNT_LEN+1):-1]
+        final_accs[client.name] = stats[-COUNT_LEN:]
         #final_rocs[client.name] = rstats[-(COUNT_LEN+1):-1]
-
+    avg_stats = avg_stats/len(clients)
+    if args.plot_train:
+        plot_acc(avg_stats,args)
     best_final = best_final_acc(final_accs,COUNT_LEN)
     #best_final_roc = best_final_acc(final_rocs,COUNT_LEN)
 
@@ -104,6 +80,22 @@ def analyze_train(clients):
         #allAccs[k]['final_best_test_roc'] = best_final_roc[k]
 
     return allAccs
+  
+import os
+def plot_acc(avg_acc,args): 
+     
+    file_name = '{}_{}_{}_{}'.format(args.data_group,args.Federated_mode,args.num_clients,args.skew_rate)
+    file_name = os.path.join(args.plotpath,file_name)
+    np_file = file_name + '.npy'
+    plot_file = file_name + '.png'
+    
+    plt.plot(range(len(avg_acc)),avg_acc)
+    plt.xlabel('communication round')
+    plt.ylabel('average accuracy')
+    plt.title(file_name)
+    plt.savefig(plot_file,dpi = 300)
+    
+    np.save(np_file,avg_acc)
     
 
 def run_selftrain_GC(clients, server, args):
@@ -114,6 +106,7 @@ def run_selftrain_GC(clients, server, args):
         client.download_from_server(args,server)
     
     feature_dim = clients[0].data[0].x.shape[1] if args.setting == 'single' else args.hidden
+    '''
     graph_batch = random_graphbatch(20,20,40,feature_dim,seed = 0)
     
     client_similarity = torch.zeros((len(clients),len(clients)))
@@ -121,7 +114,7 @@ def run_selftrain_GC(clients, server, args):
 
     oparamsim = torch.zeros((args.num_clients,args.num_clients))
     paramsim = torch.zeros((args.num_clients,args.num_clients))
-    
+    '''
     for cround in range(1,args.num_rounds + 1):
         # training
         for client in clients:
@@ -129,6 +122,7 @@ def run_selftrain_GC(clients, server, args):
             client.evaluate()
 
         #analyze the similarity 
+        '''
         embed = server.graph_modelembedding(clients,graph_batch.to(args.device))
         params = [{k:copy.deepcopy(client.W[k]) for k in server.W.keys()} for client in clients]
         ofeature,feature,sim = prepare_features(embed,params,cround,args)
@@ -140,34 +134,28 @@ def run_selftrain_GC(clients, server, args):
         
         client_similarity += client_simi
         embed_similarity += embed_simi.cpu()
+        '''
 
-
-        if args.data_group == 'clf_test':
-            print('the similarity of the classifiers')
-            clf_ana(clients,server)
     
     #print('average similarity')
     #print('average client similarity')
     #print(client_similarity/args.num_rounds)
     #print('average embedding similarity')
     #print(embed_similarity/args.num_rounds)
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
     '''
     clients[0].download_from_server(clients[1])
     _,acc0 = clients[0].evaluate()
     _,acc1 = clients[1].evaluate()
     print('client_0:{:.4f},client_1:{:.4f}'.format(acc0,acc1))
     '''
-    #if args.global_model:
-        #monitor_performance(writer,clients[-1])
-    #monitor_performance(writer,clients)
 
-    oparamsim /= args.num_rounds
-    paramsim /= args.num_rounds
-    print(oparamsim-paramsim)
+    #oparamsim /= args.num_rounds
+    #paramsim /= args.num_rounds
+    #print(oparamsim-paramsim)
 
-    np.save('client_feature/vanilla_param.npy',oparamsim.numpy())
-    np.save('client_feature/differential_param.pt',paramsim.numpy())
+    #np.save('client_feature/vanilla_param.npy',oparamsim.numpy())
+    #np.save('client_feature/differential_param.pt',paramsim.numpy())
 
     return allAccs
 
@@ -215,15 +203,13 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
 
 
 
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
     '''
     clients[0].download_from_server(clients[1])
     _,acc0 = clients[0].evaluate()
     _,acc1 = clients[1].evaluate()
     print('client_0:{:.4f},client_1:{:.4f}'.format(acc0,acc1))
     '''
-    # summary writer
-    #monitor_performance(writer,allloss,allacc)
     return allAccs
 
 def run_fedstar(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, args, samp = None, frac=1.0):
@@ -252,9 +238,8 @@ def run_fedstar(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, args
         
         for client in clients:
             client.evaluate()
-        print(mean_performance(clients))
     
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
     
     return allAccs
 
@@ -311,7 +296,7 @@ def run_pFedGraph(clients, server: Server, COMMUNICATION_ROUNDS, local_epoch, ar
             client.evaluate()
             
 
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
     
     return allAccs
     
@@ -337,7 +322,7 @@ def run_scaffold(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, arg
         #update the client model with control parameters
         server.scaffold_update(clients,local_epoch,args)
     
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
 
     return allAccs
 
@@ -374,7 +359,7 @@ def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=N
         for client in clients:
             client.evaluate()
 
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
     
     return allAccs
 
@@ -431,7 +416,7 @@ def pre_vinigraph(init_A,tag,param,sim,eps,cround,lastA,args):
         mask = (A >= 0).float().to(A.device)
         A = mask*A
 
-    interval_print(A,cround,40,'initial client graph')
+    #interval_print(A,cround,40,'initial client graph')
 
     return A
 
@@ -450,7 +435,7 @@ def get_finalgraph(args,feature,init_A,cround,clients):
         A = torch.ones((nclient,nclient))/nclient
     elif args.para_choice == 'label':
         A = label_dis(clients,args.graph_eps)
-    interval_print(A,cround,40,'result client graph')
+    #interval_print(A,cround,40,'result client graph')
     return A
 
 def prepare_features(embed,param,cround,args):
@@ -507,12 +492,13 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
 
     #interval update
     last_client_W = None
-    A,average_A,lastA = None,torch.zeros(nclient,nclient),None
+    A,average_A = None,torch.zeros(nclient,nclient)
     graph_batch = random_graphbatch(20,20,30,min(c.data[0].x.shape[1] for c in clients),'structure',seed = 0)
 
     sharing_start = 0
     if args.setting == 'multi':
         graph_batch = [feature_enlarge(graph_batch,c.data[0].x.shape[1]) for c in clients]
+    
     infos = {'ofeature':[],'feature':[],'initA':[],'resA':[]}
 
     # record the performance gain of each client after knowledge sharing
@@ -522,11 +508,6 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
         average = 0
         for i,client in enumerate(clients):
             client.compute_weight_update(local_epoch)
-            #_,acc,_ = client.evaluate(record = False)
-            #average += acc    
-            #performance_gain[i] = acc
-            #seq_grads[client.id].append({k:client.dW[k] for k in client.gconvNames})
-        #print('accuracy after local training before knowledge sharing {:.4f}'.format(average/len(clients)))
         
         if args.setting == 'single':
             embed = server.graph_modelembedding(clients,graph_batch.to(args.device),'sum')
@@ -544,16 +525,20 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
             init_A = pre_vinigraph(init_A, args.initial_graph,graph_dWs,sim,args.graph_eps,cround,A,args).to(args.device)
             init_A = normalize(init_A,'sym')
             
+            client_graph_cons = graph_constructor(feature.shape[1],args)
             A = get_finalgraph(args,feature,init_A,cround,clients)
+            #A = client_graph_cons.graph_based_aggregation(feature, init_A)
             
             
             #print('out')
             #print(A)
             
+            
+            #A = get_finalgraph(args,feature,init_A,cround,clients)
+            
             num = torch.tensor([client.train_size]).to(A.device)
             A = normalize(A*num[None,:],'row')
-
-            lastA = A
+            
             average_A += A.cpu()
             
             collect_info(infos,ofeature.cpu().numpy(),feature.cpu().numpy(),init_A.cpu().numpy(),A.cpu().numpy())
@@ -570,16 +555,9 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
 
         # evaluate the performance
         [client.evaluate() for client in clients]
-        '''
-        average = 0
-        for i,client in enumerate(clients):
-            _,acc,_ = client.evaluate()
-            performance_gain[i] -= acc
-            average += acc
-        '''
         #print('accuracy after knowledge sharing {:.4f}'.format(average/len(clients)))
     
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
 
     average_A /= COMMUNICATION_ROUNDS - sharing_start
     # save info
@@ -643,7 +621,7 @@ def run_gcfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2,ar
     frame.columns = ['test_acc']
     print(frame)
     '''
-    all_Accs = analyze_train(clients)
+    all_Accs = analyze_train(clients,args)
 
     return all_Accs
 
@@ -764,7 +742,7 @@ def run_gcflplus_dWs(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, 
     for idc in cluster_indices:
         server.cache_model(idc, clients[idc[0]].W, acc_clients)
 
-    allAccs = analyze_train(clients)
+    allAccs = analyze_train(clients,args)
 
     return allAccs
 
@@ -780,50 +758,7 @@ def get_interval_dW(clients,last_client_W,server_key):
     ]
             
     return agg_dWs,graph_dWs
-    # update every round
-    if interval == 1 or ((last_client_W is None) and cround == 1):
-        graph_dWs = [
-            {k:copy.deepcopy(client.W[k]) for k in server_key}
-            for client in clients
-        ]
-        if last_client_W == None:
-            last_client_W = [
-                {k:copy.deepcopy(client.W[k]) for k in server_key}
-                for client in clients
-            ]
-    
-    elif cround % interval == 1:
-        now_client_W = [
-            {k:copy.deepcopy(client.W[k]) for k in server_key}
-            for client in clients
-        ]
-        graph_dWs = group_sub(now_client_W,last_client_W)
 
-        last_client_W = copy.deepcopy(now_client_W)
-    
-    else:
-        graph_dWs = None
-
-    #return agg_dWs,graph_dWs,last_client_W
-
-def get_dW(clients,server_key):
-
-    client_Ws = [
-        {k:copy.deepcopy(client.W[k]) for k in server_key}
-        for client in clients
-    ]
-
-    return client_Ws
-
-def time_mean(seq):
-    mean = {}
-    for term in seq:
-        for k in term.keys():
-            if k not in mean.keys():
-                mean[k] = term[k].clone()
-            else:
-                mean[k] += term[k].clone()
-        mean[k] /= len(seq)
-    return mean    
+   
 
 
