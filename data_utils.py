@@ -9,7 +9,7 @@ from torch_geometric.data.datapipes import functional_transform
 from ogb.graphproppred import PygGraphPropPredDataset
 from sklearn.model_selection import StratifiedKFold
 import numpy as np
-from perturbations import *
+#from perturbations import *
 from analyze_dataset import *
 #from sfl.delete import *
 from ogb.graphproppred.mol_encoder import AtomEncoder, BondEncoder

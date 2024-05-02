@@ -15,7 +15,7 @@ from utils import get_stats, split_data, get_numGraphLabels,convert_to_nodeDegre
 from analyze_dataset import *
 
 from sklearn.model_selection import StratifiedKFold
-from perturbations import *
+#from perturbations import *
 from functest import arti_datasets,toy_datasets,feature_padding
 from data_utils import nofeature_datasets,graph_process,toy_split,load_attr,subchunk_split,show_label_distribution,fix_size_split
 

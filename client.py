@@ -6,7 +6,7 @@ from analyze_dataset import tri_num_disb,deg_disb,hop2_disb
 import numpy as np
 import random
 from data_utils import easy_datasets,label_balanced_downsample
-from perturbations import node_feature_perturbation,structure_perturbation
+#from perturbations import node_feature_perturbation,structure_perturbation
 from utils import get_roc_auc
 import torch.nn.functional as F
 from graph_utils import sd_matrixing

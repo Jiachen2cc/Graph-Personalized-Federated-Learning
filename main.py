@@ -16,6 +16,7 @@ from utils import cross_res_analyze
 from graph_utils import normalize
 from data_utils import gcfl_param,device
 import time
+from dataprocess.setup import SetUp
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -361,7 +362,8 @@ if args.repeat is not None:
 
 def preparation(args):
 
-    splitedData = setupGC.prepareData_oneDS(args.num_clients,args,seed=args.seed)
+    #splitedData = setupGC.prepareData_oneDS(args.num_clients,args,seed=args.seed)
+    splitedData = SetUp(args).splited_graphs
     init_clients, init_server, init_idx_clients = setupGC.setup_devices(splitedData, args)
 
     return init_clients, init_server
