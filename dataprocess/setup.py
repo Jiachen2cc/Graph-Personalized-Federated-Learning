@@ -20,6 +20,8 @@ class SetUp:
         self.num_node_features = self.graphs[0].num_node_features
         self.num_graph_labels = max([g.y.item() for g in self.graphs])+1
         self.splited_graphs = self.split_dataset()
+        self.show_label_distribution()
+        
     
     # load dataset according to our requirements
     def load_dataset(self):
@@ -81,6 +83,17 @@ class SetUp:
         return splitedData
     
     
+    def show_label_distribution(self):
+        
+        label_all = [np.array([g.y.item() 
+                        for g in self.splited_graphs[k][0]]) 
+                     for k in self.splited_graphs.keys()]
+        label_dis = np.zeros((self.num_graph_labels,len(label_all)))
+        for i in range(self.num_graph_labels):
+            for j, labels in enumerate(label_all):
+                label_dis[i][j] = np.sum(labels == i)
+        print(label_dis)
+
     def dataset_statistics(self):
         # return chose statistics properties of dataset   
         ...

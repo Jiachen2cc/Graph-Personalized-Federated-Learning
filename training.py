@@ -410,11 +410,8 @@ def pre_vinigraph(init_A,tag,param,sim,eps,cround,lastA,args):
         A = sim
     #A = normalize(graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2)),'sym')
     #A = graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2))
-    if args.discrete:
-        A = (A >= 0).float().to(A.device)
-    else:
-        mask = (A >= 0).float().to(A.device)
-        A = mask*A
+    mask = (A >= 0).float().to(A.device)
+    A = mask*A
 
     #interval_print(A,cround,40,'initial client graph')
 
@@ -525,9 +522,13 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
             init_A = pre_vinigraph(init_A, args.initial_graph,graph_dWs,sim,args.graph_eps,cround,A,args).to(args.device)
             init_A = normalize(init_A,'sym')
             
+            #print('initial graph')
+            #print(init_A)
             client_graph_cons = graph_constructor(feature.shape[1],args)
-            A = get_finalgraph(args,feature,init_A,cround,clients)
-            #A = client_graph_cons.graph_based_aggregation(feature, init_A)
+            #A = get_finalgraph(args,feature,init_A,cround,clients)
+            A = client_graph_cons.graph_based_aggregation(feature, init_A)
+            #if cround > 5:
+            #    exit(0)
             
             
             #print('out')
@@ -536,8 +537,8 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
             
             #A = get_finalgraph(args,feature,init_A,cround,clients)
             
-            num = torch.tensor([client.train_size]).to(A.device)
-            A = normalize(A*num[None,:],'row')
+            #num = torch.tensor([client.train_size]).to(A.device)
+            #A = normalize(A*num[None,:],'row')
             
             average_A += A.cpu()
             

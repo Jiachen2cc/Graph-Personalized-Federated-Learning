@@ -61,7 +61,7 @@ def kfold_split(graphs,fold_num,seed):
     
     return train_idx_list, test_idx_list
 
-def soft_dirichlet(alpha, num_classes, num_client, upper = 0.9):
+def soft_dirichlet(alpha, num_classes, num_client, upper = 0.95):
     priors = np.random.dirichlet(
         alpha = [alpha] * num_classes, size = num_client)
     

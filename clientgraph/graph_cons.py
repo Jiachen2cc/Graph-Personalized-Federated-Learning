@@ -18,8 +18,8 @@ class graph_constructor:
     
     def preprocess(self, features, pre_A):
         # discretize the input graph in case needed
-        if self.args.discrete:
-            pre_A = (F.sigmoid(pre_A) >= 0.5).float().to(pre_A.device)
+        #if self.args.discrete:
+        #    pre_A = (torch.sigmoid(pre_A) >= 0.5).float().to(pre_A.device)
         return features, pre_A
         
     def train(self,features,A):
@@ -47,8 +47,19 @@ class graph_constructor:
         # may used to get a sparser adj
         
         # compute row wise softmax to normalize the sharing weight
-        # adj = F.softmax(adj, dim = 1)
-        adj = torch.sigmoid(adj)
+        adj = F.softmax(adj, dim = 1)
+        #print('before discretion')
+        #print(adj)
+        if self.args.discrete:
+            thresh = 0.1 * (1/self.args.num_clients)
+            
+            adj = (adj >= thresh).float().to(adj.device)
+            #print('after discretion')
+            #print(adj)
+            adj = normalize(adj,'row')
+        #print('applied graph')
+        #print(adj)
+        # adj = torch.sigmoid(adj)
         return adj
             
     def gen_graph(self, features, A):
@@ -56,9 +67,10 @@ class graph_constructor:
         # generate the client graph
         with torch.no_grad():
             adj = self.model(features,A)
+            '''
             if self.args.discrete:
                 adj = (adj >= 0).float().to(adj.device)
-        
+            '''
         return adj
     
     

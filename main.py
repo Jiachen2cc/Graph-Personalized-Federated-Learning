@@ -207,6 +207,7 @@ parser.add_argument('--noise_type',type = str, default = 'feature',
                     choices = ['feature','structure','node'])
 
 # feature perturbation configuration
+'''
 parser.add_argument('--noise_rate',type = float, default = 1,
                     help = 'the perturbated rate for each nodes/edges in a single graph')
 parser.add_argument('--fptype',type = str, default = 'add',
@@ -218,7 +219,7 @@ parser.add_argument('--per_edge',type = int, default = 0,
                 help = 'decide whether to perturbate edges when performing node feature perturbation')
 parser.add_argument('--ex_rate',type = float, default = 0.4,
                 help = 'the rates for changing original edges into noise similarity edges')
-
+'''
 
 parser.add_argument('--feature_pertur',type = int, default = 0)
 parser.add_argument('--structure_pertur',type = int, default = 0)
