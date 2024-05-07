@@ -7,6 +7,7 @@ cfg = {
     'lambda_1': 1,
     
 }
+'''
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', type=str, default="0")    
@@ -85,3 +86,4 @@ def get_args():
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
     return args , cfg
+'''

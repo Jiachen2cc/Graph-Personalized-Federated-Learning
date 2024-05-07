@@ -505,6 +505,7 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
         average = 0
         for i,client in enumerate(clients):
             client.compute_weight_update(local_epoch)
+            #[client.evaluate() for client in clients]
         
         if args.setting == 'single':
             embed = server.graph_modelembedding(clients,graph_batch.to(args.device),'sum')
