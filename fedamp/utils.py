@@ -49,6 +49,8 @@ def cal_model_cosine_difference(nets_this_round, initial_global_parameters, dw):
     return model_similarity_matrix
 
 def update_graph_matrix_neighbor(nets_this_round, initial_global_parameters, dw):
+    for net in nets_this_round.values():
+        net.to('cpu')
     model_difference_matrix = cal_model_cosine_difference(nets_this_round, initial_global_parameters, dw)
     graph_matrix = calculate_graph_matrix(model_difference_matrix)
     #print(f'Model difference: {model_difference_matrix[0]}')
@@ -75,7 +77,7 @@ def weight_flatten_all(model):
     params = torch.cat(params)
     return params
 
-def aggregation_by_graph(cfg, graph_matrix, nets_this_round, global_w, cluster_models):
+def aggregation_by_graph(graph_matrix, nets_this_round, global_w, cluster_models):
     tmp_client_state_dict = {}
     for client_id in nets_this_round.keys():
         tmp_client_state_dict[client_id] = copy.deepcopy(global_w)

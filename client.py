@@ -99,12 +99,6 @@ class Client_GC():
         test = [self.data[idx] for idx in test_idx]
         
         # label balanced dataset downsample
-        #if args.data_down < 1 and 'global_model' not in self.name:
-        if args.data_down < 1:
-            labels = np.array([g.y.item() for g in train])
-            train_idx = label_balanced_downsample(labels,args.data_down,args.seed)
-            train = [train[idx] for idx in train_idx]
-
         self.train_size = len(train)
         
         #print(self.name,self.train_size,len(test),len(self.data))

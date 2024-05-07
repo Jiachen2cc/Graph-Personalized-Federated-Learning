@@ -15,4 +15,6 @@ outputs/
 supexp/
 analysis/
 train_plot/
+fedamp/fedamp_exp
+pfedgraph_cosine/pfedgraph_cosine_exp
 

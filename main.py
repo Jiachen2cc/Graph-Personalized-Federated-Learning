@@ -17,6 +17,7 @@ from graph_utils import normalize
 from data_utils import gcfl_param,device
 import time
 from dataprocess.setup import SetUp
+from fedamp.train import process_fedamp
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -49,27 +50,11 @@ def process_fedavg(clients, server,args = None):
     all_Accs = run_fedavg(clients, server, args.num_rounds, args.local_epoch, args, samp=None)
     #all_Accs = run_fedavg(clients, server, args.num_rounds, 5, samp=None)
     return all_Accs
-    '''
-    if args.repeat is None:
-        outfile = os.path.join(outpath, f'accuracy_fedavg_GC{suffix}.csv')
-    else:
-        outfile = os.path.join(outpath, "repeats", f'{args.repeat}_accuracy_fedavg_GC{suffix}.csv')
-    frame.to_csv(outfile)
-    print(f"Wrote to file: {outfile}")
-    '''
 
 def process_fedprox(clients, server, args):
     allAccs = run_fedprox(clients, server, args.num_rounds, args.local_epoch, args, samp=None)
 
     return allAccs
-    '''
-    if args.repeat is None:
-        outfile = os.path.join(outpath, f'accuracy_fedprox_mu{mu}_GC{suffix}.csv')
-    else:
-        outfile = os.path.join(outpath, "repeats", f'{args.repeat}_accuracy_fedprox_mu{mu}_GC{suffix}.csv')
-    frame.to_csv(outfile)
-    print(f"Wrote to file: {outfile}")
-    '''
 
 def process_scaffold(clients,server,args):
     allAccs = run_scaffold(clients, server, args.num_rounds,args.local_epoch,args)
@@ -92,6 +77,7 @@ def process_gcflplusdWs(clients, server,args):
 
     allAccs = run_gcflplus_dWs(clients, server, args.num_rounds, args.local_epoch, args.epsilon1, args.epsilon2, args.seq_length, args.standardize,args)
     return allAccs
+
 
 parser = argparse.ArgumentParser()
 
@@ -200,38 +186,8 @@ parser.add_argument('--lam', type = float, default = 0.01,
                     help = 'hyper parameters in local objective')
 parser.add_argument('--fedgraphalpha', type = float, default = 0.8)
 
-# dataset difficulty modifications
-parser.add_argument('--difficulty', type = int, default = 0,
-                    help = 'decide whether to do the difficulty test')
-parser.add_argument('--noise_type',type = str, default = 'feature',
-                    choices = ['feature','structure','node'])
 
-# feature perturbation configuration
 '''
-parser.add_argument('--noise_rate',type = float, default = 1,
-                    help = 'the perturbated rate for each nodes/edges in a single graph')
-parser.add_argument('--fptype',type = str, default = 'add',
-                    help = 'the feature perturbation type',
-                    choices = ['add','replace'])
-parser.add_argument('--SNR',type = float,default = 10,
-                    choices = [20,15,10,5,0,-5,-10])
-parser.add_argument('--per_edge',type = int, default = 0,
-                help = 'decide whether to perturbate edges when performing node feature perturbation')
-parser.add_argument('--ex_rate',type = float, default = 0.4,
-                help = 'the rates for changing original edges into noise similarity edges')
-'''
-
-parser.add_argument('--feature_pertur',type = int, default = 0)
-parser.add_argument('--structure_pertur',type = int, default = 0)
-#edge perturbation configuration
-parser.add_argument('--prate',type = float, default = 1,
-                    help = 'the probability for dropping positive edges')
-parser.add_argument('--nrate',type = float, default = 0,
-                    help = 'the probability for adding negative edges')
-parser.add_argument('--fmask',type = str, default = 'None',
-                    help = 'the type of feature mask when performing edge perturbation',
-                    choices = ['None','zero','one','Gaussian'])
-
 # node downsample configuration
 parser.add_argument('--downsample_rate', type = float, default = 1,
                     help = 'the downsample rate for node number')
@@ -244,7 +200,7 @@ parser.add_argument('--data_down', type = float, default = 1,
 parser.add_argument('--hetero',type = int, default = 0,
                     help = 'choose whether to strengthen the hetergeneity between datasets')
 parser.add_argument('--target_dataset', type = str, default = 'IMDB-BINARY')
-
+'''
 parser.add_argument('--split_way', type = str, default = 'blabel_skew',
                     help = ' the split methods for global datasets',choices = ['toy','label_skew','blabel_skew',
                                                                                'random','fix_num'])
@@ -260,8 +216,9 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
                     help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
-parser.add_argument('--Federated_mode', type = str, default ='GPFL',
-                        choices = ['Selftraining','FedAvg','FedProx','GPFL','GCFL','Scaffold','fedstar','pfedgraph'])
+parser.add_argument('--Federated_mode', type = str, default ='fedamp',
+                        choices = ['Selftraining','FedAvg','FedProx','GPFL','GCFL','Scaffold',
+                        'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
                         choices = ['uniform','sim','ans','property','randomc'])
 parser.add_argument('--graph_eps', type = float, default = 0.3,
@@ -298,7 +255,7 @@ parser.add_argument('--mu',type = float, default = 0.01,
                     help = 'the mu coefficient for fedprox')
 parser.add_argument('--sigmoid',type = int, default = 1,
                     help = 'the activation function for generated graph')
-parser.add_argument('--discrete',type = int, default = 0,
+parser.add_argument('--discrete',type = int, default = 1,
                     help = 'whether to train a discrete or continual client graph')
 
 # control parameter for ablation study
@@ -403,6 +360,8 @@ def training_round(init_clients,init_server,args):
             res = process_fedstar(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'pfedgraph':
             res = process_pfedgraph(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
+        elif args.Federated_mode == 'fedamp':
+            res = process_fedamp(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
         cross_results.append(res)
         #break
         

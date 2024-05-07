@@ -2,6 +2,11 @@ import argparse
 import os
 import torch
 
+# hyper parameters for fedamp training
+cfg = {
+    'lambda_1': 1,
+    
+}
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', type=str, default="0")    

@@ -10,7 +10,7 @@ import torch.optim as optim
 
 from fedamp.config import get_args
 from fedamp.utils import aggregation_by_graph, update_graph_matrix_neighbor
-from fedamp.setupGC import prepareData_oneDS,setup_devices
+from setupGC import prepareData_oneDS,setup_devices
 
 #from model import simplecnn, textcnn
 #from prepare_data import get_dataloader
@@ -142,7 +142,7 @@ def train_single_fold(clients, server, fold_id, args):
         graph_matrix = update_graph_matrix_neighbor(nets_this_round, global_parameters, dw)   # Graph Matrix is not normalized yet
         aggregation_by_graph(cfg, graph_matrix, nets_this_round, global_parameters, cluster_models)   # Aggregation weight is normalized here
         
-       
+    
     return mean_personalized_acc
         
 def train_multi_fold(clients,server,args):
