@@ -197,9 +197,7 @@ def network_properties(graph: Data):
     E = ud.shape[1]
     vd = degree(ud[0])
     
-    subkey = ['density','network entropy','closeness centrality']
     # average degree
-
     properties['average degree'] = torch.mean(vd) if len(vd) > 0 else 0
     # average hop2 degree
     #properties['average hop2'] = torch.mean(torch.FloatTensor(hop2_neighbor(graph)))

@@ -164,50 +164,7 @@ def label_skew_balance(graphs, num_client, seed, alpha=4):
             #print(label_res)
         return [client_indices[i] for i in range(num_client)]
 
-'''
-def select_pertur(graphs,num_client,seed):
-    # set seed
-    random.seed(seed)
-    np.random.seed(seed)
-    # assign status flag to each client
-    # 1 normal
-    # 2 node feature Gaussian
-    # 3 node feature perm 
-    # 4 structure triangle enclose
-    fstat = ['Gaussian','perm']
-    sstat = ['tri_en']
-    status = ['normal','Gaussian','perm','tri_en']
-    cstatus = [random.choice(status) for i in range(num_client)]
-    
-    data_list = []
-    for data,state in zip(graphs,cstatus):
-        if state in fstat:
-            pdata = node_feature_perturbation(data,state,seed)
-        elif state in sstat:
-            pdata = structure_perturbation(data,state)
-        else:
-            pdata = data
-        data_list.append(pdata)
-    
-    return data_list,cstatus
-    
 
-def feature_pertur_oneDS(data,chunks,chunks_idx,idx,args):
-
-    if args.mix_type == 'attr':
-        attrdata = load_attr(args.datapath,data)
-        num_node_features = max(num_node_features,attrdata[0].num_node_features)
-        if idx == 1:
-            attrchunk = [attrdata[idx] for idx in chunks_idx]
-            chunks = feature_mix(chunks,args.mix_type,args.fmix_rate,attrchunk)
-        else:
-            chunks = feature_padding(chunks,num_node_features)
-    elif (args.mix_type in ['ones','Gauss']) and idx == 1:
-        print('feature mix!')
-        chunks = feature_mix(chunks,args.mix_type,args.fmix_rate)
-
-    return chunks
-'''    
 def prepareData_oneDS(num_client, args, seed=None):
     
     data = args.data_group
@@ -354,7 +311,7 @@ def setup_devices(splitedData, args):
     sclassifiers,sextracts = [],[]
     for idx, ds in enumerate(splitedData.keys()):
         idx_clients[idx] = ds
-        data, split_idx, num_node_features, num_graph_labels, dataset_name = splitedData[ds]
+        data, split_idx, num_node_features, num_graph_labels, dataset_name, property = splitedData[ds]
         if args.Federated_mode == 'fedstar':
             data = init_structure_encoding(args,data,args.type_init)
             cmodel_gc = GIN_dc(num_node_features, args.n_se, args.hidden,
@@ -369,7 +326,7 @@ def setup_devices(splitedData, args):
         optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, cmodel_gc.parameters(
         )), lr=args.lr, weight_decay=args.weight_decay)
         clients.append(Client_GC(cmodel_gc, idx, ds, dataset_name,
-                       data, split_idx, optimizer, args))
+                       data, property, split_idx, optimizer, args))
         sclassifier = GINclassifier(nhid = args.hidden,nclass=num_graph_labels)
         sextract = GINextractor(nfeat = num_node_features, nhid = args.hidden)
 

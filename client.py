@@ -12,13 +12,14 @@ import torch.nn.functional as F
 from graph_utils import sd_matrixing
 
 class Client_GC():
-    def __init__(self, model, client_id, client_name, dataset_name, data, split_idx, optimizer, args):
+    def __init__(self, model, client_id, client_name, dataset_name, data, property, split_idx, optimizer, args):
         self.model = model.to(args.device)
         self.id = client_id
         self.name = client_name
         self.dname = dataset_name
 
         self.data = data
+        self.proerty = property
         self.split_idx = split_idx
 
         self.train_size = None

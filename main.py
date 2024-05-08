@@ -110,6 +110,8 @@ parser.add_argument('--multiseed', help = 'enable multiseed experiment',
 # input and output
 parser.add_argument('--datapath', type=str, default='./data',
                         help='The input path of data.')
+parser.add_argument('--propertypath', type = str, default = './property',
+                        help = 'The procomputed property vectors')
 parser.add_argument('--outbase', type=str, default='./outputs',
                         help='The base path for outputting.')
 parser.add_argument('--outpath', type=str, default='./output')
@@ -215,7 +217,7 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
                     help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
-parser.add_argument('--Federated_mode', type = str, default ='GPFL',
+parser.add_argument('--Federated_mode', type = str, default ='pfedgraph',
                         choices = ['Selftraining','FedAvg','FedProx','GPFL','GCFL','Scaffold',
                         'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
@@ -236,7 +238,7 @@ parser.add_argument('--timelen', type = int, default = 20)
 
 
 # update model sharing mechanism
-parser.add_argument('--sharing_mode', type = str, default = 'gradient',
+parser.add_argument('--sharing_mode', type = str, default = 'total',
                         choices = ['gradient','total','difference','ALA'])
 
 # feature normalization method
@@ -336,7 +338,7 @@ def training_round(init_clients,init_server,args):
         # split the train and test dataset
         for client in idx_clients:
             assert isinstance(client,Client_GC)
-            struc_feature = client.split_traintest(idx,args.batch_size,args)
+            client.split_traintest(idx,args.batch_size,args)
         
         #analyze the propeties of all the datasets
         #pg_analysis(idx_clients)

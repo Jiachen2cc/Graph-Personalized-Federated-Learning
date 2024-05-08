@@ -11,12 +11,15 @@ from sklearn.model_selection import StratifiedKFold
 import numpy as np
 from dataprocess.utils import *
 from dataprocess.data_split import *
+from dataprocess.data_property import network_properties
+import os
 
 class SetUp:
     
     def __init__(self,args):
         self.args = args
         self.graphs = self.load_dataset()
+        self.property = self.extract_property()
         self.num_node_features = self.graphs[0].num_node_features
         self.num_graph_labels = max([g.y.item() for g in self.graphs])+1
         self.splited_graphs = self.split_dataset()
@@ -74,11 +77,13 @@ class SetUp:
         for idx, chunks_idx in zip(list(range(self.args.num_clients)),graphs_chunks_idx):
             ds = f'{idx}-{self.args.data_group}'
             chunks = [self.graphs[idx] for idx in chunks_idx]
+            chunks_property = [self.property[idx,:] for idx in chunks_idx]
             train_idx_list, test_idx_list = kfold_split(chunks,self.args.fold_num,
                                             self.args.seed)
             splitedData[ds] = (chunks, {'train':train_idx_list,'test':test_idx_list},
                             self.num_node_features,
-                            self.num_graph_labels, self.args.data_group)
+                            self.num_graph_labels, self.args.data_group,
+                            chunks_property)
         
         return splitedData
     
@@ -94,6 +99,15 @@ class SetUp:
                 label_dis[i][j] = np.sum(labels == i)
         print(label_dis)
 
-    def dataset_statistics(self):
+    def extract_property(self):
         # return chose statistics properties of dataset   
-        ...
+        property_path = os.path.join(self.args.propertypath,self.args.data_group+'.pt')
+        property_tensor = None
+        if not os.path.exists(property_path):
+            proprety_tensor = torch.stack([network_properties(g) for g in self.graphs],dim = 0).cpu()
+            torch.save(proprety_tensor,property_path)
+        else:
+            property_tensor = torch.load(property_path)
+        return property_tensor
+        
+        

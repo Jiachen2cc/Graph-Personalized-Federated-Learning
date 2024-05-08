@@ -1,5 +1,9 @@
 
-def prepare_initial(clients):
+def prepare_global_initial(clients):
+    ...
+    return 
+
+def prepare_round_initial(clients):
     
     # choice 1 acquire property value and construct graph based on simi
     property = ...

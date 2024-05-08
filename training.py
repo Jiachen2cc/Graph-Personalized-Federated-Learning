@@ -172,6 +172,7 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
         
         for client in clients:
             client.local_train(local_epoch)
+            client.evaluate()
 
         # do not select global model
         if args.global_model:
