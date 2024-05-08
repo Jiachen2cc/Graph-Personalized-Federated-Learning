@@ -77,12 +77,13 @@ def process_fedamp(clients, server, args):
         #nets_param_start = {k: copy.deepcopy(local_models[k]) for k in party_list_this_round}
         
         local_train_fedavg(args,round,local_models,cluster_models,train_local_dls)
-        for c in clients:
-            c.evaluate()
         #total_data_points = sum([len(net_dataidx_map[k]) for k in party_list_this_round])
         #fed_avg_freqs = {k: len(net_dataidx_map[k]) / total_data_points for k in party_list_this_round}
         graph_matrix = update_graph_matrix_neighbor(local_models, global_parameters, dw)   # Graph Matrix is not normalized yet
         aggregation_by_graph(graph_matrix, local_models, global_parameters, cluster_models)   # Aggregation weight is normalized here
+        for c in clients:
+            c.model.cuda()
+            c.evaluate()
         
     allAccs = analyze_train(clients,args)
     return allAccs

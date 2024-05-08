@@ -2,6 +2,11 @@ import argparse
 import os
 import torch
 
+cfg = {
+    'lam': 0.01,
+    'difference_measure':'all',
+    'alpha':0.8
+}
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu', type=str, default="0")

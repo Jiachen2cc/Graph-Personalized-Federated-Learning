@@ -18,6 +18,8 @@ from data_utils import gcfl_param,device
 import time
 from dataprocess.setup import SetUp
 from fedamp.train import process_fedamp
+from pfedgraph_cosine.train import process_pfedgraph
+
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -68,9 +70,6 @@ def process_fedstar(clients,server,args):
     allAccs = run_fedstar(clients, server, args.num_rounds,args.local_epoch,args)
     return allAccs
 
-def process_pfedgraph(clients,server,args):
-    allAccs = run_pFedGraph(clients, server, args.num_rounds,args.local_epoch,args)
-    return allAccs
 
 
 def process_gcflplusdWs(clients, server,args):
@@ -216,7 +215,7 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
                     help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
-parser.add_argument('--Federated_mode', type = str, default ='fedamp',
+parser.add_argument('--Federated_mode', type = str, default ='GPFL',
                         choices = ['Selftraining','FedAvg','FedProx','GPFL','GCFL','Scaffold',
                         'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',

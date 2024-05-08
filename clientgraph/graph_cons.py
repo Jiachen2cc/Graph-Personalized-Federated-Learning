@@ -53,7 +53,9 @@ class graph_constructor:
         if self.args.discrete:
             thresh = 0.1 * (1/self.args.num_clients)
             
+            #mask = (adj >= thresh).float().to(adj.device)
             adj = (adj >= thresh).float().to(adj.device)
+            #adj = mask*adj
             #print('after discretion')
             #print(adj)
             adj = normalize(adj,'row')

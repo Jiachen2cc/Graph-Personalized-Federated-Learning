@@ -57,6 +57,8 @@ def cal_model_cosine_difference(nets_this_round, initial_global_parameters, dw, 
 
 def update_graph_matrix_neighbor(graph_matrix, nets_this_round, initial_global_parameters, dw, fed_avg_freqs, lambda_1, similarity_matric):
     # index_clientid = torch.tensor(list(map(int, list(nets_this_round.keys()))))     # for example, client 'index_clientid[0]'s model difference vector is model_difference_matrix[0] 
+    for net in nets_this_round.values():
+        net.to('cpu')
     index_clientid = list(nets_this_round.keys())
     # model_difference_matrix = cal_model_difference(index_clientid, nets_this_round, nets_param_start, difference_measure)
     model_difference_matrix = cal_model_cosine_difference(nets_this_round, initial_global_parameters, dw, similarity_matric)
@@ -104,7 +106,7 @@ def weight_flatten_all(model):
     params = torch.cat(params)
     return params
 
-def aggregation_by_graph(cfg, graph_matrix, nets_this_round, global_w, global_p):
+def aggregation_by_graph(graph_matrix, nets_this_round, global_w, global_p):
     tmp_client_state_dict = {}
     cluster_model_vectors = {}
     for client_id in nets_this_round.keys():
