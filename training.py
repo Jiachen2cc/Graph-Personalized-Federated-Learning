@@ -379,9 +379,9 @@ def pre_finigraph(tag,clients,eps,args):
         init_A = pg_analysis(clients)
         #pass
     elif tag == 'ans':
-        init_A = cluster_uniform_graph(args.num_clients*args.num_splits,args.num_splits)
+        init_A = cluster_uniform_graph(args.num_clients,args.num_splits)
     elif tag == 'randomc':
-        init_A = random_con_graph(args.num_clients*args.num_splits)
+        init_A = random_con_graph(args.num_clients)
     else:
         init_A = None
     

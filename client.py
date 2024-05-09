@@ -12,18 +12,19 @@ import torch.nn.functional as F
 from graph_utils import sd_matrixing
 
 class Client_GC():
-    def __init__(self, model, client_id, client_name, dataset_name, data, property, split_idx, optimizer, args):
+    def __init__(self, model, client_id, client_name, dataset_name, data, data_property, split_idx, optimizer, args):
         self.model = model.to(args.device)
         self.id = client_id
         self.name = client_name
         self.dname = dataset_name
 
         self.data = data
-        self.proerty = property
+        self.data_proerty = data_property
         self.split_idx = split_idx
 
         self.train_size = None
         self.train_data = None
+        self.train_data_property = None
         self.test_data = None
         self.dataLoader = {'train': None, 'test': None}
 
@@ -97,6 +98,8 @@ class Client_GC():
 
         train_idx, test_idx = self.split_idx['train'][fold_idx], self.split_idx['test'][fold_idx]
         train = [self.data[idx] for idx in train_idx]
+        train_property = torch.stack([self.data_proerty[idx] for idx in train_idx],dim = 0)
+        self.train_data_property = torch.mean(train_property,dim = 0)
         test = [self.data[idx] for idx in test_idx]
         
         # label balanced dataset downsample

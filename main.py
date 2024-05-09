@@ -238,7 +238,7 @@ parser.add_argument('--timelen', type = int, default = 20)
 
 
 # update model sharing mechanism
-parser.add_argument('--sharing_mode', type = str, default = 'total',
+parser.add_argument('--sharing_mode', type = str, default = 'gradient',
                         choices = ['gradient','total','difference','ALA'])
 
 # feature normalization method

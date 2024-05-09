@@ -104,8 +104,8 @@ class SetUp:
         property_path = os.path.join(self.args.propertypath,self.args.data_group+'.pt')
         property_tensor = None
         if not os.path.exists(property_path):
-            proprety_tensor = torch.stack([network_properties(g) for g in self.graphs],dim = 0).cpu()
-            torch.save(proprety_tensor,property_path)
+            property_tensor = torch.stack([network_properties(g) for g in self.graphs],dim = 0).cpu()
+            torch.save(property_tensor,property_path)
         else:
             property_tensor = torch.load(property_path)
         return property_tensor

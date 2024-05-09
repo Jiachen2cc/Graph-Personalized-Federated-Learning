@@ -127,7 +127,6 @@ def no_negtive(adj):
 def normalize(adj, mode, sparse=False):
     EOS = 1e-10
     if not sparse:
-        # 对称形式的拉普拉斯归一化和直接用行向量归一化
         if mode == "sym":
             inv_sqrt_degree = 1. / (torch.sqrt(adj.sum(dim=1, keepdim=False)) + EOS)
             #inv_sqrt_degree = torch.diag(inv_sqrt_degree)

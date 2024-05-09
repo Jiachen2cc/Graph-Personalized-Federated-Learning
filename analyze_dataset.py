@@ -196,12 +196,14 @@ def cons_feature(datasets):
     return simi
 
 def pg_analysis(clients):
-    cons_feature([c.train_data for c in clients])
-    cons_feature([c.sample_uniform() for c in clients])
+    #cons_feature([c.train_data for c in clients])
+    #cons_feature([c.sample_uniform() for c in clients])
     
 
-    fm = torch.stack([pfeature(c.train_data)[0] for c in clients],dim = 0)
-    fstd = torch.stack([pfeature(c.train_data)[1] for c in clients],dim = 0)
+    #fm = torch.stack([pfeature(c.train_data)[0] for c in clients],dim = 0)
+    #fstd = torch.stack([pfeature(c.train_data)[1] for c in clients],dim = 0)
+    
+    fm = torch.stack([c.train_data_property for c in clients], dim = 0)
     
     fmean = torch.mean(fm,dim = 0)
     #fres = (fm - fmean)**2
