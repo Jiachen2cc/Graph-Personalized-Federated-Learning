@@ -48,20 +48,14 @@ class graph_constructor:
         
         # compute row wise softmax to normalize the sharing weight
         adj = F.softmax(adj, dim = 1)
-        #print('before discretion')
-        #print(adj)
-        if self.args.discrete:
-            thresh = 0.1 * (1/self.args.num_clients)
-            
-            #mask = (adj >= thresh).float().to(adj.device)
+        if self.args.discrete == 'thresh':
+            thresh = self.args.dthresh * (1/self.args.num_clients)
             adj = (adj >= thresh).float().to(adj.device)
-            #adj = mask*adj
-            #print('after discretion')
-            #print(adj)
             adj = normalize(adj,'row')
-        #print('applied graph')
-        #print(adj)
-        # adj = torch.sigmoid(adj)
+        elif self.args.discrete == 'ratio':
+            k = int(self.args.dratio * adj.size(0))
+            mask = topk_mask(adj,k)
+            adj = normalize(mask,'row')
         return adj
             
     def gen_graph(self, features, A):

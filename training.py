@@ -49,11 +49,14 @@ def analyze_train(clients,args):
         stats = np.array(client.eval_stats['testAccs'])
         avg_stats = avg_stats + stats
         #rstats = np.array(client.eval_stats['testRocs'])
-        allAccs[client.name]['best_test_acc'] = np.max(stats)
+        #allAccs[client.name]['best_test_acc'] = np.max(stats)
         allAccs[client.name]['final_test_acc'] = stats[-1]
         final_accs[client.name] = stats[-COUNT_LEN:]
         #final_rocs[client.name] = rstats[-(COUNT_LEN+1):-1]
     avg_stats = avg_stats/len(clients)
+    best_ind = np.argmax(avg_stats)
+    for c in clients:
+        allAccs[c.name]['BMTA'] = c.eval_stats['testAccs'][best_ind]
     if args.plot_train:
         plot_acc(avg_stats,args)
     best_final = best_final_acc(final_accs,COUNT_LEN)
@@ -81,7 +84,6 @@ def plot_acc(avg_acc,args):
     
     np.save(np_file,avg_acc)
     
-
 def run_selftrain_GC(clients, server, args):
     assert isinstance(server,Server)
 
@@ -89,58 +91,13 @@ def run_selftrain_GC(clients, server, args):
     for client in clients:
         client.download_from_server(args,server)
     
-    feature_dim = clients[0].data[0].x.shape[1] if args.setting == 'single' else args.hidden
-    '''
-    graph_batch = random_graphbatch(20,20,40,feature_dim,seed = 0)
-    
-    client_similarity = torch.zeros((len(clients),len(clients)))
-    embed_similarity = torch.zeros((len(clients),len(clients)))
-
-    oparamsim = torch.zeros((args.num_clients,args.num_clients))
-    paramsim = torch.zeros((args.num_clients,args.num_clients))
-    '''
     for cround in range(1,args.num_rounds + 1):
         # training
         for client in clients:
             client.local_train(1)
             client.evaluate()
 
-        #analyze the similarity 
-        '''
-        embed = server.graph_modelembedding(clients,graph_batch.to(args.device))
-        params = [{k:copy.deepcopy(client.W[k]) for k in server.W.keys()} for client in clients]
-        ofeature,feature,sim = prepare_features(embed,params,cround,args)
-
-        oparamsim += cos_sim(ofeature.detach().cpu())
-        paramsim += cos_sim(feature.detach().cpu())
-        client_simi = simi_ana(clients,None,server.W.keys())
-        embed_simi = cos_sim(embed)
-        
-        client_similarity += client_simi
-        embed_similarity += embed_simi.cpu()
-        '''
-
-    
-    #print('average similarity')
-    #print('average client similarity')
-    #print(client_similarity/args.num_rounds)
-    #print('average embedding similarity')
-    #print(embed_similarity/args.num_rounds)
     allAccs = analyze_train(clients,args)
-    '''
-    clients[0].download_from_server(clients[1])
-    _,acc0 = clients[0].evaluate()
-    _,acc1 = clients[1].evaluate()
-    print('client_0:{:.4f},client_1:{:.4f}'.format(acc0,acc1))
-    '''
-
-    #oparamsim /= args.num_rounds
-    #paramsim /= args.num_rounds
-    #print(oparamsim-paramsim)
-
-    #np.save('client_feature/vanilla_param.npy',oparamsim.numpy())
-    #np.save('client_feature/differential_param.pt',paramsim.numpy())
-
     return allAccs
 
 def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=None, frac=1.0):
@@ -156,7 +113,6 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
         
         for client in clients:
             client.local_train(local_epoch)
-            client.evaluate()
 
         # do not select global model
         if args.global_model:

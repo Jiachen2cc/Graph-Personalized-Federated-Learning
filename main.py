@@ -195,7 +195,7 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
 
 # choose federated parameters
 parser.add_argument('--Federated_mode', type = str, default ='GPFL',
-                        choices = ['Selftraining','FedAvg','FedProx','GPFL','GCFL','Scaffold',
+                        choices = ['self','FedAvg','FedProx','GPFL','GCFL','Scaffold',
                         'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
                         choices = ['uniform','sim','ans','property','randomc'])
@@ -221,9 +221,12 @@ parser.add_argument('--mu',type = float, default = 0.01,
                     help = 'the mu coefficient for fedprox')
 parser.add_argument('--sigmoid',type = int, default = 1,
                     help = 'the activation function for generated graph')
-parser.add_argument('--discrete',type = int, default = 1,
-                    help = 'whether to train a discrete or continual client graph')
-
+parser.add_argument('--discrete',type = str, default = 'ratio',
+                    choices = ['thresh','ratio'])
+parser.add_argument('--dthresh',type = float, default = 0.1,
+                    help = 'the discrete threshold for filtering weak connection')
+parser.add_argument('--dratio',type = float, default = 0.5,
+                    help = 'the discrete ratio for keeping connection')
 # control parameter for ablation study
 # lu : graph learner      | initialization graph update
 # l  : only graph learner | no graph update
@@ -312,7 +315,7 @@ def training_round(init_clients,init_server,args):
         if args.Federated_mode == 'GPFL':
             res,avgA = process_gpfl(copy.deepcopy(idx_clients), copy.deepcopy(init_server), args)
             cross_A.append(avgA)
-        elif args.Federated_mode == 'Selftraining':
+        elif args.Federated_mode == 'self':
             res = process_selftrain(clients=copy.deepcopy(idx_clients), server=copy.deepcopy(init_server), args = args)
         elif args.Federated_mode == 'FedAvg':
             res = process_fedavg(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)

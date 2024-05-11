@@ -87,3 +87,12 @@ def normalize(adj, mode, sparse=False):
         new_values = adj.values() * D_value
 
         return torch.sparse.FloatTensor(adj.indices(), new_values, adj.size())
+    
+    
+def topk_mask(adj,k):
+    _,indices = torch.topk(adj,k,dim = 1)
+    mask = torch.zero(adj.shape)
+    for i, idx in enumerate(indices):
+        mask[i,idx] = 1
+    return mask
+    
