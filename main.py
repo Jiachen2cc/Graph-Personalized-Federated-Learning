@@ -10,7 +10,7 @@ import pandas as pd
 
 import setupGC
 from training import *
-from analyze_dataset import structure_sim,pg_analysis,label_dis
+#from analyze_dataset import structure_sim,pg_analysis,label_dis
 from client import Client_GC
 from utils import cross_res_analyze
 from graph_utils import normalize
@@ -19,6 +19,7 @@ import time
 from dataprocess.setup import SetUp
 from fedamp.train import process_fedamp
 from pfedgraph_cosine.train import process_pfedgraph
+from gpfl.train import process_gpfl
 
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -33,11 +34,12 @@ def set_seed(seed):
     torch.backends.cudnn.benckmark = False
     torch.backends.cudnn.deterministic = True
 
+'''
 def process_gpfl(clients, server,args):
     # structure federated learning based on the gradients of the model
     allAccs = run_gpfl(clients, server, args.num_rounds, args.local_epoch, args)
     return allAccs
-
+'''
 def process_selftrain(clients, server,args):
     #print("Self-training ...")
     allAccs = run_selftrain_GC(clients, server,args)
@@ -62,6 +64,7 @@ def process_scaffold(clients,server,args):
     allAccs = run_scaffold(clients, server, args.num_rounds,args.local_epoch,args)
     return allAccs
 
+
 def process_gcfl(clients, server, args):
     allAccs = run_gcfl(clients, server, args.num_rounds, args.local_epoch, args.epsilon1, args.epsilon2,args)
     return allAccs
@@ -69,7 +72,6 @@ def process_gcfl(clients, server, args):
 def process_fedstar(clients,server,args):
     allAccs = run_fedstar(clients, server, args.num_rounds,args.local_epoch,args)
     return allAccs
-
 
 
 def process_gcflplusdWs(clients, server,args):
@@ -139,8 +141,9 @@ parser.add_argument('--repeat_num',type = int, default = 1,
                     help = 'the repeat times for main experiment')
 
 # server & local model sharing options
-parser.add_argument('--server_sharing',type = str, default = 'full',
-                        choices = ['center','full'])
+#parser.add_argument('--server_sharing',type = str, default = 'full',
+#                        choices = ['center','full'])
+
 # GCFL parameters
 parser.add_argument('--seq_length', help='the length of the gradient norm sequence',
                         type=int, default=10)
@@ -169,8 +172,8 @@ parser.add_argument('--serveralpha', type = float, default = 0.95,
                     help = 'server prop alpha')
 parser.add_argument('--serverbeta',type = float, default = 0.1,
                     help = 'parameter replace rate')
-parser.add_argument('--interval', type = int, default = 1,
-                    help = 'the client graph update interval')
+#parser.add_argument('--interval', type = int, default = 1,
+#                    help = 'the client graph update interval')
 parser.add_argument('--mix_rate',type = float,default = 0)
 
 #FedStar Parameters
@@ -186,7 +189,6 @@ parser.add_argument('--type_init', help='the type of positional initialization',
 parser.add_argument('--lam', type = float, default = 0.01,
                     help = 'hyper parameters in local objective')
 parser.add_argument('--fedgraphalpha', type = float, default = 0.8)
-
 
 '''
 # node downsample configuration
@@ -217,13 +219,13 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
                     help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
-parser.add_argument('--Federated_mode', type = str, default ='pfedgraph',
+parser.add_argument('--Federated_mode', type = str, default ='GPFL',
                         choices = ['Selftraining','FedAvg','FedProx','GPFL','GCFL','Scaffold',
                         'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
                         choices = ['uniform','sim','ans','property','randomc'])
-parser.add_argument('--graph_eps', type = float, default = 0.3,
-                        help = 'the eps term for initial client graph normalization')
+#parser.add_argument('--graph_eps', type = float, default = 0.3,
+#                        help = 'the eps term for initial client graph normalization')
 parser.add_argument('--graph_rate', type = float, default = 0.05,
                     help = 'the update rate of the initial graph')
 parser.add_argument('--para_choice', type = str, default = 'param',
@@ -234,7 +236,7 @@ parser.add_argument('--input_choice', type = str, default = 'diff',
                         choices = ['whole','gradient','seq','diff','ans','normalize'])
 parser.add_argument('--diff_rate',type = float, default = 1,
                     help = 'the remove rate of mean value')
-parser.add_argument('--timelen', type = int, default = 20)
+#parser.add_argument('--timelen', type = int, default = 20)
 
 
 # update model sharing mechanism
@@ -244,12 +246,14 @@ parser.add_argument('--sharing_mode', type = str, default = 'gradient',
 # feature normalization method
 parser.add_argument('--norm_way', type = str, default = 'F_norm',
                         choices = ['F_norm','minmax_norm',''])
+
 parser.add_argument('--global_model', type = int, default = 0,
                     help = 'we do not need a global model in cross-dataset setting')
 parser.add_argument('--sround', type = int, default = 0,
                     help = 'the start round of normal sharing')
 parser.add_argument('--pshare', type = str, default = 'uniform',
                     choices = ['null','uniform','init'],help = 'the sharing method before normal sharing start')
+
 
 # the mu coefficient for fedprox
 parser.add_argument('--mu',type = float, default = 0.01,

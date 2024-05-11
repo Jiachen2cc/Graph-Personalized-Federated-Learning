@@ -20,7 +20,7 @@ def prepare_features(embed,param,args):
 
     # apply transforms to parameters | get normalized features(each sample scaled to norm = 1)
     if args.input_choice == 'diff':
-        choices = {k: F.normalize(marginal(f,args.diff_rate),p=2,dim=1) for k,f in choices.items()}
+        choices = {k: F.normalize(marginal(f),p=2,dim=1) for k,f in choices.items()}
     
     # compute similarity
     sims = {k: torch.matmul(f,f.T) for k,f in choices.items()}

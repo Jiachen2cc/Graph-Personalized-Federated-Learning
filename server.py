@@ -4,8 +4,7 @@ import random
 import networkx as nx
 from dtaidistance import dtw
 #from argument_setting import args
-from init_client_graph import dist_simi_metrix
-from federated import graph_gen,graph_dic,graph_aggregate,bi_graph_dic
+#from delete import graph_gen,graph_dic,graph_aggregate,bi_graph_dic
 import copy
 from queue import Queue
 from graph_utils import normalize,flattenw
@@ -175,7 +174,7 @@ class Server():
         res_matrix = torch.cat(res_embed,dim = 0)
         
         return res_matrix
-            
+    ''' 
     def graph_build(self, client_dWs, A, args, norm = True):
 
         # get the client gradient 
@@ -200,7 +199,7 @@ class Server():
         #print('graph quality:{:.4f}'.format(quality))
 
         return res_A
-    
+    '''
     def graph_update(self, clients, clients_dWs, A, args):
          
         #1 flatten corresponding parameters and perform aggregating 
@@ -271,13 +270,13 @@ class Server():
         tuning aggregation result
 
         """
-        
+    '''
     def tograph_update(self, clients, clients_Ws, A, args):
 
         res_Ws = graph_aggregate(clients_Ws,A,args)
         for client,res_W in zip(clients,res_Ws):
             client.download_weight(res_W)
-        
+      
     def bigraph_update(self, clients, clients_Ws, A,args):
 
         init_A = A.to(args.device)
@@ -287,7 +286,7 @@ class Server():
             client.download_weight(res_W)
         
         return res_A
-
+    '''
     def scaffold_update(self, clients, local_epoch,args):
         
         # haven't implement trianing with client sampling

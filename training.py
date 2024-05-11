@@ -3,26 +3,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from server import Server
 import torch
-from queue import Queue
+from queue import Queue  
 import copy
 from analyze_client import simi_ana,clf_ana,cos_sim
 from analyze_dataset import structure_sim,pg_analysis,label_dis,get_meanfeature
-from analyze_graphs import fake_graph
 from server import group_sub
-from init_client_graph import dist_simi_metrix
-from graph_utils import para2metrix,normalize
-from functest import random_graphbatch,feature_enlarge
-from federated import generate_adj
+#from graph_utils import para2metrix,normalize
+#from functest import random_graphbatch,feature_enlarge
+#from delete import generate_adj
 from torch.utils.tensorboard import SummaryWriter
 from analyze_client import graph_diff
-from recover_model import GCN_DAE
-from client import Client_GC
 from utils import graph_truncate,mean_diff,cluster_uniform_graph,random_con_graph
 import math
 from graph_utils import normalize,update_graph_matrix,graph_aggregate
 import torch.nn.functional as F
 from tqdm import tqdm
-from utils import rule_selector
 from clientgraph.graph_cons import graph_constructor
 
 
@@ -301,7 +296,6 @@ def run_pFedGraph(clients, server: Server, COMMUNICATION_ROUNDS, local_epoch, ar
     
     return allAccs
     
-
 def run_scaffold(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, args, samp = None, frac = 1.0):
 
     for client in clients:
@@ -326,7 +320,6 @@ def run_scaffold(clients, server: Server, COMMUNICARION_ROUNDS, local_epoch, arg
     allAccs = analyze_train(clients,args)
 
     return allAccs
-
 
 def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=None, frac=1.0):
     for client in clients:
@@ -364,15 +357,15 @@ def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=N
     
     return allAccs
 
-
-def pre_finigraph(tag,clients,eps,args):
+def pre_finigraph(tag,clients,args):
     # prepare all the initial client graph except for 
     # distance & similarity(these two needed to be computed in each round)
-
+    '''
     if tag in ['degree_disb','triangle_disb','hop2_disb']:
         distributions = [client.structure_feature_analysis(tag) for client in clients]
         init_A = structure_sim(distributions,eps)
-    elif tag == 'uniform':
+    '''
+    if tag == 'uniform':
         num = len(clients)
         init_A = torch.ones(num,num)/num
     elif tag == 'property':
@@ -387,7 +380,7 @@ def pre_finigraph(tag,clients,eps,args):
     
     return init_A
 
-def pre_vinigraph(init_A,tag,param,sim,eps,cround,lastA,args):
+def pre_vinigraph(init_A,tag,param,sim,lastA,args):
     
     flex = ['distance']
     # filter last graph to avoid introducing wrong information
@@ -404,11 +397,13 @@ def pre_vinigraph(init_A,tag,param,sim,eps,cround,lastA,args):
         #print(cround)
         #print(torch.sum((A-init_A)**2))
         #A = init_A
-    elif tag == 'distance':
-        A = dist_simi_metrix(param,eps)
     elif tag == 'sim':
         #print('correct logic!')
         A = sim
+    '''
+    elif tag == 'distance':
+        A = dist_simi_metrix(param,eps)
+    '''
     #A = normalize(graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2)),'sym')
     #A = graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2))
     mask = (A >= 0).float().to(A.device)
@@ -417,25 +412,7 @@ def pre_vinigraph(init_A,tag,param,sim,eps,cround,lastA,args):
     #interval_print(A,cround,40,'initial client graph')
 
     return A
-
-def get_finalgraph(args,feature,init_A,cround,clients):
-    nclient = init_A.shape[0]
-    if args.para_choice not in ['ans','self','avg']:
-        if 'l' in args.ablation:
-            _,A,_ = generate_adj(clients,feature,init_A,args,None)
-        else:
-            A = init_A
-    elif args.para_choice == 'ans':
-        A = cluster_uniform_graph(nclient,args.num_splits)
-    elif args.para_choice == 'self':
-        A = torch.eye(nclient)
-    elif args.para_choice == 'avg':
-        A = torch.ones((nclient,nclient))/nclient
-    elif args.para_choice == 'label':
-        A = label_dis(clients,args.graph_eps)
-    #interval_print(A,cround,40,'result client graph')
-    return A
-
+'''
 def prepare_features(embed,param,cround,args):
     # param to metrix
     cparam = (para2metrix(param,None,args.compress_dim)).to(args.device)
@@ -454,6 +431,7 @@ def prepare_features(embed,param,cround,args):
     return ofeature[k],choices[k],sims[args.graph_choice]
 
 # try different sharing ways before paramter converge to stable value
+
 def pre_sharing(server,clients,agg_dWs,method,init_A,args):
 
     if method == 'null':
@@ -484,7 +462,7 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
     #q = Queue(maxsize = 5)
 
     # compute the initial graph 
-    init_A = pre_finigraph(args.initial_graph,clients,args.graph_eps,args)
+    init_A = pre_finigraph(args.initial_graph,clients,args)
     property_feature = get_meanfeature(clients)
     nclient = len(clients)
 
@@ -521,7 +499,7 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
             if args.initial_graph == 'property' and cround == 1:
                 #print(property_feature.shape)
                 init_A = rule_selector(property_feature,sim.detach().cpu())
-            init_A = pre_vinigraph(init_A, args.initial_graph,graph_dWs,sim,args.graph_eps,cround,A,args).to(args.device)
+            init_A = pre_vinigraph(init_A, args.initial_graph,graph_dWs,sim,A,args).to(args.device)
             init_A = normalize(init_A,'sym')
             
             #print('initial graph')
@@ -568,7 +546,8 @@ def run_gpfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, args):
     #print('average sharing client graph')
     #print(average_A)
     return allAccs,average_A
-               
+'''
+            
 def run_gcfl(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, EPS_2,args):
     assert isinstance(server,Server)
 

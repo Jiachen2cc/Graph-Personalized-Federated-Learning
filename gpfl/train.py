@@ -53,7 +53,7 @@ def process_gpfl(clients,server,args):
                                    sim.detach().cpu())
         else:
             init_A = round_update(A,sim,args.graph_rate)
-        init_A = normalize(init_A,'sym')
+        init_A = normalize(init_A,'sym').to(args.device)
         # 3 construct client graph
         client_graph_cons = graph_constructor(feature.shape[1],args)
         A = client_graph_cons.graph_based_aggregation(feature, init_A)

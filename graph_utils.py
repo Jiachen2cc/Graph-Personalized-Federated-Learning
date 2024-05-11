@@ -6,7 +6,7 @@ import torch
 import torch.nn.functional as F
 from sklearn.neighbors import kneighbors_graph
 import copy
-from model_compression import continous_compress,compress_shape
+#from model_compression import continous_compress,compress_shape
 import cvxpy as cp
 
 
@@ -200,7 +200,7 @@ def state_dict2metrix(models_state):
 
     return param_metrix
 
-
+'''
 def para2metrix(models_state,cmode,cdim):
 
     key_shapes = [list(param.data.shape) for _,param in models_state[0].items()]
@@ -217,7 +217,7 @@ def para2metrix(models_state,cmode,cdim):
         compress_param = torch.avg_pool1d(param_metrix,stri,stri)
     
     return compress_param
-
+'''
 def flattenw(w):
     #return torch.cat([v.flatten() for v in w.data()])
     return torch.cat([v.flatten() for v in w.values()])
