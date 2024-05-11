@@ -86,9 +86,6 @@ parser.add_argument('--setting',type = str, default = 'single',
                         choices = ['single','multi'])
 parser.add_argument('--device', type=str, default='cpu',
                         help='CPU / GPU device.')
-# parameter for local model training
-parser.add_argument('--num_repeat', type=int, default= 5,
-                        help='number of repeating rounds to simulate;')
 parser.add_argument('--num_rounds', type=int, default= 200,
                         help='number of rounds to simulate;')
 parser.add_argument('--local_epoch', type=int, default=1,
@@ -140,9 +137,6 @@ parser.add_argument('--test_fold', type = int, default = 0,
 parser.add_argument('--repeat_num',type = int, default = 1,
                     help = 'the repeat times for main experiment')
 
-# server & local model sharing options
-#parser.add_argument('--server_sharing',type = str, default = 'full',
-#                        choices = ['center','full'])
 
 # GCFL parameters
 parser.add_argument('--seq_length', help='the length of the gradient norm sequence',
@@ -153,13 +147,10 @@ parser.add_argument('--epsilon2', help='the threshold epsilon2 for GCFL',
                         type=float, default=0.1)
 
 # GPFL parameters
-parser.add_argument('--gen_mode', type = str, default = 'GAEAT',
-                    help = 'the type of graph generator')
 parser.add_argument('--glr', type = float, default = 1e-3,
                     help = 'the learning rate of graph generator')
 parser.add_argument('--gweight_decay', type = float, default = 5e-4,
                     help = 'the weight decay of graph generator')
-parser.add_argument('--mask_ratio', type = float, default = 0.)
 parser.add_argument('--loss_gama', type = float, default = 0.5)
 parser.add_argument('--compress_mode', type = str, default = 'shape',
                     help = 'the parameter compression model',
@@ -172,9 +163,6 @@ parser.add_argument('--serveralpha', type = float, default = 0.95,
                     help = 'server prop alpha')
 parser.add_argument('--serverbeta',type = float, default = 0.1,
                     help = 'parameter replace rate')
-#parser.add_argument('--interval', type = int, default = 1,
-#                    help = 'the client graph update interval')
-parser.add_argument('--mix_rate',type = float,default = 0)
 
 #FedStar Parameters
 parser.add_argument('--n_rw', type=int, default=16,
@@ -190,20 +178,7 @@ parser.add_argument('--lam', type = float, default = 0.01,
                     help = 'hyper parameters in local objective')
 parser.add_argument('--fedgraphalpha', type = float, default = 0.8)
 
-'''
-# node downsample configuration
-parser.add_argument('--downsample_rate', type = float, default = 1,
-                    help = 'the downsample rate for node number')
 
-# data downsample configuration
-parser.add_argument('--data_down', type = float, default = 1,
-                    help = 'the downsample rate fot the whole dataset')
-
-# dataset heterogeneity modifications
-parser.add_argument('--hetero',type = int, default = 0,
-                    help = 'choose whether to strengthen the hetergeneity between datasets')
-parser.add_argument('--target_dataset', type = str, default = 'IMDB-BINARY')
-'''
 parser.add_argument('--split_way', type = str, default = 'blabel_skew',
                     help = ' the split methods for global datasets',choices = ['toy','label_skew','blabel_skew',
                                                                                'random','fix_num'])
@@ -224,8 +199,6 @@ parser.add_argument('--Federated_mode', type = str, default ='GPFL',
                         'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
                         choices = ['uniform','sim','ans','property','randomc'])
-#parser.add_argument('--graph_eps', type = float, default = 0.3,
-#                        help = 'the eps term for initial client graph normalization')
 parser.add_argument('--graph_rate', type = float, default = 0.05,
                     help = 'the update rate of the initial graph')
 parser.add_argument('--para_choice', type = str, default = 'param',
@@ -234,10 +207,6 @@ parser.add_argument('--graph_choice', type = str,default = 'embed',
                     help = 'the choice for parameterize the initial graph')
 parser.add_argument('--input_choice', type = str, default = 'diff',
                         choices = ['whole','gradient','seq','diff','ans','normalize'])
-parser.add_argument('--diff_rate',type = float, default = 1,
-                    help = 'the remove rate of mean value')
-#parser.add_argument('--timelen', type = int, default = 20)
-
 
 # update model sharing mechanism
 parser.add_argument('--sharing_mode', type = str, default = 'gradient',
@@ -246,14 +215,6 @@ parser.add_argument('--sharing_mode', type = str, default = 'gradient',
 # feature normalization method
 parser.add_argument('--norm_way', type = str, default = 'F_norm',
                         choices = ['F_norm','minmax_norm',''])
-
-parser.add_argument('--global_model', type = int, default = 0,
-                    help = 'we do not need a global model in cross-dataset setting')
-parser.add_argument('--sround', type = int, default = 0,
-                    help = 'the start round of normal sharing')
-parser.add_argument('--pshare', type = str, default = 'uniform',
-                    choices = ['null','uniform','init'],help = 'the sharing method before normal sharing start')
-
 
 # the mu coefficient for fedprox
 parser.add_argument('--mu',type = float, default = 0.01,

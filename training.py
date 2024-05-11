@@ -2,22 +2,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from server import Server
-import torch
-from queue import Queue  
+import torch  
 import copy
 from analyze_client import simi_ana,clf_ana,cos_sim
-from analyze_dataset import structure_sim,pg_analysis,label_dis,get_meanfeature
-from server import group_sub
-#from graph_utils import para2metrix,normalize
-#from functest import random_graphbatch,feature_enlarge
-#from delete import generate_adj
-from torch.utils.tensorboard import SummaryWriter
-from analyze_client import graph_diff
-from utils import graph_truncate,mean_diff,cluster_uniform_graph,random_con_graph
-import math
 from graph_utils import normalize,update_graph_matrix,graph_aggregate
 import torch.nn.functional as F
-from tqdm import tqdm
 from clientgraph.graph_cons import graph_constructor
 
 
@@ -356,15 +345,10 @@ def run_fedprox(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=N
     allAccs = analyze_train(clients,args)
     
     return allAccs
-
+'''
 def pre_finigraph(tag,clients,args):
     # prepare all the initial client graph except for 
     # distance & similarity(these two needed to be computed in each round)
-    '''
-    if tag in ['degree_disb','triangle_disb','hop2_disb']:
-        distributions = [client.structure_feature_analysis(tag) for client in clients]
-        init_A = structure_sim(distributions,eps)
-    '''
     if tag == 'uniform':
         num = len(clients)
         init_A = torch.ones(num,num)/num
@@ -400,10 +384,6 @@ def pre_vinigraph(init_A,tag,param,sim,lastA,args):
     elif tag == 'sim':
         #print('correct logic!')
         A = sim
-    '''
-    elif tag == 'distance':
-        A = dist_simi_metrix(param,eps)
-    '''
     #A = normalize(graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2)),'sym')
     #A = graph_truncate(A.cpu(),math.ceil((A.shape[1]+1)/2))
     mask = (A >= 0).float().to(A.device)
@@ -412,7 +392,7 @@ def pre_vinigraph(init_A,tag,param,sim,lastA,args):
     #interval_print(A,cround,40,'initial client graph')
 
     return A
-'''
+
 def prepare_features(embed,param,cround,args):
     # param to metrix
     cparam = (para2metrix(param,None,args.compress_dim)).to(args.device)
