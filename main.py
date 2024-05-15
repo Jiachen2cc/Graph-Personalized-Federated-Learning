@@ -75,7 +75,6 @@ def process_fedstar(clients,server,args):
 
 
 def process_gcflplusdWs(clients, server,args):
-
     allAccs = run_gcflplus_dWs(clients, server, args.num_rounds, args.local_epoch, args.epsilon1, args.epsilon2, args.seq_length, args.standardize,args)
     return allAccs
 
@@ -140,7 +139,7 @@ parser.add_argument('--repeat_num',type = int, default = 1,
 
 # GCFL parameters
 parser.add_argument('--seq_length', help='the length of the gradient norm sequence',
-                        type=int, default=10)
+                        type=int, default = 10)
 parser.add_argument('--epsilon1', help='the threshold epsilon1 for GCFL',
                         type=float, default=0.01)
 parser.add_argument('--epsilon2', help='the threshold epsilon2 for GCFL',
@@ -173,6 +172,9 @@ parser.add_argument('--n_ones', type=int, default=16,
                         help='Size of position encoding (ones).')
 parser.add_argument('--type_init', help='the type of positional initialization',
                         type=str, default='rw_dg', choices=['rw', 'dg', 'rw_dg', 'ones'])
+# fedamp parameters
+parser.add_argument('--amp_lam', type = float, default = 1,
+                    help = 'sharing parameter for fedamp')
 # pFedGraph parameters
 parser.add_argument('--lam', type = float, default = 0.01,
                     help = 'hyper parameters in local objective')
@@ -194,11 +196,11 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
                     help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
-parser.add_argument('--Federated_mode', type = str, default ='GPFL',
+parser.add_argument('--Federated_mode', type = str, default ='GCFL',
                         choices = ['self','FedAvg','FedProx','GPFL','GCFL','Scaffold',
                         'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
-                        choices = ['uniform','sim','ans','property','randomc'])
+                        choices = ['uniform','sim','ans','property','randomc','distri'])
 parser.add_argument('--graph_rate', type = float, default = 0.05,
                     help = 'the update rate of the initial graph')
 parser.add_argument('--para_choice', type = str, default = 'param',
@@ -221,11 +223,11 @@ parser.add_argument('--mu',type = float, default = 0.01,
                     help = 'the mu coefficient for fedprox')
 parser.add_argument('--sigmoid',type = int, default = 1,
                     help = 'the activation function for generated graph')
-parser.add_argument('--discrete',type = str, default = 'ratio',
+parser.add_argument('--discrete',type = str, default = 'thresh',
                     choices = ['thresh','ratio'])
 parser.add_argument('--dthresh',type = float, default = 0.1,
                     help = 'the discrete threshold for filtering weak connection')
-parser.add_argument('--dratio',type = float, default = 0.5,
+parser.add_argument('--dratio',type = float, default = 0.1,
                     help = 'the discrete ratio for keeping connection')
 # control parameter for ablation study
 # lu : graph learner      | initialization graph update
@@ -290,47 +292,49 @@ if args.repeat is not None:
 def preparation(args):
 
     #splitedData = setupGC.prepareData_oneDS(args.num_clients,args,seed=args.seed)
+    start = time.time()
     splitedData = SetUp(args).splited_graphs
     init_clients, init_server, init_idx_clients = setupGC.setup_devices(splitedData, args)
-
+    print('preparation cost:{:.4f}'.format(time.time() - start))
     return init_clients, init_server
     
 def training_round(init_clients,init_server,args):
     
-    
-    idx_clients = copy.deepcopy(init_clients)
+    #start = time.time()
+    #idx_clients = copy.deepcopy(init_clients)
+    #print('copy time:{:.4f}'.format(time.time() - start))
     cross_results,cross_A = [],[]
     tarfold = range(args.fold_num) if args.test_fold == args.fold_num else [args.test_fold] 
     for idx in tarfold:
 
         # split the train and test dataset
-        for client in idx_clients:
+        start = time.time()
+        for client in init_clients:
             assert isinstance(client,Client_GC)
             client.split_traintest(idx,args.batch_size,args)
-        
         #analyze the propeties of all the datasets
         #pg_analysis(idx_clients)
         #exit(0)
 
         if args.Federated_mode == 'GPFL':
-            res,avgA = process_gpfl(copy.deepcopy(idx_clients), copy.deepcopy(init_server), args)
+            res,avgA = process_gpfl(copy.deepcopy(init_clients), copy.deepcopy(init_server), args)
             cross_A.append(avgA)
         elif args.Federated_mode == 'self':
-            res = process_selftrain(clients=copy.deepcopy(idx_clients), server=copy.deepcopy(init_server), args = args)
+            res = process_selftrain(clients=copy.deepcopy(init_clients), server=copy.deepcopy(init_server), args = args)
         elif args.Federated_mode == 'FedAvg':
-            res = process_fedavg(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
+            res = process_fedavg(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'FedProx':
-            res = process_fedprox(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server), args = args)
+            res = process_fedprox(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server), args = args)
         elif args.Federated_mode == 'Scaffold':
-            res = process_scaffold(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
+            res = process_scaffold(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'GCFL':
-            res = process_gcflplusdWs(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
+            res = process_gcflplusdWs(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'fedstar':
-            res = process_fedstar(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
+            res = process_fedstar(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'pfedgraph':
-            res = process_pfedgraph(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
+            res = process_pfedgraph(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'fedamp':
-            res = process_fedamp(clients = copy.deepcopy(idx_clients), server = copy.deepcopy(init_server),args = args)
+            res = process_fedamp(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         cross_results.append(res)
         #break
         

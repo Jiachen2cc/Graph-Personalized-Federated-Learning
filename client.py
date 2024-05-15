@@ -109,15 +109,15 @@ class Client_GC():
         self.dataLoader['train'] = DataLoader(train, Batchsize, True)
         self.dataLoader['test'] = DataLoader(test, Batchsize, True)
         
-        self.train_data = cp.deepcopy(train)
-        self.test_data = cp.deepcopy(test)
+        self.train_data = train
+        self.test_data = test
 
         #return struc_f
     
     def get_labeldis(self):
 
         labels = np.array([g.y.item() for g in self.train_data])
-        ldis = [np.sum(labels == i) for i in range(1,int(np.max(labels)+1))]
+        ldis = [np.sum(labels == i) for i in range(0,int(np.max(labels)+1))]
         return ldis
 
     def dict_extend(self,x,y):

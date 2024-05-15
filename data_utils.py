@@ -62,8 +62,8 @@ hasattr_datasets = ['AIDS','BZR','COX2','DHFR','ENZYMES','PROTEINS']
 gcfl_param = {
     'PROTEINS': [0.03,0.06],
     'IMDB-BINARY': [0.025,0.045],
-    'NCI1':[0.05,0.5], #[0.04,0.08],
-    'Yeast':[0.05,0.1],
+    'NCI1':[0.1,0.21], #[0.04,0.08],
+    'Yeast':[0.1,0.2],
     'molecules':[0.07,0.28],
     'biochem':[0.07,0.35],
     'mix':[0.08,0.04]

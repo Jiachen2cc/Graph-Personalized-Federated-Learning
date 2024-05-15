@@ -23,6 +23,11 @@ def round_update(lastA, embedsim, graph_rate):
     
     mask = (A >= 0).float().to(A.device)
     return mask*A
+
+def prepare_fixed_graph(clients,args):
+    label_dis = torch.stack([torch.tensor(c.get_labeldis()) for c in clients], dim = 0).float()
+    disg = distribution_graph(label_dis)
+    return disg
     
 
 def process_gpfl(clients,server,args):
@@ -56,7 +61,10 @@ def process_gpfl(clients,server,args):
         init_A = normalize(init_A,'sym').to(args.device)
         # 3 construct client graph
         client_graph_cons = graph_constructor(feature.shape[1],args)
-        A = client_graph_cons.graph_based_aggregation(feature, init_A)
+        if args.initial_graph == 'distri':
+            A = normalize(prepare_fixed_graph(clients,args).to(args.device),'row')
+        else:
+            A = client_graph_cons.graph_based_aggregation(feature, init_A)
         
         # 4 graph-guided model aggregation
         [client.reset() for client in clients]

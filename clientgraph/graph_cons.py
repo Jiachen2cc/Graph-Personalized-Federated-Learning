@@ -77,31 +77,6 @@ class graph_constructor:
         self.train(features, A)
         client_graph = self.gen_graph(features, A)
         sharing_graph = self.postprocess(client_graph)
-        '''
-        keys,key_shapes = [],[]
-        param_metrix = state_dict2metrix(models_state)
-        for key, param in models_state[0].items():
-            keys.append(key)
-            key_shapes.append(list(param.data.shape))
-        
-        aggregated_param = torch.mm(sharing_graph, param_metrix)
-        for i in range(args.layers - 1):
-            aggregated_param = torch.mm(sharing_graph, aggregated_param)
-        new_param_matrix = ((self.args.serveralpha * aggregated_param) + 
-                            ((1 - self.args.serveralpha) * param_metrix))
-        
-        models_dic = copy.deepcopy(models_state)
-        new_param_matrix = new_param_matrix.to(args.device)
-        # reconstract parameter
-        for i in range(len(models_dic)):
-            pointer = 0
-            for k in range(len(keys)):
-                num_p = 1
-                for n in key_shapes[k]:
-                    num_p *= n
-                models_dic[i][keys[k]] = new_param_matrix[i][pointer:pointer + num_p].reshape(key_shapes[k])
-                pointer += num_p
-        '''
         return sharing_graph
             
         

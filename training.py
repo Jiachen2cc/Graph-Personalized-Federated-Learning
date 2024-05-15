@@ -115,10 +115,7 @@ def run_fedavg(clients, server, COMMUNICATION_ROUNDS, local_epoch, args, samp=No
             client.local_train(local_epoch)
 
         # do not select global model
-        if args.global_model:
-            selected_clients = clients[:-1]
-        else:
-            selected_clients = clients
+        selected_clients = clients
     
         # analyze client.W[k]
         clients_W = []
@@ -636,9 +633,10 @@ def run_gcflplus_dWs(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, 
         for idc in cluster_indices:
             max_norm = server.compute_max_update_norm([clients[i] for i in idc])
             mean_norm = server.compute_mean_update_norm([clients[i] for i in idc])
+            #print("cluster {}, mean_norm {:.4f}, max_norm {:.4f}".format(idc,mean_norm,max_norm))
             if mean_norm < EPS_1 and max_norm > EPS_2 and len(idc) > 2 and c_round > 20 \
                     and all(len(value) >= seq_length for value in seqs_grads.values()):
-
+                #print("cluster to be splited {}".format(idc))
                 server.cache_model(idc, clients[idc[0]].W, acc_clients)
 
                 tmp = [seqs_grads[id][-seq_length:] for id in idc]
@@ -659,7 +657,8 @@ def run_gcflplus_dWs(clients, server, COMMUNICATION_ROUNDS, local_epoch, EPS_1, 
 
     for idc in cluster_indices:
         server.cache_model(idc, clients[idc[0]].W, acc_clients)
-
+        
+    #print(cluster_indices)
     allAccs = analyze_train(clients,args)
 
     return allAccs

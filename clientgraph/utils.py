@@ -91,7 +91,7 @@ def normalize(adj, mode, sparse=False):
     
 def topk_mask(adj,k):
     _,indices = torch.topk(adj,k,dim = 1)
-    mask = torch.zero(adj.shape)
+    mask = torch.zeros(adj.shape)
     for i, idx in enumerate(indices):
         mask[i,idx] = 1
     return mask

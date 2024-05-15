@@ -37,14 +37,15 @@ def local_train_fedavg(args, round, nets_this_round, cluster_models, train_local
             
             if round > 0:
                 for param_p, param in zip(cluster_model.parameters(), net.parameters()):
-                    loss += ((cfg['lambda_1'] / 2) * torch.norm((param - param_p)) ** 2)
+                    loss += ((args.amp_lam / 2) * torch.norm((param - param_p)) ** 2)
                 
             loss.backward()
             optimizer.step()
         
     #return ans
 
-
+# aggregate cluster model with client graph
+# then update local model in a proximal manner
 def process_fedamp(clients, server, args):
     
     train_local_dls = [c.dataLoader['train'] for c in clients]

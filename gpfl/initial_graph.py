@@ -6,7 +6,7 @@ from torch_geometric.data import Batch,Data
 import networkx as nx
 import random
 import torch.nn.functional as F
-from gpfl.utils import marginal
+from gpfl.utils import marginal,cossim
 
 def property_graph(property):
     
@@ -24,6 +24,36 @@ def property_graph(property):
     simi = torch.matmul(pfeature,pfeature.T)
     simi = simi * (simi>=0).float()
     return simi
+
+def distribution_graph(dis,thresh = 0.95):
+    # distribution should be a n*d matrix
+    dis = F.normalize(dis.T,p = 2, dim = 0)
+    d = dis.shape[1]
+    sharing = torch.zeros((d,d))
+    for i in range(d):
+        cur = dis[:,i]
+        selected, res = [i],[]
+        for idx in range(d):
+            if idx == i:
+                continue
+            if torch.sum(cur*dis[:,idx]) > thresh:
+                selected.append(idx)
+            else:
+                res.append(idx)    
+        weight = torch.ones(d)
+        if len(res) > 0:
+            p = dis[:,torch.tensor(res)].reshape((dis.shape[0],len(res)))
+            proj = torch.pinverse(p.T@p)@p.T@cur
+            proj = proj*(proj >= 0).float()
+            x = p@proj
+            simi = max(cossim(cur,x),0)
+            # maybe there are more choices for regularization
+            proj = (proj/torch.max(proj))*simi
+            for idx in range(len(res)):
+                weight[res[idx]] = proj[idx]
+        sharing[i,:] = weight
+    
+    return sharing 
 
 def random_graph(size):
     

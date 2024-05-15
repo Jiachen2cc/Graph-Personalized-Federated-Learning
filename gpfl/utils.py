@@ -3,6 +3,10 @@ import torch
 def marginal(feature):
     return feature - torch.mean(feature,dim = 0)
 
+def cossim(x,y):
+    scale = (torch.sum(x**2)*torch.sum(y**2))**0.5
+    return torch.sum(x*y)/scale
+
 def normalize(adj, mode, sparse=False):
     EOS = 1e-10
     if not sparse:
