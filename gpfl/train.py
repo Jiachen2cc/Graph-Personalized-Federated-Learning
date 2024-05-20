@@ -14,12 +14,19 @@ def prepare_global_initial(clients,args):
         return random_graph(args.num_clients)
     return None
 
-def round_update(lastA, embedsim, graph_rate):
-    
-    if lastA is None:
-        A = embedsim
+def round_update(lastA, gfeature, graph_rate,args):
+    if args.construct == 'sim':
+        update_g = gfeature@gfeature.T
     else:
-        A = lastA*(1-graph_rate) + embedsim.to(lastA.device)*graph_rate
+        update_g = distribution_graph(gfeature)
+    
+    if 'u' in args.ablation:
+        if lastA is None:
+            A = update_g
+        else:
+            A = lastA*(1-graph_rate) + update_g.to(lastA.device)*graph_rate
+    else:
+        A = lastA
     
     mask = (A >= 0).float().to(A.device)
     return mask*A
@@ -35,8 +42,9 @@ def process_gpfl(clients,server,args):
     #1 initialization
     [c.download_from_server(args,server) for c in clients]
     init_A, average_A = prepare_global_initial(clients,args), torch.zeros((args.num_clients,args.num_clients))
+    A = init_A
     graph_batch = random_graphbatch(20,clients[0].data[0].x.shape[1],seed = 0)
-    
+    avg_edges = 0
     # loop over each communication round
     for i in range(1,args.num_rounds+1):
         
@@ -50,22 +58,27 @@ def process_gpfl(clients,server,args):
             for c in clients
         ]  
         # 2 prepare client feature initial graph
-        rawfeature,feature,sim = prepare_features(embed,parameter,args)
+        rawfeature,feature,gfeature = prepare_features(embed,parameter,args)
         
         # 2.1 rule-based property selector | round update
-        if i == 1:
+        if i == 1 and args.initial_graph == 'property':
             init_A = rule_selector(torch.stack([c.train_data_property for c in clients], dim = 0),
-                                   sim.detach().cpu())
-        else:
-            init_A = round_update(A,sim,args.graph_rate)
+                                   (gfeature@gfeature.T).detach().cpu())
+        elif i > 1:
+            #if args.update_test == 'a':
+            #    init_A = round_update(A,gfeature,args.graph_rate,args)
+            #else:
+            init_A = round_update(init_A,gfeature,args.graph_rate,args)
+        #print(init_A)
         init_A = normalize(init_A,'sym').to(args.device)
         # 3 construct client graph
         client_graph_cons = graph_constructor(feature.shape[1],args)
         if args.initial_graph == 'distri':
             A = normalize(prepare_fixed_graph(clients,args).to(args.device),'row')
-        else:
+        elif 'l' in args.ablation:
             A = client_graph_cons.graph_based_aggregation(feature, init_A)
-        
+        else:
+            A = init_A
         # 4 graph-guided model aggregation
         [client.reset() for client in clients]
         server.graph_update(clients,
@@ -75,9 +88,11 @@ def process_gpfl(clients,server,args):
         # evaluate and record important info
         [client.evaluate() for client in clients]
         average_A += A.cpu()
+        avg_edges += torch.sum(A > 0).item()
     # evaluate train stage
     allAccs = analyze_train(clients,args) 
     average_A /= args.num_rounds
+    avg_edges /= (len(clients))**2 * args.num_rounds
     return allAccs, average_A  
     
         

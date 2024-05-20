@@ -13,6 +13,7 @@ from dataprocess.utils import *
 from dataprocess.data_split import *
 from dataprocess.data_property import network_properties
 import os
+import time
 
 class SetUp:
     

@@ -150,7 +150,7 @@ parser.add_argument('--glr', type = float, default = 1e-3,
                     help = 'the learning rate of graph generator')
 parser.add_argument('--gweight_decay', type = float, default = 5e-4,
                     help = 'the weight decay of graph generator')
-parser.add_argument('--loss_gama', type = float, default = 0.5)
+parser.add_argument('--loss_gama', type = float, default = 1)
 parser.add_argument('--compress_mode', type = str, default = 'shape',
                     help = 'the parameter compression model',
                     choices = ['continous','discrete','shape'])
@@ -196,7 +196,7 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
                     help = 'the rate for parameterize the Dirichlet distribution')
 
 # choose federated parameters
-parser.add_argument('--Federated_mode', type = str, default ='GCFL',
+parser.add_argument('--Federated_mode', type = str, default ='GPFL',
                         choices = ['self','FedAvg','FedProx','GPFL','GCFL','Scaffold',
                         'fedstar','pfedgraph','fedamp'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
@@ -209,6 +209,8 @@ parser.add_argument('--graph_choice', type = str,default = 'embed',
                     help = 'the choice for parameterize the initial graph')
 parser.add_argument('--input_choice', type = str, default = 'diff',
                         choices = ['whole','gradient','seq','diff','ans','normalize'])
+parser.add_argument('--construct', type = str, default = 'sim',
+                    choices = ['sim','collab'])
 
 # update model sharing mechanism
 parser.add_argument('--sharing_mode', type = str, default = 'gradient',
@@ -224,7 +226,7 @@ parser.add_argument('--mu',type = float, default = 0.01,
 parser.add_argument('--sigmoid',type = int, default = 1,
                     help = 'the activation function for generated graph')
 parser.add_argument('--discrete',type = str, default = 'thresh',
-                    choices = ['thresh','ratio'])
+                    choices = ['thresh','ratio','no'])
 parser.add_argument('--dthresh',type = float, default = 0.1,
                     help = 'the discrete threshold for filtering weak connection')
 parser.add_argument('--dratio',type = float, default = 0.1,
@@ -305,13 +307,18 @@ def training_round(init_clients,init_server,args):
     #print('copy time:{:.4f}'.format(time.time() - start))
     cross_results,cross_A = [],[]
     tarfold = range(args.fold_num) if args.test_fold == args.fold_num else [args.test_fold] 
+    init_client_state = [c.model.state_dict().copy() for c in init_clients]
+    init_server_state = init_server.model.state_dict().copy()
     for idx in tarfold:
 
         # split the train and test dataset
         start = time.time()
-        for client in init_clients:
+        # reload model state
+        for client,client_state in zip(init_clients,init_client_state):
             assert isinstance(client,Client_GC)
+            #client.model.load_state_dict(client_state)
             client.split_traintest(idx,args.batch_size,args)
+        #init_server.load_state_dict(init_server_state)
         #analyze the propeties of all the datasets
         #pg_analysis(idx_clients)
         #exit(0)

@@ -25,7 +25,7 @@ def prepare_features(embed,param,args):
     # compute similarity
     sims = {k: torch.matmul(f,f.T) for k,f in choices.items()}
     k = args.para_choice if args.para_choice in choices.keys() else 'embed'
-    return ofeature[k],choices[k],sims[args.graph_choice]
+    return ofeature[k],choices[k],choices[args.graph_choice]
 
 
 # helper functions related to parameter - vector conversion

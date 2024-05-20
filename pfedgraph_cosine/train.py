@@ -119,6 +119,9 @@ def process_pfedgraph(clients,server,args):
         #nets_param_start = {k: copy.deepcopy(local_models[k]) for k in party_list_this_round}
 
         local_train_pfedgraph(args, round, nets_this_round, cluster_model_vectors, train_local_dls)
+        for c in clients:
+            c.model.cuda()
+            c.evaluate()
         total_data_points = sum([c.train_size for c in clients])
         fed_avg_freqs = {k: clients[k].train_size/ total_data_points for k in range(args.num_clients)}
 
@@ -126,10 +129,7 @@ def process_pfedgraph(clients,server,args):
 
         graph_matrix = update_graph_matrix_neighbor(graph_matrix, nets_this_round, global_parameters, dw, fed_avg_freqs, cfg['alpha'], cfg['difference_measure'])   # Graph Matrix is not normalized yet
         cluster_model_vectors = aggregation_by_graph(graph_matrix, nets_this_round, global_parameters,global_p)                                                    # Aggregation weight is normalized here
-        for c in clients:
-            c.model.cuda()
-            c.evaluate()
-            
+        
     allAccs = analyze_train(clients,args)
     return allAccs
 

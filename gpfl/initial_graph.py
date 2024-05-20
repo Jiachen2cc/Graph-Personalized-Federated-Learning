@@ -11,11 +11,9 @@ from gpfl.utils import marginal,cossim
 def property_graph(property):
     
     pfeature = torch.stack(property, dim = 0)
-    
     # feature normalization
     pmean, pstd = torch.mean(pfeature,dim = 0), torch.std(pfeature,dim = 0)
     pfeature = (pfeature-pmean)/pstd
-    
     # cosine similarity
     # row normalization
     pfeature /= (torch.sum(pfeature*pfeature,

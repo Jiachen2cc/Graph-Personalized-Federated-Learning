@@ -47,7 +47,7 @@ class graph_constructor:
         # may used to get a sparser adj
         
         # compute row wise softmax to normalize the sharing weight
-        adj = F.softmax(adj, dim = 1)
+        adj = torch.softmax(adj, dim = 1)
         if self.args.discrete == 'thresh':
             thresh = self.args.dthresh * (1/self.args.num_clients)
             adj = (adj >= thresh).float().to(adj.device)
