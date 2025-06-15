@@ -82,6 +82,7 @@ def process_fedamp(clients, server, args):
         #fed_avg_freqs = {k: len(net_dataidx_map[k]) / total_data_points for k in party_list_this_round}
         graph_matrix = update_graph_matrix_neighbor(local_models, global_parameters, dw)   # Graph Matrix is not normalized yet
         aggregation_by_graph(graph_matrix, local_models, global_parameters, cluster_models)   # Aggregation weight is normalized here
+        
         for c in clients:
             c.model.cuda()
             c.evaluate()
