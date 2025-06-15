@@ -197,3 +197,53 @@ class GIN_dc(torch.nn.Module):
 
     def loss(self, pred, label):
         return F.nll_loss(pred, label)
+    
+    
+# masked GIN for FedPub
+
+from fedpub.layers import MaskedLinear
+
+class MaskedGIN(torch.nn.Module):
+    
+    def __init__(self, n_feat, nhid, nclass, nlayer, dropout,
+                 l1 = 1e-3, args = None):
+        super(MaskedGIN, self).__init__()
+        self.num_layers = nlayer
+        self.dropout = dropout 
+        
+        self.pre = torch.nn.Sequential(MaskedLinear(n_feat, nhid, l1, args))
+        self.graph_convs = torch.nn.ModuleList()
+        for l in range(nlayer):
+            nnk = torch.nn.Sequential(
+                MaskedLinear(nhid, nhid, l1, args),
+                torch.nn.ReLU(),
+                MaskedLinear(nhid, nhid, l1, args)
+            )
+            self.graph_convs.append(GINConv(nnk))
+
+        self.post = torch.nn.Sequential(
+            MaskedLinear(nhid, nhid, l1, args),
+            torch.nn.ReLU()
+        )
+        self.readout = torch.nn.Sequential(
+            MaskedLinear(nhid, nclass, l1, args)
+        )
+    
+    def forward(self, data):
+        
+        x, edge_index, batch = data.x, data.edge_index, data.batch
+        x = self.pre(x)
+        for i in range(len(self.graph_convs)):
+            x = self.graph_convs[i](x, edge_index)
+            x = F.relu(x)
+            x = F.dropout(x, self.dropout, training=self.training)
+        x = global_add_pool(x, batch)
+        x = self.post(x)
+        x = F.dropout(x, self.dropout, training=self.training)
+        x = self.readout(x)
+        x = F.log_softmax(x, dim = 1)
+    
+    def loss(self, pred, label):
+        return F.nll_loss(pred, label)
+    
+    

@@ -63,7 +63,7 @@ def random_graphbatch(graph_num,feature_dim,seed):
     random.seed(seed)
     
     for _ in range(graph_num):
-        graph =struc_graph(30,feature_dim,0.1,seed)
+        graph = struc_graph(30,feature_dim,0.1,seed)
         graphs.append(graph)
     graphs = Batch.from_data_list(graphs)
     return graphs
