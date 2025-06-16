@@ -401,7 +401,7 @@ class MaskedLinear(torch.nn.Module):
         self.d_i = d_i
         self.d_o = d_o
         self.l1 = l1
-        self.mask_one_init = args.clsf_mask_one
+        self.mask_one_init = True #args.clsf_mask_one
 
         self.weight = torch.nn.Parameter(torch.empty((self.d_o,self.d_i), requires_grad=True, dtype=torch.float32))
         torch.nn.init.xavier_uniform_(self.weight)

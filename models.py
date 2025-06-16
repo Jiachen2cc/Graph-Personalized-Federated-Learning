@@ -242,6 +242,8 @@ class MaskedGIN(torch.nn.Module):
         x = F.dropout(x, self.dropout, training=self.training)
         x = self.readout(x)
         x = F.log_softmax(x, dim = 1)
+        
+        return x
     
     def loss(self, pred, label):
         return F.nll_loss(pred, label)

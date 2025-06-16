@@ -7,7 +7,7 @@ import torch
 from torch_geometric.datasets import TUDataset
 from torch_geometric.loader import DataLoader
 
-from models import GIN, GINclassifier,GINextractor,GIN_dc
+from models import GIN, GINclassifier,GINextractor,GIN_dc, MaskedGIN
 from server import Server
 from client import Client_GC
 from utils import get_stats, split_data, get_numGraphLabels,convert_to_nodeDegreeFeatures,init_structure_encoding
@@ -32,6 +32,9 @@ def setup_devices(splitedData, args):
             data = init_structure_encoding(args,data,args.type_init)
             cmodel_gc = GIN_dc(num_node_features, args.n_se, args.hidden,
                         num_graph_labels, args.nlayer, args.dropout)
+        elif args.Federated_mode == 'fedpub':
+            cmodel_gc = MaskedGIN(num_node_features, args.hidden,
+                        num_graph_labels, args.nlayer, args.dropout, args.fedpub_l1, args)
         else:
             cmodel_gc = GIN(num_node_features, args.hidden,
                         num_graph_labels, args.nlayer, args.dropout)
@@ -53,6 +56,9 @@ def setup_devices(splitedData, args):
     if args.Federated_mode == 'fedstar':
         smodel = GIN_dc(num_node_features, args.n_se, args.hidden,
                 num_graph_labels, args.nlayer, args.dropout)
+    elif args.Federated_mode == 'fedpub':
+        smodel = MaskedGIN(num_node_features, args.hidden,
+                num_graph_labels, args.nlayer, args.dropout, args.fedpub_l1, args)
     else:
         smodel = GIN(num_node_features, args.hidden,
                 num_graph_labels, args.nlayer, args.dropout)

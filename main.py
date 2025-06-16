@@ -20,6 +20,7 @@ from dataprocess.setup import SetUp
 from fedamp.train import process_fedamp
 from pfedgraph_cosine.train import process_pfedgraph
 from gpfl.train import process_gpfl
+from fedpub.train import process_fedpub
 
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -83,8 +84,10 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--setting',type = str, default = 'single',
                         choices = ['single','multi'])
-parser.add_argument('--device', type=str, default='cpu',
+parser.add_argument('--device', type=str, default='gpu',
                         help='CPU / GPU device.')
+parser.add_argument('--gpu_id', type=int, default = 0,
+                        help = "the id of gpu if available")
 parser.add_argument('--num_rounds', type=int, default= 200,
                         help='number of rounds to simulate;')
 parser.add_argument('--local_epoch', type=int, default=1,
@@ -180,6 +183,11 @@ parser.add_argument('--lam', type = float, default = 0.01,
                     help = 'hyper parameters in local objective')
 parser.add_argument('--fedgraphalpha', type = float, default = 0.8)
 
+# fedpub parameters
+parser.add_argument('--fedpub_l1', type = float, default = 1e-3)
+parser.add_argument('--fedpub_loc_l2', type = float, default = 1e-3)
+parser.add_argument('--fedpub_norm_scale', type = float, default = 10)
+
 
 parser.add_argument('--split_way', type = str, default = 'blabel_skew',
                     help = ' the split methods for global datasets',choices = ['toy','label_skew','blabel_skew',
@@ -198,7 +206,7 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
 # choose federated parameters
 parser.add_argument('--Federated_mode', type = str, default ='GPFL',
                         choices = ['self','FedAvg','FedProx','GPFL','GCFL','Scaffold',
-                        'fedstar','pfedgraph','fedamp'])
+                        'fedstar','pfedgraph','fedamp','fedpub'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
                         choices = ['uniform','sim','ans','property','randomc','distri'])
 parser.add_argument('--graph_rate', type = float, default = 0.05,
@@ -257,7 +265,7 @@ seed_dataSplit = 123
 
 
 #args.device = torch.device("cuda:2" if torch.cuda.is_available() else "cpu")
-args.device = device
+args.device = "cpu" if args.device == "cpu" else f"cuda:{args.gpu_id}"
 args.n_se = args.n_rw + args.n_dg
 
 EPS_1 = args.epsilon1
@@ -342,6 +350,8 @@ def training_round(init_clients,init_server,args):
             res = process_pfedgraph(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == 'fedamp':
             res = process_fedamp(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
+        elif args.Federated_mode == "fedpub":
+            res = process_fedpub(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         cross_results.append(res)
         #break
         

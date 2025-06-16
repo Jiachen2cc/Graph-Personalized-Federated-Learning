@@ -5,7 +5,7 @@ import random
 import numpy as np
 
 from collections import defaultdict, OrderedDict
-from misc.forked_pdb import ForkedPdb
+from fedpub.misc.forked_pdb import ForkedPdb
 
 import torch
 from torch import Tensor

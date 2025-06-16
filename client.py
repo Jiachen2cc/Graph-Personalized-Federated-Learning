@@ -448,6 +448,7 @@ def train_gc(model, dataloaders, optimizer, local_epoch, device, train_data):
             'testLosses': losses_test, 'testAccs': accs_test}
 
 def eval_gc(model, test_loader, device):
+    model = model.to(device)
     model.eval()
 
     total_loss = 0.

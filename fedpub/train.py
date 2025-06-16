@@ -2,7 +2,7 @@ import torch
 
 from fedpub.misc.utils import from_networkx
 from gpfl.initial_graph import random_graphbatch
-from fedpub.utils import cossim
+from fedpub.utils import cossim,extract_detach_model_weight,aggregate_model_weights, set_state_dict
 from client import Client_GC
 from training import analyze_train
 
@@ -30,13 +30,12 @@ def local_train_fedpub(
             target = batch.y
             out = client.model(batch)
             loss = client.model.loss(out, target)
-            for name, param in client.model.state_dict():
+            for name, param in client.model.state_dict().items():
                 if 'mask' in name:
                     loss += torch.norm(param.float(), 1) * args.fedpub_l1
                 elif 'conv' in name or 'readout' in name:
                     if cur_round == 1: 
                         continue
-                    ## prev_w may need to be fixed
                     loss += torch.norm(param.float() - client.prev_w[name], 2) * args.fedpub_loc_l2
             loss.backward()
             client.optimizer.step()
@@ -64,7 +63,7 @@ def process_fedpub(
     
     num_client = len(clients)
     # 2. train model
-    for i in range(1, args.num_round + 1):
+    for i in range(1, args.num_rounds + 1):
         # 2.1 local train 
         # for c in clients:
         #     c.compute_weight_update(args.local_epoch)
@@ -83,16 +82,40 @@ def process_fedpub(
             for j in range(num_client):
                 sim_matrix[i,j] = 1 - cossim(embed[i], embed[j])
         # apply exp over sim weights
-        sim_matrix = torch.exp(args.norm_scale * sim_matrix)
+        sim_matrix = torch.exp(args.fedpub_norm_scale * sim_matrix)
         row_sums = sim_matrix.sum(axis=1)
         sim_matrix = sim_matrix / row_sums[:, None]
         
         # 2.4 backward, update parameters and masks
         
         # 1. aggregate client model weights by sim_matrix weight
+        # acess client model weights
+        local_model_weights = [
+            extract_detach_model_weight(c.model.state_dict())
+            for c in clients
+        ]
         
+        # compute aggregation result
+        agg_model_weights = [aggregate_model_weights(
+            local_model_weights,
+            sim_matrix[i,:]
+        ) for i in range(num_client)]
         
-        # 2. set model weights here
+        # send aggregated weight back to client 
+        for i, c in enumerate(clients):
+            c.prev_w = set_state_dict(
+                agg_model_weights[i],
+                args.gpu_id
+            )
+            update_weights = set_state_dict(
+                agg_model_weights[i],
+                args.gpu_id,
+                skip_stat = True,
+                skip_mask = True,
+                model = c.model.state_dict()
+            )
+            c.model.load_state_dict(update_weights)
+        
         
         # 2.5 evaluation
         for c in clients:
