@@ -80,12 +80,13 @@ def process_fedpub(
         sim_matrix = torch.empty((num_client, num_client))
         for i in range(num_client):
             for j in range(num_client):
-                sim_matrix[i,j] = 1 - cossim(embed[i], embed[j])
+                sim_matrix[i,j] = cossim(embed[i], embed[j])
         # apply exp over sim weights
         sim_matrix = torch.exp(args.fedpub_norm_scale * sim_matrix)
         row_sums = sim_matrix.sum(axis=1)
         sim_matrix = sim_matrix / row_sums[:, None]
-        
+        # print(sim_matrix)
+        # exit(0)
         # 2.4 backward, update parameters and masks
         
         # 1. aggregate client model weights by sim_matrix weight

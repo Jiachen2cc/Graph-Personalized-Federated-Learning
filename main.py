@@ -330,7 +330,8 @@ def training_round(init_clients,init_server,args):
         #analyze the propeties of all the datasets
         #pg_analysis(idx_clients)
         #exit(0)
-
+        print(len(init_clients))
+        # exit(0)
         if args.Federated_mode == 'GPFL':
             res,avgA = process_gpfl(copy.deepcopy(init_clients), copy.deepcopy(init_server), args)
             cross_A.append(avgA)
