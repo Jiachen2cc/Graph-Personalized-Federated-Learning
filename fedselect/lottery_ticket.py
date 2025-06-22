@@ -221,7 +221,7 @@ def get_mask_from_delta(
                 )
                 return_mask[name] = torch.from_numpy(new_mask).to(device)
     # print(eval_per_layer_sparsity(return_mask))
-    print(eval_layer_sparsity(return_mask, "fc.weight"))
+    # print(eval_layer_sparsity(return_mask, "fc.weight"))
     return return_mask
 
 
@@ -254,5 +254,5 @@ def delta_update(
         bound=bound,
         invert=invert,
     )
-    print_lth_stats(mask, invert=invert)
+    # print_lth_stats(mask, invert=invert)
     return mask

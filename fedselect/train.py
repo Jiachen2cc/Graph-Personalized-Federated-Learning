@@ -4,7 +4,7 @@ from collections import OrderedDict
 from client import Client_GC
 from fedselect.pflopt.optimizers import MaskLocalAltSGD
 import torch
-from broadcast import (
+from fedselect.broadcast import (
     add_masks,
     add_server_weights,
     div_server_weights,
@@ -21,7 +21,7 @@ def local_train(
 ):
     optimizer = MaskLocalAltSGD(client.model.parameters(), mask, lr = args.lr)
     # epoch = args.local_epoch
-    train_loss_1 = 0
+    train_loss = 0
     iterator = iter(client.dataLoader['train'])
     
     for _, batch in enumerate(iterator):
@@ -35,10 +35,10 @@ def local_train(
             torch.nn.utils.clip_grad_norm_(client.model.parameters(), max_grad_norm)
         optimizer.step()
         
-    train_loss_1 /= len(client.dataLoader['train'])
+    train_loss /= len(client.dataLoader['train'])
     optimizer.toggle()
     
-    return train_loss_1
+    return train_loss
 
         
     
@@ -72,13 +72,14 @@ def process_fedselect(
     for round_num in range(com_rounds):
         round_loss = 0
         for i in range(len(clients)):
-            client = client[i]
+            client = clients[i]
             client_mask = client_masks_prev.get(i)
             loss = local_train(client,client_mask,args)
             round_loss += loss
             if round_num < com_rounds - 1:
                 # update server
                 server_accumulate_mask = add_masks(server_accumulate_mask, client_mask)
+                # print(111)
                 server_weights = add_server_weights(
                     server_weights, client.model.state_dict(), client_mask
                 )
@@ -105,7 +106,7 @@ def process_fedselect(
             
             server_weights = div_server_weights(server_weights, server_accumulate_mask)
             # Server broadcasts non lottery ticket parameters u_i to every device
-            for i in range(clients):
+            for i in range(len(clients)):
                 client_state_dicts[i] = broadcast_server_to_client_initialization(
                     server_weights, client_masks[i], client_state_dicts[i]
                 )
@@ -119,3 +120,5 @@ def process_fedselect(
             c.evaluate()
     
     allAccs = analyze_train(clients, args)
+    
+    return allAccs

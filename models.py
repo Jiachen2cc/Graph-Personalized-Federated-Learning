@@ -102,11 +102,22 @@ class GIN(torch.nn.Module):
         self.pre = torch.nn.Sequential(torch.nn.Linear(nfeat, nhid))
 
         self.graph_convs = torch.nn.ModuleList()
-        self.nn1 = torch.nn.Sequential(torch.nn.Linear(nhid, nhid), torch.nn.ReLU(), torch.nn.Linear(nhid, nhid))
-        self.graph_convs.append(GINConv(self.nn1))
+        # self.nn1 = torch.nn.Sequential(torch.nn.Linear(nhid, nhid), torch.nn.ReLU(), torch.nn.Linear(nhid, nhid))
+        self.graph_convs.append(GINConv( 
+            torch.nn.Sequential(
+            torch.nn.Linear(nhid, nhid), 
+            torch.nn.ReLU(), 
+            torch.nn.Linear(nhid, nhid))
+            )
+        )
         for l in range(nlayer - 1):
-            self.nnk = torch.nn.Sequential(torch.nn.Linear(nhid, nhid), torch.nn.ReLU(), torch.nn.Linear(nhid, nhid))
-            self.graph_convs.append(GINConv(self.nnk))
+            self.graph_convs.append(GINConv(
+                torch.nn.Sequential(
+                    torch.nn.Linear(nhid, nhid), 
+                    torch.nn.ReLU(), 
+                    torch.nn.Linear(nhid, nhid)
+                ))
+            )
 
         self.post = torch.nn.Sequential(torch.nn.Linear(nhid, nhid), torch.nn.ReLU())
         self.readout = torch.nn.Sequential(torch.nn.Linear(nhid, nclass))

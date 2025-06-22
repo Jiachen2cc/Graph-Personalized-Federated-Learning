@@ -18,4 +18,8 @@ train_plot/
 fedamp/fedamp_exp
 pfedgraph_cosine/pfedgraph_cosine_exp
 fedpub/fedpub_exp
+fedpub_outputs/
+fedselect/fedselect_exp
+script/
+
 

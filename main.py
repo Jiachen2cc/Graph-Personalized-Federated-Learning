@@ -21,6 +21,7 @@ from fedamp.train import process_fedamp
 from pfedgraph_cosine.train import process_pfedgraph
 from gpfl.train import process_gpfl
 from fedpub.train import process_fedpub
+from fedselect.train import process_fedselect
 
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -188,6 +189,10 @@ parser.add_argument('--fedpub_l1', type = float, default = 1e-3)
 parser.add_argument('--fedpub_loc_l2', type = float, default = 1e-3)
 parser.add_argument('--fedpub_norm_scale', type = float, default = 10)
 
+# fedselect parameters
+parser.add_argument("--fedselect_lth_epoch_iters", type=int, default=3)
+parser.add_argument("--fedselect_prune_percent", type=float, default=25)
+parser.add_argument("--fedselect_prune_target",type = int, default = 80)
 
 parser.add_argument('--split_way', type = str, default = 'blabel_skew',
                     help = ' the split methods for global datasets',choices = ['toy','label_skew','blabel_skew',
@@ -206,7 +211,7 @@ parser.add_argument('--skew_rate',type = float, default = 0.5,
 # choose federated parameters
 parser.add_argument('--Federated_mode', type = str, default ='GPFL',
                         choices = ['self','FedAvg','FedProx','GPFL','GCFL','Scaffold',
-                        'fedstar','pfedgraph','fedamp','fedpub'])
+                        'fedstar','pfedgraph','fedamp','fedpub','fedselect'])
 parser.add_argument('--initial_graph', type = str, default = 'property',
                         choices = ['uniform','sim','ans','property','randomc','distri'])
 parser.add_argument('--graph_rate', type = float, default = 0.05,
@@ -353,6 +358,8 @@ def training_round(init_clients,init_server,args):
             res = process_fedamp(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         elif args.Federated_mode == "fedpub":
             res = process_fedpub(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
+        elif args.Federated_mode == "fedselect":
+            res = process_fedselect(clients = copy.deepcopy(init_clients), server = copy.deepcopy(init_server),args = args)
         cross_results.append(res)
         #break
         
